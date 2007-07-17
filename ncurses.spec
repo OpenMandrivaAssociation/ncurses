@@ -1,10 +1,13 @@
-%define patchdate 20051029
-%define version 5.5
-%define release %mkrel 1.%{patchdate}.4
+%define rolluppatch 20070714
+%define patchdate 20070716
+%define version 5.6
+%define release %mkrel 1.%{patchdate}.1
 %define major 5
-%define majorminor 5.5
+%define majorminor 5.6
 %define utf8libname %mklibname %{name}w %{major}
 %define libname %mklibname %{name} %{major}
+%define develname %mklibname -d %{name}
+%define utf8develname %mklibname -d %{name}w
 
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
@@ -16,15 +19,19 @@ Url:		http://www.gnu.org/software/ncurses/ncurses.html
 Source0:	ftp://ftp.gnu.org/gnu/ncurses/%{name}-%{version}.tar.bz2
 Source4:	ncurses-resetall.sh
 Source5:    	ncurses-usefull-terms
-Patch1:		ncurses-5.3-xterm-debian.patch
+# fwang: Source 100 is rollup patches from
+# ftp://invisible-island.net/ncurses/5.6/
+Source100:	ncurses-%{version}-%{rolluppatch}-patch.sh
+
+Patch1:		ncurses-5.6-xterm-debian.patch
 Patch4:		ncurses-5.3-parallel.patch
 Patch5:		ncurses-5.3-utf8.patch
 #Patch6:		ncurses-5.4-20041204-remove-extra-dep.patch.bz2 
 #Patch8:		ncurses-5.4-deps.patch.bz2
 
-Patch11:	ncurses-5.5-20051015.patch
-Patch12:	ncurses-5.5-20051022.patch
-Patch13:	ncurses-5.5-20051029.patch
+# Patch >100 from here:
+# ftp://invisible-island.net/ncurses/5.6/
+Patch101:	ncurses-5.6-20070716.patch.gz
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	gpm-devel sharutils
@@ -68,27 +75,29 @@ Requires:	ncurses
 %description	extraterms
 Install the ncurses-extraterms package if you use some exotic terminals.
 
-%package -n	%{libname}-devel
+%package -n	%{develname}
 Summary:	The development files for applications which use ncurses
 Group:		Development/C
-Provides:	lib%{name}-devel %{name}-devel
-Obsoletes:	lib%{name}-devel %{name}-devel
+Provides:	lib%{name}-devel = %{version}-%{release}
+Provides:	%{name}-devel = %{version}-%{release}
 Requires:	%{libname} = %{version}-%{release}
+Obsoletes:	%{libname}-devel
 
-%description -n	%{libname}-devel
+%description -n	%{develname}
 The header files and libraries for developing applications that use
 the ncurses CRT screen handling and optimization package.
 
 Install the ncurses-devel package if you want to develop applications
 which will use ncurses.
 
-%package -n	%{utf8libname}-devel
+%package -n	%{utf8develname}
 Summary:	The development files for applications which use ncurses
 Group:		Development/C
 Requires:	%{utf8libname} = %{version}-%{release}
 Provides:	lib%{name}w-devel = %{version}-%{release}
+Obsoletes:	%{utf8libname}-devel
 
-%description -n	%{utf8libname}-devel
+%description -n	%{utf8develname}
 The libraries for developing applications that use ncurses CRT screen
 handling and optimization package. Install it if you want to develop
 applications which will use ncurses.
@@ -101,11 +110,13 @@ i.e. -lformw, -lmenuw, -lncursesw, -lpanelw.
 %prep
 %setup -q
 
-%patch11 -p1
-%patch12 -p1
-%patch13 -p1
+# Let's apply rollup patches at first
+cp %SOURCE100 .
+/bin/sh ncurses-%{version}-%{rolluppatch}-patch.sh
+# Then the official patch
+%patch101 -p1
 
-%patch4 -p1 -b .parallel
+#%patch4 -p1 -b .parallel
 %patch5 -p1 -b .utf8
 
 # regenerating configure needs patched autoconf, so modify configure
@@ -120,9 +131,9 @@ find . -name "*.orig" | xargs rm -f
 chmod 755 c++/edit_cfg.sh test/listused.sh test/configure test/tracemunch
 
 %build
-OPT_FLAGS="$RPM_OPT_FLAGS -DPURE_TERMINFO -fno-omit-frame-pointer"
-CFLAGS="$OPT_FLAGS -DSVR4_CURSES"
-CXXFLAGS="$OPT_FLAGS"
+#OPT_FLAGS="$RPM_OPT_FLAGS -DPURE_TERMINFO -fno-omit-frame-pointer"
+#CFLAGS="$OPT_FLAGS -DSVR4_CURSES"
+#CXXFLAGS="$OPT_FLAGS"
 
 mkdir -p ncurses-normal
 pushd ncurses-normal
@@ -135,7 +146,7 @@ CONFIGURE_TOP=..
 	--enable-no-padding --enable-sigwinch --without-ada \
 	--enable-xmc-glitch --enable-colorfgbg --with-ospeed=unsigned
 
-%make
+%make -j1
 popd
 
 mkdir -p ncurses-utf8
@@ -149,7 +160,7 @@ CONFIGURE_TOP=..
 	--enable-no-padding --enable-sigwinch --without-ada \
 	--enable-widec --enable-xmc-glitch --enable-colorfgbg --with-ospeed=unsigned
 
-%make
+%make -j1
 popd
 
 %install
@@ -240,7 +251,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %doc README
 
-%files -n %{libname}-devel -f %libname-devel.list
+%files -n %{develname} -f %libname-devel.list
 %defattr(-,root,root)
 %doc doc c++ test
 /%{_lib}/lib*.so
@@ -250,10 +261,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/*.h
 %{_mandir}/man3/*
 
-%files -n %{utf8libname}-devel
+%files -n %{utf8develname}
 %defattr(-,root,root)
 %{_includedir}/ncursesw
 %{_libdir}/lib*w.so
 %{_libdir}/lib*w.a
-
 
