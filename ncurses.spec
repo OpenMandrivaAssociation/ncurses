@@ -1,7 +1,7 @@
 %define rolluppatch 20070714
 %define patchdate 20070716
 %define version 5.6
-%define release %mkrel 1.%{patchdate}.1
+%define release %mkrel 1.%{patchdate}.2
 %define major 5
 %define majorminor 5.6
 %define utf8libname %mklibname %{name}w %{major}
@@ -79,9 +79,11 @@ Install the ncurses-extraterms package if you use some exotic terminals.
 Summary:	The development files for applications which use ncurses
 Group:		Development/C
 Provides:	lib%{name}-devel = %{version}-%{release}
+Provides:	%{libname}-devel
 Provides:	%{name}-devel = %{version}-%{release}
 Requires:	%{libname} = %{version}-%{release}
 Obsoletes:	%{libname}-devel
+Obsoletes:	%{name}-devel
 
 %description -n	%{develname}
 The header files and libraries for developing applications that use
@@ -95,6 +97,7 @@ Summary:	The development files for applications which use ncurses
 Group:		Development/C
 Requires:	%{utf8libname} = %{version}-%{release}
 Provides:	lib%{name}w-devel = %{version}-%{release}
+Provides:	%{utf8libname}-devel
 Obsoletes:	%{utf8libname}-devel
 
 %description -n	%{utf8develname}
