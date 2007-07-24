@@ -1,7 +1,7 @@
 %define rolluppatch 20070714
-%define patchdate 20070716
+%define patchdate 20070721
 %define version 5.6
-%define release %mkrel 1.%{patchdate}.2
+%define release %mkrel 1.%{patchdate}.1
 %define major 5
 %define majorminor 5.6
 %define utf8libname %mklibname %{name}w %{major}
@@ -32,6 +32,7 @@ Patch5:		ncurses-5.3-utf8.patch
 # Patch >100 from here:
 # ftp://invisible-island.net/ncurses/5.6/
 Patch101:	ncurses-5.6-20070716.patch.gz
+Patch102:	ncurses-5.6-20070721.patch.gz
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	gpm-devel sharutils
@@ -118,6 +119,7 @@ cp %SOURCE100 .
 /bin/sh ncurses-%{version}-%{rolluppatch}-patch.sh
 # Then the official patch
 %patch101 -p1
+%patch102 -p1
 
 #%patch4 -p1 -b .parallel
 %patch5 -p1 -b .utf8
