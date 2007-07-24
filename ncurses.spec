@@ -36,6 +36,7 @@ Patch102:	ncurses-5.6-20070721.patch.gz
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	gpm-devel sharutils
+Conflicts:	%{name}-extraterms < 5.6-1.20070721.1
 
 %description
 The curses library routines are a terminal-independent method of updating
@@ -71,7 +72,7 @@ and is not compatible with those without.
 %package	extraterms
 Summary:	Some exotic terminal descriptions
 Group:		System/Libraries
-Requires:	ncurses
+Requires:	ncurses = %{version}-%{release}
 
 %description	extraterms
 Install the ncurses-extraterms package if you use some exotic terminals.
@@ -196,8 +197,6 @@ ln -s /%{_lib}/libncurses.so.%{majorminor} $RPM_BUILD_ROOT%{_libdir}/libncurses.
 ln -s /%{_lib}/libncurses.so.%{majorminor} $RPM_BUILD_ROOT%{_libdir}/libncurses.so.%{major}
 ln -s /%{_lib}/libncurses.so.%{majorminor} $RPM_BUILD_ROOT%{_libdir}/libncurses.so
 
-ln -s $RPM_BUILD_ROOT%{_libdir}/libncurses.so.%{majorminor} $RPM_BUILD_ROOT/%{_lib}/libncurses.so.4
-
 #
 # FIXME
 # OK do not time to debbug it now
@@ -271,4 +270,3 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/ncursesw
 %{_libdir}/lib*w.so
 %{_libdir}/lib*w.a
-
