@@ -1,5 +1,5 @@
 %define rolluppatch 20070714
-%define patchdate 20070728
+%define patchdate 20070818
 %define version 5.6
 %define release %mkrel 1.%{patchdate}.1
 %define major 5
@@ -26,14 +26,14 @@ Source100:	ncurses-%{version}-%{rolluppatch}-patch.sh
 Patch1:		ncurses-5.6-xterm-debian.patch
 Patch4:		ncurses-5.3-parallel.patch
 Patch5:		ncurses-5.3-utf8.patch
-#Patch6:		ncurses-5.4-20041204-remove-extra-dep.patch.bz2 
-#Patch8:		ncurses-5.4-deps.patch.bz2
 
 # Patch >100 from here:
 # ftp://invisible-island.net/ncurses/5.6/
 Patch101:	ncurses-5.6-20070716.patch.gz
 Patch102:	ncurses-5.6-20070721.patch.gz
 Patch103:	ncurses-5.6-20070728.patch.gz
+Patch104:	ncurses-5.6-20070812.patch.gz
+Patch105:	ncurses-5.6-20070818.patch.gz
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	gpm-devel sharutils
@@ -123,15 +123,14 @@ cp %SOURCE100 .
 %patch101 -p1
 %patch102 -p1
 %patch103 -p1
+%patch104 -p1
+%patch105 -p1
 
 #%patch4 -p1 -b .parallel
 %patch5 -p1 -b .utf8
 
 # regenerating configure needs patched autoconf, so modify configure
 # directly
-#%patch6 -p1 -b .removedep
-#%patch7 -p1
-#%patch8 -p1 -b .deps
 %patch1 -p1 -b .deb
 
 find . -name "*.orig" | xargs rm -f
