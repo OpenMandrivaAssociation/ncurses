@@ -34,6 +34,8 @@ Patch102:	ncurses-5.6-20070721.patch.gz
 Patch103:	ncurses-5.6-20070728.patch.gz
 Patch104:	ncurses-5.6-20070812.patch.gz
 Patch105:	ncurses-5.6-20070818.patch.gz
+Patch106:	ncurses-5.6-20070825.patch.gz
+Patch107:	ncurses-5.6-20070901.patch.gz
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	gpm-devel sharutils
@@ -125,6 +127,8 @@ cp %SOURCE100 .
 %patch103 -p1
 %patch104 -p1
 %patch105 -p1
+%patch106 -p1
+%patch107 -p1
 
 #%patch4 -p1 -b .parallel
 %patch5 -p1 -b .utf8
