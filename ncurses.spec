@@ -1,5 +1,5 @@
 %define rolluppatch 20070714
-%define patchdate 20070818
+%define patchdate 20070901
 %define version 5.6
 %define release %mkrel 1.%{patchdate}.1
 %define major 5
