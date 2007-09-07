@@ -1,7 +1,7 @@
 %define rolluppatch 20070714
 %define patchdate 20070901
 %define version 5.6
-%define release %mkrel 1.%{patchdate}.1
+%define release %mkrel 1.%{patchdate}.2
 %define major 5
 %define majorminor 5.6
 %define utf8libname %mklibname %{name}w %{major}
@@ -87,8 +87,7 @@ Provides:	lib%{name}-devel = %{version}-%{release}
 Provides:	%{libname}-devel
 Provides:	%{name}-devel = %{version}-%{release}
 Requires:	%{libname} = %{version}-%{release}
-Obsoletes:	%{libname}-devel
-Obsoletes:	%{name}-devel
+Obsoletes:	%mklibname -d %name 5
 
 %description -n	%{develname}
 The header files and libraries for developing applications that use
@@ -102,8 +101,7 @@ Summary:	The development files for applications which use ncurses
 Group:		Development/C
 Requires:	%{utf8libname} = %{version}-%{release}
 Provides:	lib%{name}w-devel = %{version}-%{release}
-Provides:	%{utf8libname}-devel
-Obsoletes:	%{utf8libname}-devel
+Obsoletes:	%mklibname -d %{name}w 5
 
 %description -n	%{utf8develname}
 The libraries for developing applications that use ncurses CRT screen
@@ -214,6 +212,9 @@ cp $RPM_BUILD_ROOT%{_datadir}/terminfo/x/xterm-new $RPM_BUILD_ROOT%{_datadir}/te
 # have to be done before find commands below
 #
 rm -f $RPM_BUILD_ROOT%{_libdir}/terminfo
+
+# fwang: avoid conflict with kon package
+rm -f $RPM_BUILD_ROOT%_datadir/terminfo/k/kon
 
 #
 # FIXME
