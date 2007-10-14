@@ -1,7 +1,7 @@
 %define rolluppatch 20070714
-%define patchdate 20070901
+%define patchdate 20071013
 %define version 5.6
-%define release %mkrel 1.%{patchdate}.3
+%define release %mkrel 1.%{patchdate}.1
 %define major 5
 %define majorminor 5.6
 %define utf8libname %mklibname %{name}w %{major}
@@ -36,6 +36,11 @@ Patch104:	ncurses-5.6-20070812.patch.gz
 Patch105:	ncurses-5.6-20070818.patch.gz
 Patch106:	ncurses-5.6-20070825.patch.gz
 Patch107:	ncurses-5.6-20070901.patch.gz
+Patch108:	ncurses-5.6-20070908.patch.gz
+Patch109:	ncurses-5.6-20070915.patch.gz
+Patch110:	ncurses-5.6-20070929.patch.gz
+Patch111:	ncurses-5.6-20071006.patch.gz
+Patch112:	ncurses-5.6-20071013.patch.gz
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	gpm-devel sharutils
@@ -127,6 +132,11 @@ cp %SOURCE100 .
 %patch105 -p1
 %patch106 -p1
 %patch107 -p1
+%patch108 -p1
+%patch109 -p1
+%patch110 -p1
+%patch111 -p1
+%patch112 -p1
 
 #%patch4 -p1 -b .parallel
 %patch5 -p1 -b .utf8
