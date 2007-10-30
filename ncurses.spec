@@ -1,5 +1,5 @@
 %define rolluppatch 20070714
-%define patchdate 20071013
+%define patchdate 20071020
 %define version 5.6
 %define release %mkrel 1.%{patchdate}.1
 %define major 5
@@ -41,6 +41,7 @@ Patch109:	ncurses-5.6-20070915.patch.gz
 Patch110:	ncurses-5.6-20070929.patch.gz
 Patch111:	ncurses-5.6-20071006.patch.gz
 Patch112:	ncurses-5.6-20071013.patch.gz
+Patch113:	ncurses-5.6-20071020.patch.gz
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	gpm-devel sharutils
@@ -137,6 +138,7 @@ cp %SOURCE100 .
 %patch110 -p1
 %patch111 -p1
 %patch112 -p1
+%patch113 -p1
 
 #%patch4 -p1 -b .parallel
 %patch5 -p1 -b .utf8
