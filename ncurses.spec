@@ -44,7 +44,6 @@ Patch112:	ncurses-5.6-20071013.patch.gz
 Patch113:	ncurses-5.6-20071020.patch.gz
 Patch114:	ncurses-5.6-20071103.patch.gz
 
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	gpm-devel sharutils
 Conflicts:	%{name}-extraterms < 5.6-1.20070721.1
 
