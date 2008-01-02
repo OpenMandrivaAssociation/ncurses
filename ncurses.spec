@@ -32,6 +32,7 @@ Patch5:		ncurses-5.3-utf8.patch
 Patch101:	ncurses-5.6-20071215.patch.gz
 Patch102:	ncurses-5.6-20071222.patch.gz
 
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	gpm-devel sharutils
 Conflicts:	%{name}-extraterms < 5.6-1.20070721.1
 
