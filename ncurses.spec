@@ -96,6 +96,7 @@ Summary:	The development files for applications which use ncurses
 Group:		Development/C
 Requires:	%{utf8libname} = %{version}-%{release}
 Provides:	lib%{name}w-devel = %{version}-%{release}
+Provides:	ncursesw-devel = %{version}-%{release}
 Obsoletes:	%mklibname -d %{name}w 5
 
 %description -n	%{utf8develname}
