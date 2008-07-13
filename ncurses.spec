@@ -1,5 +1,5 @@
-%define rolluppatch 20071201
-%define patchdate 20080517
+%define rolluppatch 20080621
+%define patchdate 20080712
 %define version 5.6
 %define release %mkrel 1.%{patchdate}.1
 %define major 5
@@ -29,23 +29,9 @@ Patch5:		ncurses-5.3-utf8.patch
 
 # Patch >100 from here:
 # ftp://invisible-island.net/ncurses/5.6/
-Patch101:	ncurses-5.6-20071215.patch.gz
-Patch102:	ncurses-5.6-20071222.patch.gz
-Patch103:	ncurses-5.6-20080105.patch.gz
-Patch104:	ncurses-5.6-20080112.patch.gz
-Patch105:	ncurses-5.6-20080119.patch.gz
-Patch106:	ncurses-5.6-20080203.patch.gz
-Patch107:	ncurses-5.6-20080209.patch.gz
-Patch108:	ncurses-5.6-20080223.patch.gz
-Patch109:	ncurses-5.6-20080301.patch.gz
-Patch110:	ncurses-5.6-20080308.patch.gz
-Patch111:	ncurses-5.6-20080322.patch.gz
-Patch112:	ncurses-5.6-20080329.patch.gz
-Patch113:	ncurses-5.6-20080405.patch.gz
-Patch114:	ncurses-5.6-20080412.patch.gz
-Patch115:	ncurses-5.6-20080419.patch.gz
-Patch116:	ncurses-5.6-20080503.patch.gz
-Patch117:	ncurses-5.6-20080517.patch.gz
+Patch101:	ncurses-5.6-20080628.patch.gz
+Patch102:	ncurses-5.6-20080705.patch.gz
+Patch103:	ncurses-5.6-20080712.patch.gz
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	gpm-devel sharutils
@@ -134,21 +120,6 @@ cp %SOURCE100 .
 %patch101 -p1
 %patch102 -p1
 %patch103 -p1
-%patch104 -p1
-%patch105 -p1
-%patch106 -p1
-%patch107 -p1
-%patch108 -p1
-%patch109 -p1
-%patch110 -p1
-%patch111 -p1
-%patch112 -p1
-%patch113 -p1
-%patch114 -p1
-%patch115 -p1
-%patch116 -p1
-%patch117 -p1
-
 
 #%patch4 -p1 -b .parallel
 %patch5 -p1 -b .utf8
