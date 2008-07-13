@@ -1,5 +1,5 @@
 %define rolluppatch 20080621
-%define patchdate 20080712
+%define patchdate 20080705
 %define version 5.6
 %define release %mkrel 1.%{patchdate}.1
 %define major 5
@@ -119,8 +119,6 @@ cp %SOURCE100 .
 # Then the official patch
 %patch101 -p1
 %patch102 -p1
-%patch103 -p1
-
 #%patch4 -p1 -b .parallel
 %patch5 -p1 -b .utf8
 
