@@ -1,5 +1,5 @@
 %define rolluppatch 20080621
-%define patchdate 20080705
+%define patchdate 20080823
 %define version 5.6
 %define release %mkrel 1.%{patchdate}.1
 %define major 5
@@ -32,6 +32,11 @@ Patch5:		ncurses-5.3-utf8.patch
 Patch101:	ncurses-5.6-20080628.patch.gz
 Patch102:	ncurses-5.6-20080705.patch.gz
 Patch103:	ncurses-5.6-20080712.patch.gz
+Patch104:	ncurses-5.6-20080713.patch.gz
+Patch105:	ncurses-5.6-20080726.patch.gz
+Patch106:	ncurses-5.6-20080804.patch.gz
+Patch107:	ncurses-5.6-20080816.patch.gz
+Patch108:	ncurses-5.6-20080823.patch.gz
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	gpm-devel sharutils
@@ -119,6 +124,12 @@ cp %SOURCE100 .
 # Then the official patch
 %patch101 -p1
 %patch102 -p1
+%patch103 -p1
+%patch104 -p1
+%patch105 -p1
+%patch106 -p1
+%patch107 -p1
+%patch108 -p1
 #%patch4 -p1 -b .parallel
 %patch5 -p1 -b .utf8
 
