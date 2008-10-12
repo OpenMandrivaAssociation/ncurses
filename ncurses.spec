@@ -1,5 +1,5 @@
 %define rolluppatch 20080621
-%define patchdate 20080823
+%define patchdate 20080927
 %define version 5.6
 %define release %mkrel 1.%{patchdate}.1
 %define major 5
@@ -37,6 +37,13 @@ Patch105:	ncurses-5.6-20080726.patch.gz
 Patch106:	ncurses-5.6-20080804.patch.gz
 Patch107:	ncurses-5.6-20080816.patch.gz
 Patch108:	ncurses-5.6-20080823.patch.gz
+Patch109:	ncurses-5.6-20080830.patch.gz
+Patch110:	ncurses-5.6-20080906.patch.gz
+Patch111:	ncurses-5.6-20080907.patch.gz
+Patch112:	ncurses-5.6-20080913.patch.gz
+Patch113:	ncurses-5.6-20080920.patch.gz
+Patch114:	ncurses-5.6-20080925.patch.gz
+Patch115:	ncurses-5.6-20080927.patch.gz
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	gpm-devel sharutils
@@ -130,6 +137,13 @@ cp %SOURCE100 .
 %patch106 -p1
 %patch107 -p1
 %patch108 -p1
+%patch109 -p1
+%patch110 -p1
+%patch111 -p1
+%patch112 -p1
+%patch113 -p1
+%patch114 -p1
+%patch115 -p1
 #%patch4 -p1 -b .parallel
 %patch5 -p1 -b .utf8
 
@@ -142,10 +156,6 @@ find . -name "*.orig" | xargs rm -f
 chmod 755 c++/edit_cfg.sh test/listused.sh test/configure test/tracemunch
 
 %build
-#OPT_FLAGS="$RPM_OPT_FLAGS -DPURE_TERMINFO -fno-omit-frame-pointer"
-#CFLAGS="$OPT_FLAGS -DSVR4_CURSES"
-#CXXFLAGS="$OPT_FLAGS"
-
 mkdir -p ncurses-normal
 pushd ncurses-normal
 CONFIGURE_TOP=.. 
