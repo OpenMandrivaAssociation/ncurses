@@ -1,7 +1,7 @@
 %define rolluppatch 20080621
 %define patchdate 20080927
 %define version 5.6
-%define release %mkrel 1.%{patchdate}.1
+%define release %mkrel 1.%{patchdate}.2
 %define major 5
 %define majorminor 5.6
 %define utf8libname %mklibname %{name}w %{major}
@@ -239,6 +239,8 @@ perl -ni -e 'BEGIN { open F, "%{name}.list"; /^%/ or $s{$_} = 1 foreach <F>; } p
 
 find $RPM_BUILD_ROOT/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not -name "*_p.a" -not -name "*w.a" | sed -e "s#^$RPM_BUILD_ROOT##" > %{libname}-devel.list
 
+%multiarch_includes %buildroot%_includedir/ncurses*/curses.h
+
 %if %mdkversion < 200900
 %post -n %{libname} -p /sbin/ldconfig
 %endif
@@ -288,11 +290,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/lib*.so
 %exclude %{_libdir}/lib*w.so
 %{_includedir}/ncurses
+%multiarch %_includedir/multiarch*/ncurses
 %{_includedir}/*.h
 %{_mandir}/man3/*
 
 %files -n %{utf8develname}
 %defattr(-,root,root)
 %{_includedir}/ncursesw
+%multiarch %_includedir/multiarch*/ncursesw
 %{_libdir}/lib*w.so
 %{_libdir}/lib*w.a
