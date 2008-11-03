@@ -1,9 +1,10 @@
-%define rolluppatch 20080621
-%define patchdate 20080927
-%define version 5.6
-%define release %mkrel 1.%{patchdate}.2
+#define rolluppatch 20080621
+#define patchdate 20080927
+%define version 5.7
+#define release %mkrel 1.%{patchdate}.2
+%define release %mkrel 1
 %define major 5
-%define majorminor 5.6
+%define majorminor 5.7
 %define utf8libname %mklibname %{name}w %{major}
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname -d %{name}
@@ -16,34 +17,19 @@ Release:	%{release}
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
-Source0:	ftp://ftp.gnu.org/gnu/ncurses/%{name}-%{version}.tar.bz2
+Source0:	ftp://ftp.gnu.org/gnu/ncurses/%{name}-%{version}.tar.gz
 Source4:	ncurses-resetall.sh
 Source5:    	ncurses-usefull-terms
 # fwang: Source 100 is rollup patches from
 # ftp://invisible-island.net/ncurses/5.6/
-Source100:	ncurses-%{version}-%{rolluppatch}-patch.sh
+#Source100:	ncurses-%{version}-%{rolluppatch}-patch.sh
 
 Patch1:		ncurses-5.6-xterm-debian.patch
 Patch4:		ncurses-5.3-parallel.patch
 Patch5:		ncurses-5.3-utf8.patch
 
 # Patch >100 from here:
-# ftp://invisible-island.net/ncurses/5.6/
-Patch101:	ncurses-5.6-20080628.patch.gz
-Patch102:	ncurses-5.6-20080705.patch.gz
-Patch103:	ncurses-5.6-20080712.patch.gz
-Patch104:	ncurses-5.6-20080713.patch.gz
-Patch105:	ncurses-5.6-20080726.patch.gz
-Patch106:	ncurses-5.6-20080804.patch.gz
-Patch107:	ncurses-5.6-20080816.patch.gz
-Patch108:	ncurses-5.6-20080823.patch.gz
-Patch109:	ncurses-5.6-20080830.patch.gz
-Patch110:	ncurses-5.6-20080906.patch.gz
-Patch111:	ncurses-5.6-20080907.patch.gz
-Patch112:	ncurses-5.6-20080913.patch.gz
-Patch113:	ncurses-5.6-20080920.patch.gz
-Patch114:	ncurses-5.6-20080925.patch.gz
-Patch115:	ncurses-5.6-20080927.patch.gz
+# ftp://invisible-island.net/ncurses/5.7/
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	gpm-devel sharutils
@@ -92,7 +78,6 @@ Install the ncurses-extraterms package if you use some exotic terminals.
 Summary:	The development files for applications which use ncurses
 Group:		Development/C
 Provides:	lib%{name}-devel = %{version}-%{release}
-Provides:	%{libname}-devel
 Provides:	%{name}-devel = %{version}-%{release}
 Requires:	%{libname} = %{version}-%{release}
 Obsoletes:	%mklibname -d %name 5
@@ -126,24 +111,9 @@ i.e. -lformw, -lmenuw, -lncursesw, -lpanelw.
 %setup -q
 
 # Let's apply rollup patches at first
-cp %SOURCE100 .
-/bin/sh ncurses-%{version}-%{rolluppatch}-patch.sh
+#cp %SOURCE100 .
+#/bin/sh ncurses-%{version}-%{rolluppatch}-patch.sh
 # Then the official patch
-%patch101 -p1
-%patch102 -p1
-%patch103 -p1
-%patch104 -p1
-%patch105 -p1
-%patch106 -p1
-%patch107 -p1
-%patch108 -p1
-%patch109 -p1
-%patch110 -p1
-%patch111 -p1
-%patch112 -p1
-%patch113 -p1
-%patch114 -p1
-%patch115 -p1
 #%patch4 -p1 -b .parallel
 %patch5 -p1 -b .utf8
 
