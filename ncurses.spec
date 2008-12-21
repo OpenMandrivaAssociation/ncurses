@@ -2,7 +2,7 @@
 #define patchdate 20080927
 %define version 5.7
 #define release %mkrel 1.%{patchdate}.2
-%define release %mkrel 1
+%define release %mkrel 2
 %define major 5
 %define majorminor 5.7
 %define utf8libname %mklibname %{name}w %{major}
@@ -27,6 +27,7 @@ Source5:    	ncurses-usefull-terms
 Patch1:		ncurses-5.6-xterm-debian.patch
 Patch4:		ncurses-5.3-parallel.patch
 Patch5:		ncurses-5.3-utf8.patch
+Patch6:		ncurses-5.7-format_not_a_string_literal_and_no_format_arguments.diff
 
 # Patch >100 from here:
 # ftp://invisible-island.net/ncurses/5.7/
@@ -115,7 +116,9 @@ i.e. -lformw, -lmenuw, -lncursesw, -lpanelw.
 #/bin/sh ncurses-%{version}-%{rolluppatch}-patch.sh
 # Then the official patch
 #%patch4 -p1 -b .parallel
+
 %patch5 -p1 -b .utf8
+%patch6 -p0 -b .format_not_a_string_literal_and_no_format_arguments
 
 # regenerating configure needs patched autoconf, so modify configure
 # directly
