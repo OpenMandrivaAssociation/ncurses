@@ -2,7 +2,7 @@
 #define patchdate 20080927
 %define version 5.7
 #define release %mkrel 1.%{patchdate}.2
-%define release %mkrel 2
+%define release %mkrel 3
 %define major 5
 %define majorminor 5.7
 %define utf8libname %mklibname %{name}w %{major}
@@ -43,7 +43,7 @@ classic curses library.
 %package -n %{libname}
 Summary:	The development files for applications which use ncurses
 Group:		System/Libraries
-Requires:	ncurses
+Requires:	ncurses = %{version}-%{release}
 
 %description -n %{libname}
 The curses library routines are a terminal-independent method of updating
@@ -54,7 +54,7 @@ classic curses library.
 %package -n %{utf8libname}
 Summary:	Ncurses libraries which support UTF8
 Group:		System/Libraries
-Requires:	ncurses
+Requires:	ncurses = %{version}-%{release}
 
 %description -n %{utf8libname}
 The curses library routines are a terminal-independent method of updating
