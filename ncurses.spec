@@ -1,8 +1,8 @@
 #define rolluppatch 20080621
-#define patchdate 20080927
+%define patchdate 20090207
 %define version 5.7
-#define release %mkrel 1.%{patchdate}.2
-%define release %mkrel 3
+%define release %mkrel 3.%{patchdate}.1
+#define release %mkrel 3
 %define major 5
 %define majorminor 5.7
 %define utf8libname %mklibname %{name}w %{major}
@@ -29,6 +29,20 @@ Patch5:		ncurses-5.3-utf8.patch
 Patch6:		ncurses-5.7-format_not_a_string_literal_and_no_format_arguments.diff
 # Patch >100 from here:
 # ftp://invisible-island.net/ncurses/5.7/
+Patch101:	ncurses-5.7-20081115.patch.gz
+Patch102:	ncurses-5.7-20081122.patch.gz
+Patch103:	ncurses-5.7-20081129.patch.gz
+Patch104:	ncurses-5.7-20081206.patch.gz
+Patch105:	ncurses-5.7-20081213.patch.gz
+Patch106:	ncurses-5.7-20081220.patch.gz
+Patch107:	ncurses-5.7-20081227.patch.gz
+Patch108:	ncurses-5.7-20090103.patch.gz
+Patch109:	ncurses-5.7-20090104.patch.gz
+Patch110:	ncurses-5.7-20090105.patch.gz
+Patch111:	ncurses-5.7-20090110.patch.gz
+Patch112:	ncurses-5.7-20090117.patch.gz
+Patch113:	ncurses-5.7-20090124.patch.gz
+Patch114:	ncurses-5.7-20090207.patch.gz
 BuildRequires:	gpm-devel
 BuildRequires:	sharutils
 Conflicts:	%{name}-extraterms < 5.6-1.20070721.1
@@ -113,7 +127,21 @@ i.e. -lformw, -lmenuw, -lncursesw, -lpanelw.
 #cp %SOURCE100 .
 #/bin/sh ncurses-%{version}-%{rolluppatch}-patch.sh
 # Then the official patch
-#%patch4 -p1 -b .parallel
+%patch101 -p1
+%patch102 -p1
+%patch103 -p1
+%patch104 -p1
+%patch105 -p1
+%patch106 -p1
+%patch107 -p1
+%patch108 -p1
+%patch109 -p1
+%patch110 -p1
+%patch111 -p1
+%patch112 -p1
+%patch113 -p1
+%patch114 -p1
+#patch4 -p1 -b .parallel
 
 %patch5 -p1 -b .utf8
 %patch6 -p0 -b .format_not_a_string_literal_and_no_format_arguments
