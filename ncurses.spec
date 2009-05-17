@@ -1,5 +1,5 @@
 #define rolluppatch 20080621
-%define patchdate 20090207
+%define patchdate 20090516
 %define version 5.7
 %define release %mkrel 3.%{patchdate}.1
 #define release %mkrel 3
@@ -43,6 +43,20 @@ Patch111:	ncurses-5.7-20090110.patch.gz
 Patch112:	ncurses-5.7-20090117.patch.gz
 Patch113:	ncurses-5.7-20090124.patch.gz
 Patch114:	ncurses-5.7-20090207.patch.gz
+Patch115:	ncurses-5.7-20090214.patch.gz
+Patch116:	ncurses-5.7-20090221.patch.gz
+Patch117:	ncurses-5.7-20090228.patch.gz
+Patch118:	ncurses-5.7-20090314.patch.gz
+Patch119:	ncurses-5.7-20090321.patch.gz
+Patch120:	ncurses-5.7-20090328.patch.gz
+Patch121:	ncurses-5.7-20090404.patch.gz
+Patch122:	ncurses-5.7-20090411.patch.gz
+Patch123:	ncurses-5.7-20090418.patch.gz
+Patch124:	ncurses-5.7-20090419.patch.gz
+Patch125:	ncurses-5.7-20090425.patch.gz
+Patch126:	ncurses-5.7-20090502.patch.gz
+Patch127:	ncurses-5.7-20090510.patch.gz
+Patch128:	ncurses-5.7-20090516.patch.gz
 BuildRequires:	gpm-devel
 BuildRequires:	sharutils
 Conflicts:	%{name}-extraterms < 5.6-1.20070721.1
@@ -141,6 +155,20 @@ i.e. -lformw, -lmenuw, -lncursesw, -lpanelw.
 %patch112 -p1
 %patch113 -p1
 %patch114 -p1
+%patch115 -p1
+%patch116 -p1
+%patch117 -p1
+%patch118 -p1
+%patch119 -p1
+%patch120 -p1
+%patch121 -p1
+%patch122 -p1
+%patch123 -p1
+%patch124 -p1
+%patch125 -p1
+%patch126 -p1
+%patch127 -p1
+%patch128 -p1
 #patch4 -p1 -b .parallel
 
 %patch5 -p1 -b .utf8
