@@ -183,6 +183,8 @@ find . -name "*.orig" | xargs rm -f
 chmod 755 c++/edit_cfg.sh test/listused.sh test/configure test/tracemunch
 
 %build
+export PKG_CONFIG_LIBDIR=%{_libdir}/pkgconfig
+
 mkdir -p ncurses-normal
 pushd ncurses-normal
 CONFIGURE_TOP=.. 
@@ -235,6 +237,7 @@ CONFIGURE_TOP=..
 	--enable-widec \
 	--enable-xmc-glitch \
 	--enable-colorfgbg \
+	--enable-pc-files \
 	--with-ospeed=unsigned
 
 %make -j1
