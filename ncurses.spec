@@ -1,7 +1,7 @@
 #define rolluppatch 20080621
 %define patchdate 20090516
 %define version 5.7
-%define release %mkrel 3.%{patchdate}.1
+%define release %mkrel 3.%{patchdate}.2
 #define release %mkrel 3
 %define major 5
 %define majorminor 5.7
@@ -206,6 +206,7 @@ CONFIGURE_TOP=..
 	--disable-widec \
 	--enable-xmc-glitch \
 	--enable-colorfgbg \
+	--enable-pc-files \
 	--with-ospeed=unsigned
 
 %make -j1
@@ -343,6 +344,7 @@ rm -rf %{buildroot}
 %doc doc c++ test
 /%{_lib}/lib*.so
 %{_libdir}/lib*.so
+%{_libdir}/pkgconfig/*.pc
 %exclude %{_libdir}/lib*w.so
 %{_includedir}/ncurses
 %multiarch %_includedir/multiarch*/ncurses
