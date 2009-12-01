@@ -1,7 +1,7 @@
 %define rolluppatch 20091107
 %define patchdate 20091128
 %define version 5.7
-%define release %mkrel 3.%{patchdate}.2
+%define release %mkrel 3.%{patchdate}.3
 %define major 5
 %define majorminor 5.7
 %define utf8libname %mklibname %{name}w %{major}
@@ -97,7 +97,7 @@ Requires:	%{utf8libname} = %{version}-%{release}
 Provides:	lib%{name}w-devel = %{version}-%{release}
 Provides:	ncursesw-devel = %{version}-%{release}
 Obsoletes:	%mklibname -d %{name}w 5
-Conflicts:	%{_lib}ncurses-devel < 5.7-3.20091128-2
+Conflicts:	%{_lib}ncurses-devel < 5.7-3.20091128.2
 
 %description -n	%{utf8develname}
 The libraries for developing applications that use ncurses CRT screen
