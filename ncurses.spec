@@ -20,7 +20,7 @@ Source0:	ftp://ftp.gnu.org/gnu/ncurses/%{name}-%{version}.tar.gz
 Source4:	ncurses-resetall.sh
 Source5:    	ncurses-usefull-terms
 # fwang: Source 100 is rollup patches from
-# ftp://invisible-island.net/ncurses/5.6/
+# ftp://invisible-island.net/ncurses/5.7/
 Source100:	ncurses-%{version}-%{rolluppatch}-patch.sh.bz2
 Patch1:		ncurses-5.6-xterm-debian.patch
 Patch4:		ncurses-5.3-parallel.patch
