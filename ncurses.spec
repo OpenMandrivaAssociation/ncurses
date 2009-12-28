@@ -1,5 +1,5 @@
 %define rolluppatch 20091107
-%define patchdate 20091226
+%define patchdate 20091227
 %define version 5.7
 %define release %mkrel 3.%{patchdate}.1
 %define major 5
@@ -35,6 +35,7 @@ Patch104:	ncurses-5.7-20091205.patch.gz
 Patch105:	ncurses-5.7-20091212.patch.gz
 Patch106:	ncurses-5.7-20091219.patch.gz
 Patch107:	ncurses-5.7-20091226.patch.gz
+Patch108:	ncurses-5.7-20091227.patch.gz
 BuildRequires:	gpm-devel
 BuildRequires:	sharutils
 Conflicts:	%{name}-extraterms < 5.6-1.20070721.1
@@ -127,6 +128,7 @@ bunzip2 -kc %SOURCE100 >./ncurses-%{version}-%{rolluppatch}-patch.sh
 %patch105 -p1
 %patch106 -p1
 %patch107 -p1
+%patch108 -p1
 #patch4 -p1 -b .parallel
 
 %patch5 -p1 -b .utf8
