@@ -1,7 +1,7 @@
 %define rolluppatch 20091107
 %define patchdate 20091227
 %define version 5.7
-%define release %mkrel 3.%{patchdate}.1
+%define release %mkrel 3.%{patchdate}.2
 %define major 5
 %define majorminor 5.7
 %define utf8libname %mklibname %{name}w %{major}
@@ -26,6 +26,7 @@ Patch1:		ncurses-5.6-xterm-debian.patch
 Patch4:		ncurses-5.3-parallel.patch
 Patch5:		ncurses-5.3-utf8.patch
 Patch6:		ncurses-5.7-format_not_a_string_literal_and_no_format_arguments.diff
+Patch7:		ncurses-5.7-urxvt.patch
 # Patch >100 from here:
 # ftp://invisible-island.net/ncurses/5.7/
 Patch101:	ncurses-5.7-20091114.patch.gz
@@ -133,6 +134,7 @@ bunzip2 -kc %SOURCE100 >./ncurses-%{version}-%{rolluppatch}-patch.sh
 
 %patch5 -p1 -b .utf8
 %patch6 -p0 -b .format_not_a_string_literal_and_no_format_arguments
+%patch7 -p0 -b .urxvt
 
 # regenerating configure needs patched autoconf, so modify configure
 # directly
