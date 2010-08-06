@@ -1,5 +1,5 @@
-%define rolluppatch 20091107
-%define patchdate 20091227
+%define rolluppatch 20100424
+%define patchdate 20100731
 %define version 5.7
 %define release %mkrel 4.%{patchdate}.1
 %define major 5
@@ -29,14 +29,18 @@ Patch6:		ncurses-5.7-format_not_a_string_literal_and_no_format_arguments.diff
 Patch7:		ncurses-5.7-urxvt.patch
 # Patch >100 from here:
 # ftp://invisible-island.net/ncurses/5.7/
-Patch101:	ncurses-5.7-20091114.patch.gz
-Patch102:	ncurses-5.7-20091121.patch.gz
-Patch103:	ncurses-5.7-20091128.patch.gz
-Patch104:	ncurses-5.7-20091205.patch.gz
-Patch105:	ncurses-5.7-20091212.patch.gz
-Patch106:	ncurses-5.7-20091219.patch.gz
-Patch107:	ncurses-5.7-20091226.patch.gz
-Patch108:	ncurses-5.7-20091227.patch.gz
+Patch101:	ncurses-5.7-20100501.patch.gz
+Patch102:	ncurses-5.7-20100515.patch.gz
+Patch103:	ncurses-5.7-20100522.patch.gz
+Patch104:	ncurses-5.7-20100529.patch.gz
+Patch105:	ncurses-5.7-20100605.patch.gz
+Patch106:	ncurses-5.7-20100612.patch.gz
+Patch107:	ncurses-5.7-20100619.patch.gz
+Patch108:	ncurses-5.7-20100626.patch.gz
+Patch109:	ncurses-5.7-20100703.patch.gz
+Patch110:	ncurses-5.7-20100717.patch.gz
+Patch111:	ncurses-5.7-20100724.patch.gz
+Patch112:	ncurses-5.7-20100731.patch.gz
 BuildRequires:	gpm-devel
 BuildRequires:	sharutils
 Conflicts:	%{name}-extraterms < 5.6-1.20070721.1
@@ -130,10 +134,14 @@ bunzip2 -kc %SOURCE100 >./ncurses-%{version}-%{rolluppatch}-patch.sh
 %patch106 -p1
 %patch107 -p1
 %patch108 -p1
+%patch109 -p1
+%patch110 -p1
+%patch111 -p1
+%patch112 -p1
 #patch4 -p1 -b .parallel
 
 %patch5 -p1 -b .utf8
-%patch6 -p0 -b .format_not_a_string_literal_and_no_format_arguments
+#%patch6 -p0 -b .format_not_a_string_literal_and_no_format_arguments
 %patch7 -p0 -b .urxvt
 
 # regenerating configure needs patched autoconf, so modify configure
