@@ -1,5 +1,5 @@
 %define rolluppatch 20100424
-%define patchdate 20100731
+%define patchdate 20100925
 %define version 5.7
 %define release %mkrel 4.%{patchdate}.1
 %define major 5
@@ -41,6 +41,13 @@ Patch109:	ncurses-5.7-20100703.patch.gz
 Patch110:	ncurses-5.7-20100717.patch.gz
 Patch111:	ncurses-5.7-20100724.patch.gz
 Patch112:	ncurses-5.7-20100731.patch.gz
+Patch113:	ncurses-5.7-20100807.patch.gz
+Patch114:	ncurses-5.7-20100814.patch.gz
+Patch115:	ncurses-5.7-20100828.patch.gz
+Patch116:	ncurses-5.7-20100904.patch.gz
+Patch117:	ncurses-5.7-20100911.patch.gz
+Patch118:	ncurses-5.7-20100918.patch.gz
+Patch119:	ncurses-5.7-20100925.patch.gz
 BuildRequires:	gpm-devel
 BuildRequires:	sharutils
 Conflicts:	%{name}-extraterms < 5.6-1.20070721.1
@@ -138,6 +145,13 @@ bunzip2 -kc %SOURCE100 >./ncurses-%{version}-%{rolluppatch}-patch.sh
 %patch110 -p1
 %patch111 -p1
 %patch112 -p1
+%patch113 -p1
+%patch114 -p1
+%patch115 -p1
+%patch116 -p1
+%patch117 -p1
+%patch118 -p1
+%patch119 -p1
 #patch4 -p1 -b .parallel
 
 %patch5 -p1 -b .utf8
