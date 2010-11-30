@@ -1,7 +1,7 @@
 %define rolluppatch 20100424
 %define patchdate 20100925
 %define version 5.7
-%define release %mkrel 4.%{patchdate}.1
+%define release %mkrel 5.%{patchdate}.1
 %define major 5
 %define majorminor 5.7
 %define utf8libname %mklibname %{name}w %{major}
