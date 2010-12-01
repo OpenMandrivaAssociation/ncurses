@@ -314,9 +314,11 @@ rm -rf %{buildroot}
 
 %files -n %{libname}
 %defattr(-,root,root)
-%attr(755,root,root) /%{_lib}/lib*.so.*
-%attr(755,root,root) %{_libdir}/lib*.so.*
-%exclude %{_libdir}/lib*w.so.*
+%attr(755,root,root) /%{_lib}/libncurses.so.*
+%attr(755,root,root) %{_libdir}/libform.so.*
+%attr(755,root,root) %{_libdir}/libmenu.so.*
+%attr(755,root,root) %{_libdir}/libncurses.so.*
+%attr(755,root,root) %{_libdir}/libpanel.so.*
 
 %files -n %{utf8libname}
 %defattr(-,root,root)
@@ -326,14 +328,26 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %doc README
 
-%files -n %{develname} -f %libname-devel.list
+%files -n %{develname}
 %defattr(-,root,root)
 %doc doc c++ test
-/%{_lib}/lib*.so
-%{_libdir}/lib*.so
-%{_libdir}/pkgconfig/*.pc
-%exclude %{_libdir}/lib*w.so
-%exclude %{_libdir}/pkgconfig/*w.pc
+/%{_lib}/libncurses.so
+%{_libdir}/libcurses.a
+%{_libdir}/libcurses.so
+%{_libdir}/libform.a
+%{_libdir}/libform.so
+%{_libdir}/libmenu.a
+%{_libdir}/libmenu.so
+%{_libdir}/libncurses++.a
+%{_libdir}/libncurses.a
+%{_libdir}/libncurses.so
+%{_libdir}/libpanel.a
+%{_libdir}/libpanel.so
+%{_libdir}/pkgconfig/form.pc
+%{_libdir}/pkgconfig/menu.pc
+%{_libdir}/pkgconfig/ncurses++.pc
+%{_libdir}/pkgconfig/ncurses.pc
+%{_libdir}/pkgconfig/panel.pc
 %{_includedir}/ncurses
 %multiarch %_includedir/multiarch*/ncurses
 %{_includedir}/*.h
