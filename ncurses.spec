@@ -1,9 +1,9 @@
 %define rolluppatch 20110108
 %define patchdate 20110108
-%define version 5.7
-%define release %mkrel 5.%{patchdate}.1
+%define version 5.8
+%define release %mkrel 1
 %define major 5
-%define majorminor 5.7
+%define majorminor 5.8
 %define utf8libname %mklibname %{name}w %{major}
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname -d %{name}
@@ -21,11 +21,8 @@ Source4:	ncurses-resetall.sh
 Source5:    	ncurses-usefull-terms
 # fwang: Source 100 is rollup patches from
 # ftp://invisible-island.net/ncurses/5.7/
-Source100:	ncurses-%{version}-%{rolluppatch}-patch.sh.bz2
+#Source100:	ncurses-%{version}-%{rolluppatch}-patch.sh.bz2
 Patch1:		ncurses-5.6-xterm-debian.patch
-Patch4:		ncurses-5.3-parallel.patch
-Patch5:		ncurses-5.3-utf8.patch
-Patch6:		ncurses-5.7-format_not_a_string_literal_and_no_format_arguments.diff
 Patch7:		ncurses-5.7-urxvt.patch
 # Patch >100 from here:
 # ftp://invisible-island.net/ncurses/5.7/
@@ -111,13 +108,10 @@ i.e. -lformw, -lmenuw, -lncursesw, -lpanelw.
 %setup -q
 
 # Let's apply rollup patches at first
-bunzip2 -kc %SOURCE100 >./ncurses-%{version}-%{rolluppatch}-patch.sh
-/bin/sh ncurses-%{version}-%{rolluppatch}-patch.sh
+#bunzip2 -kc %SOURCE100 >./ncurses-%{version}-%{rolluppatch}-patch.sh
+#/bin/sh ncurses-%{version}-%{rolluppatch}-patch.sh
 # Then the official patch
-#patch4 -p1 -b .parallel
 
-%patch5 -p1 -b .utf8
-#%patch6 -p0 -b .format_not_a_string_literal_and_no_format_arguments
 %patch7 -p0 -b .urxvt
 
 # regenerating configure needs patched autoconf, so modify configure
