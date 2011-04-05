@@ -1,6 +1,6 @@
 %define rolluppatch 20110108
 %define patchdate 20110108
-%define version 5.8
+%define version 5.9
 %define release %mkrel 1
 %define major 5
 %define majorminor 5.8
