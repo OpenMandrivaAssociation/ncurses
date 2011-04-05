@@ -3,7 +3,7 @@
 %define version 5.9
 %define release %mkrel 1
 %define major 5
-%define majorminor 5.8
+%define majorminor 5.9
 %define utf8libname %mklibname %{name}w %{major}
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname -d %{name}
