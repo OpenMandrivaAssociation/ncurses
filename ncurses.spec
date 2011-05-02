@@ -305,8 +305,7 @@ rm -rf %{buildroot}
 %{_libdir}/pkgconfig/ncurses.pc
 %{_libdir}/pkgconfig/panel.pc
 %{_includedir}/ncurses
-%dir %{multiarch_includedir}/ncursesw
-%{multiarch_includedir}/ncursesw/curses.h
+%{multiarch_includedir}/ncurses
 %{_includedir}/*.h
 %{_mandir}/man3/*
 
@@ -314,6 +313,6 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %{_includedir}/ncursesw
 %{_libdir}/pkgconfig/*w.pc
-%multiarch %_includedir/multiarch*/ncursesw
+%{multiarch_includedir}/ncursesw
 %{_libdir}/lib*w.so
 %{_libdir}/lib*w.a
