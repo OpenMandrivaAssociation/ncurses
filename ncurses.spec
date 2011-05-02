@@ -1,7 +1,7 @@
 %define rolluppatch 20110108
 %define patchdate 20110108
 %define version 5.9
-%define release %mkrel 1
+%define release %mkrel 2
 %define major 5
 %define majorminor 5.9
 %define utf8libname %mklibname %{name}w %{major}
@@ -238,7 +238,7 @@ perl -ni -e 'BEGIN { open F, "%{name}.list"; /^%/ or $s{$_} = 1 foreach <F>; } p
 
 find %{buildroot}/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not -name "*_p.a" -not -name "*w.a" | sed -e "s#^%{buildroot}##" > %{libname}-devel.list
 
-%multiarch_includes %{buildroot}%{_includedir}/ncurses*/curses.h
+%multiarch_includes %{buildroot}%{_includedir}/ncursesw/curses.h
 
 %if %mdkversion < 200900
 %post -n %{libname} -p /sbin/ldconfig
@@ -305,7 +305,8 @@ rm -rf %{buildroot}
 %{_libdir}/pkgconfig/ncurses.pc
 %{_libdir}/pkgconfig/panel.pc
 %{_includedir}/ncurses
-%multiarch %_includedir/multiarch*/ncurses
+%dir %{multiarch_includedir}/ncursesw
+%{multiarch_includedir}/ncursesw/curses.h
 %{_includedir}/*.h
 %{_mandir}/man3/*
 
