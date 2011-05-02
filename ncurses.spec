@@ -238,6 +238,8 @@ perl -ni -e 'BEGIN { open F, "%{name}.list"; /^%/ or $s{$_} = 1 foreach <F>; } p
 
 find %{buildroot}/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not -name "*_p.a" -not -name "*w.a" | sed -e "s#^%{buildroot}##" > %{libname}-devel.list
 
+%multiarch_includes %{buildroot}%{_includedir}/ncurses/curses.h
+
 %multiarch_includes %{buildroot}%{_includedir}/ncursesw/curses.h
 
 %if %mdkversion < 200900
