@@ -149,6 +149,7 @@ pushd ncurses-normal
 CONFIGURE_TOP=.. 
 %configure2_5x \
 	--includedir=%{_includedir}/ncurses \
+	--with-pkg-config-libdir=%_libdir/pkgconfig \
 	--without-libtool \
 	--with-shared \
 	--with-normal \
@@ -179,6 +180,7 @@ pushd ncurses-utf8
 CONFIGURE_TOP=.. 
 %configure2_5x \
 	--includedir=%{_includedir}/ncursesw \
+	--with-pkg-config-libdir=%_libdir/pkgconfig \
 	--without-libtool \
 	--with-shared \
 	--with-normal \
