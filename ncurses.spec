@@ -23,6 +23,8 @@ Source5:    	ncurses-useful-terms
 # ftp://invisible-island.net/ncurses/5.7/
 #Source100:	ncurses-%{version}-%{rolluppatch}-patch.sh.bz2
 Patch1:		ncurses-5.6-xterm-debian.patch
+# Alias "console" to "linux"
+Patch2:		ncurses-5.9-linux-console.patch
 Patch7:		ncurses-5.7-urxvt.patch
 # Patch >100 from here:
 # ftp://invisible-island.net/ncurses/5.9/
@@ -130,6 +132,8 @@ etc.).
 # directly
 %patch1 -p1 -b .deb
 
+%patch2 -p1 -b .console~
+
 find . -name "*.orig" | xargs rm -f
 # fix some permissions
 chmod 755 c++/edit_cfg.sh test/listused.sh test/configure test/tracemunch
@@ -208,7 +212,6 @@ pushd ncurses-normal
 %{makeinstall_std}
 popd
 
-ln -sf ../l/linux %{buildroot}%{_datadir}/terminfo/c/console
 ln -sf ncurses/curses.h %{buildroot}/usr/include/ncurses.h
 for I in curses unctrl eti form menu panel term; do
 	ln -sf ncurses/$I.h %{buildroot}/usr/include/$I.h
