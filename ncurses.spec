@@ -18,18 +18,17 @@ Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
 Source0:	ftp://ftp.gnu.org/gnu/ncurses/%{name}-%{version}.tar.gz
 Source4:	ncurses-resetall.sh
-Source5:    	ncurses-usefull-terms
+Source5:    	ncurses-useful-terms
 # fwang: Source 100 is rollup patches from
 # ftp://invisible-island.net/ncurses/5.7/
 #Source100:	ncurses-%{version}-%{rolluppatch}-patch.sh.bz2
 Patch1:		ncurses-5.6-xterm-debian.patch
 Patch7:		ncurses-5.7-urxvt.patch
 # Patch >100 from here:
-# ftp://invisible-island.net/ncurses/5.7/
+# ftp://invisible-island.net/ncurses/5.9/
 BuildRequires:	gpm-devel
 BuildRequires:	sharutils
 Conflicts:	%{name}-extraterms < 5.6-1.20070721.1
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 The curses library routines are a terminal-independent method of updating
@@ -104,6 +103,19 @@ and is not compatible with those without. When linking programs with
 these libraries, you will have to append a "w" to the library names,
 i.e. -lformw, -lmenuw, -lncursesw, -lpanelw.
 
+%package -n termcap
+Summary:	The terminal feature database used by certain applications
+Group:		System/Libraries
+Epoch:		1
+BuildArch:	noarch
+
+%description -n termcap
+The termcap package provides the /etc/termcap file.  /etc/termcap is
+a database which defines the capabilities of various terminals and
+terminal emulators.  Certain programs use the /etc/termcap file to
+access various features of terminals (the bell, colors, and graphics,
+etc.).
+
 %prep
 %setup -q
 
@@ -133,6 +145,7 @@ CONFIGURE_TOP=..
 	--without-libtool \
 	--with-shared \
 	--with-normal \
+	--with-cxx \
 	--without-debug \
 	--enable-overwrite \
 	--without-profile \
@@ -162,6 +175,7 @@ CONFIGURE_TOP=..
 	--without-libtool \
 	--with-shared \
 	--with-normal \
+	--with-cxx \
 	--without-debug \
 	--enable-overwrite \
 	--without-profile \
@@ -213,7 +227,7 @@ ln -s /%{_lib}/libncurses.so.%{majorminor} %{buildroot}%{_libdir}/libncurses.so
 
 #
 # FIXME
-# OK do not time to debbug it now
+# OK do not time to debug it now
 #
 cp %{buildroot}%{_datadir}/terminfo/x/xterm %{buildroot}%{_datadir}/terminfo/x/xterm2
 cp %{buildroot}%{_datadir}/terminfo/x/xterm-new %{buildroot}%{_datadir}/terminfo/x/xterm
@@ -226,6 +240,10 @@ rm -f %{buildroot}%{_libdir}/terminfo
 
 # fwang: avoid conflict with kon package
 rm -f %{buildroot}%{_datadir}/terminfo/k/kon
+
+# bero: Build termcap from the terminfo database
+mkdir -p %{buildroot}%_sysconfdir
+LD_LIBRARY_PATH=$RPM_BUILD_ROOT%_libdir:$RPM_BUILD_ROOT/%_lib:$LD_LIBRARY_PATH $RPM_BUILD_ROOT%_bindir/tic -Ct misc/terminfo.src >%buildroot%_sysconfdir/termcap
 
 #
 # FIXME
@@ -318,3 +336,6 @@ rm -rf %{buildroot}
 %{multiarch_includedir}/ncursesw
 %{_libdir}/lib*w.so
 %{_libdir}/lib*w.a
+
+%files -n termcap
+%_sysconfdir/termcap
