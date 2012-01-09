@@ -1,7 +1,6 @@
-%define rolluppatch 20110108
-%define patchdate 20110108
+%define rolluppatch 20111224
 %define version 5.9
-%define release %mkrel 2
+%define release %mkrel 3
 %define major 5
 %define majorminor 5.9
 %define utf8libname %mklibname %{name}w %{major}
@@ -20,14 +19,16 @@ Source0:	ftp://ftp.gnu.org/gnu/ncurses/%{name}-%{version}.tar.gz
 Source4:	ncurses-resetall.sh
 Source5:    	ncurses-useful-terms
 # fwang: Source 100 is rollup patches from
-# ftp://invisible-island.net/ncurses/5.7/
-#Source100:	ncurses-%{version}-%{rolluppatch}-patch.sh.bz2
+# ftp://invisible-island.net/ncurses/5.9/
+Source100:	ftp://invisible-island.net/ncurses/%version/ncurses-%{version}-%{rolluppatch}-patch.sh.bz2
 Patch1:		ncurses-5.6-xterm-debian.patch
 # Alias "console" to "linux"
 Patch2:		ncurses-5.9-linux-console.patch
-Patch7:		ncurses-5.7-urxvt.patch
+Patch7:		ncurses-5.9-urxvt.patch
 # Patch >100 from here:
 # ftp://invisible-island.net/ncurses/5.9/
+Patch100:	ftp://invisible-island.net/ncurses/%version/ncurses-%version-20111231.patch.gz
+Patch101:	ftp://invisible-island.net/ncurses/%version/ncurses-%version-20120107.patch.gz
 BuildRequires:	gpm-devel
 BuildRequires:	sharutils
 Conflicts:	%{name}-extraterms < 5.6-1.20070721.1
@@ -122,11 +123,13 @@ etc.).
 %setup -q
 
 # Let's apply rollup patches at first
-#bunzip2 -kc %SOURCE100 >./ncurses-%{version}-%{rolluppatch}-patch.sh
-#/bin/sh ncurses-%{version}-%{rolluppatch}-patch.sh
+bunzip2 -kc %SOURCE100 >./ncurses-%{version}-%{rolluppatch}-patch.sh
+/bin/sh ncurses-%{version}-%{rolluppatch}-patch.sh
 # Then the official patch
+%patch100 -p1 -b .p1~
+%patch101 -p1 -b .p2~
 
-%patch7 -p0 -b .urxvt
+%patch7 -p1 -b .urxvt~
 
 # regenerating configure needs patched autoconf, so modify configure
 # directly
@@ -134,7 +137,7 @@ etc.).
 
 %patch2 -p1 -b .console~
 
-find . -name "*.orig" | xargs rm -f
+find . -name "*.orig" -o -name "*~" | xargs rm -f
 # fix some permissions
 chmod 755 c++/edit_cfg.sh test/listused.sh test/configure test/tracemunch
 
@@ -246,7 +249,7 @@ rm -f %{buildroot}%{_datadir}/terminfo/k/kon
 
 # bero: Build termcap from the terminfo database
 mkdir -p %{buildroot}%_sysconfdir
-LD_LIBRARY_PATH=$RPM_BUILD_ROOT%_libdir:$RPM_BUILD_ROOT/%_lib:$LD_LIBRARY_PATH $RPM_BUILD_ROOT%_bindir/tic -Ct misc/terminfo.src >%buildroot%_sysconfdir/termcap
+LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%_lib:$RPM_BUILD_ROOT%_libdir:$LD_LIBRARY_PATH $RPM_BUILD_ROOT%_bindir/tic -Ct misc/terminfo.src >%buildroot%_sysconfdir/termcap
 
 #
 # FIXME
