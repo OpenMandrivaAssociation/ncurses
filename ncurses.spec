@@ -1,6 +1,4 @@
 %define rolluppatch 20111224
-%define version 5.9
-%define release %mkrel 3
 %define major 5
 %define majorminor 5.9
 %define utf8libname %mklibname %{name}w %{major}
@@ -10,8 +8,8 @@
 
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
-Version:	%{version}
-Release:	%{release}
+Version:	5.9
+Release:	4
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
@@ -39,18 +37,18 @@ character screens with reasonalble optimization. The ncurses (new curses)
 library is a freely distributable replacement for the discontinued 4.4BSD
 classic curses library.
 
-%package -n %{libname}
+%package -n	%{libname}
 Summary:	The development files for applications which use ncurses
 Group:		System/Libraries
 Requires:	ncurses = %{version}-%{release}
 
-%description -n %{libname}
+%description -n	%{libname}
 The curses library routines are a terminal-independent method of updating
 character screens with reasonalble optimization. The ncurses (new curses)
 library is a freely distributable replacement for the discontinued 4.4BSD
 classic curses library.
 
-%package -n %{utf8libname}
+%package -n	%{utf8libname}
 Summary:	Ncurses libraries which support UTF8
 Group:		System/Libraries
 Requires:	ncurses = %{version}-%{release}
@@ -64,29 +62,29 @@ classic curses library.
 This package contains ncurses libraries which support wide char (UTF8),
 and is not compatible with those without.
 
-%package extraterms
+%package	extraterms
 Summary:	Some exotic terminal descriptions
 Group:		System/Libraries
 Requires:	ncurses = %{version}-%{release}
 
-%description extraterms
+%description	extraterms
 Install the ncurses-extraterms package if you use some exotic terminals.
 
-%package -n %{develname}
+%package -n	%{develname}
 Summary:	The development files for applications which use ncurses
 Group:		Development/C
 Provides:	%{name}-devel = %{version}-%{release}
 Requires:	%{libname} = %{version}-%{release}
 Obsoletes:	%mklibname -d %name 5
 
-%description -n %{develname}
+%description -n	%{develname}
 The header files and libraries for developing applications that use
 the ncurses CRT screen handling and optimization package.
 
 Install the ncurses-devel package if you want to develop applications
 which will use ncurses.
 
-%package -n %{utf8develname}
+%package -n	%{utf8develname}
 Summary:	The development files for applications which use ncurses
 Group:		Development/C
 Requires:	%{utf8libname} = %{version}-%{release}
@@ -104,13 +102,13 @@ and is not compatible with those without. When linking programs with
 these libraries, you will have to append a "w" to the library names,
 i.e. -lformw, -lmenuw, -lncursesw, -lpanelw.
 
-%package -n termcap
+%package -n	termcap
 Summary:	The terminal feature database used by certain applications
 Group:		System/Libraries
 Epoch:		1
 BuildArch:	noarch
 
-%description -n termcap
+%description -n	termcap
 The termcap package provides the /etc/termcap file.  /etc/termcap is
 a database which defines the capabilities of various terminals and
 terminal emulators.  Certain programs use the /etc/termcap file to
@@ -266,27 +264,7 @@ find %{buildroot}/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not
 
 %multiarch_includes %{buildroot}%{_includedir}/ncursesw/curses.h
 
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%post -n %{utf8libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%postun -n %{utf8libname} -p /sbin/ldconfig
-%endif
-
-%clean
-rm -rf %{buildroot}
-
 %files -f %{name}.list
-%defattr(-,root,root)
 %doc README ANNOUNCE
 %{_datadir}/tabset
 %{_bindir}/*
@@ -295,7 +273,6 @@ rm -rf %{buildroot}
 %{_mandir}/man7/*
 
 %files -n %{libname}
-%defattr(-,root,root)
 %attr(755,root,root) /%{_lib}/libncurses.so.*
 %attr(755,root,root) %{_libdir}/libform.so.*
 %attr(755,root,root) %{_libdir}/libmenu.so.*
@@ -303,15 +280,12 @@ rm -rf %{buildroot}
 %attr(755,root,root) %{_libdir}/libpanel.so.*
 
 %files -n %{utf8libname}
-%defattr(-,root,root)
 %attr(755,root,root) %{_libdir}/lib*w.so.*
 
 %files extraterms -f %{name}-extraterms.list
-%defattr(-,root,root)
 %doc README
 
 %files -n %{develname}
-%defattr(-,root,root)
 %doc doc c++ test
 /%{_lib}/libncurses.so
 %{_libdir}/libcurses.a
@@ -336,7 +310,6 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*
 
 %files -n %{utf8develname}
-%defattr(-,root,root)
 %{_includedir}/ncursesw
 %{_libdir}/pkgconfig/*w.pc
 %{multiarch_includedir}/ncursesw
@@ -344,4 +317,4 @@ rm -rf %{buildroot}
 %{_libdir}/lib*w.a
 
 %files -n termcap
-%_sysconfdir/termcap
+%{_sysconfdir}/termcap
