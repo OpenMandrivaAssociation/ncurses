@@ -75,7 +75,6 @@ Install the ncurses-extraterms package if you use some exotic terminals.
 %package -n %{develname}
 Summary:	The development files for applications which use ncurses
 Group:		Development/C
-Provides:	lib%{name}-devel = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 Requires:	%{libname} = %{version}-%{release}
 Obsoletes:	%mklibname -d %name 5
@@ -91,7 +90,6 @@ which will use ncurses.
 Summary:	The development files for applications which use ncurses
 Group:		Development/C
 Requires:	%{utf8libname} = %{version}-%{release}
-Provides:	lib%{name}w-devel = %{version}-%{release}
 Provides:	ncursesw-devel = %{version}-%{release}
 Obsoletes:	%mklibname -d %{name}w 5
 Conflicts:	%{_lib}ncurses-devel < 5.7-3.20091128.2
