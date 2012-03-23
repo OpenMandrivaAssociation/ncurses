@@ -9,7 +9,7 @@
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
-Release:	4
+Release:	5
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
@@ -136,6 +136,9 @@ bunzip2 -kc %SOURCE100 >./ncurses-%{version}-%{rolluppatch}-patch.sh
 find . -name "*.orig" -o -name "*~" | xargs rm -f
 # fix some permissions
 chmod 755 c++/edit_cfg.sh test/listused.sh test/configure test/tracemunch
+
+# we don't need nor want this, and it also pulls in a dependency on /usr/bin/make
+rm -rf test/package
 
 %build
 export PKG_CONFIG_LIBDIR=%{_libdir}/pkgconfig
