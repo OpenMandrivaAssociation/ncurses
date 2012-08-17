@@ -1,4 +1,4 @@
-%define rolluppatch 20111224
+%define date	20120811
 %define major 5
 %define majorminor 5.9
 %define utf8libname %mklibname %{name}w %{major}
@@ -9,24 +9,17 @@
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
-Release:	5
+Release:	5.%{date}.1
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
-Source0:	ftp://ftp.gnu.org/gnu/ncurses/%{name}-%{version}.tar.gz
+Source0:	ftp://invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 Source4:	ncurses-resetall.sh
 Source5:    	ncurses-useful-terms
-# fwang: Source 100 is rollup patches from
-# ftp://invisible-island.net/ncurses/5.9/
-Source100:	ftp://invisible-island.net/ncurses/%version/ncurses-%{version}-%{rolluppatch}-patch.sh.bz2
 Patch1:		ncurses-5.6-xterm-debian.patch
 # Alias "console" to "linux"
-Patch2:		ncurses-5.9-linux-console.patch
+Patch2:		ncurses-5.9-20120811-linux-console.patch
 Patch7:		ncurses-5.9-urxvt.patch
-# Patch >100 from here:
-# ftp://invisible-island.net/ncurses/5.9/
-Patch100:	ftp://invisible-island.net/ncurses/%version/ncurses-%version-20111231.patch.gz
-Patch101:	ftp://invisible-island.net/ncurses/%version/ncurses-%version-20120107.patch.gz
 BuildRequires:	gpm-devel
 BuildRequires:	sharutils
 Conflicts:	%{name}-extraterms < 5.6-1.20070721.1
@@ -116,14 +109,7 @@ access various features of terminals (the bell, colors, and graphics,
 etc.).
 
 %prep
-%setup -q
-
-# Let's apply rollup patches at first
-bunzip2 -kc %SOURCE100 >./ncurses-%{version}-%{rolluppatch}-patch.sh
-/bin/sh ncurses-%{version}-%{rolluppatch}-patch.sh
-# Then the official patch
-%patch100 -p1 -b .p1~
-%patch101 -p1 -b .p2~
+%setup -q -n %{name}-%{version}-%{date}
 
 %patch7 -p1 -b .urxvt~
 
