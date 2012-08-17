@@ -157,7 +157,7 @@ CONFIGURE_TOP=..
 	--enable-pc-files \
 	--with-ospeed=unsigned
 
-%make -j1
+%make
 popd
 
 mkdir -p ncurses-utf8
@@ -188,7 +188,7 @@ CONFIGURE_TOP=..
 	--enable-pc-files \
 	--with-ospeed=unsigned
 
-%make -j1
+%make
 popd
 
 %install
