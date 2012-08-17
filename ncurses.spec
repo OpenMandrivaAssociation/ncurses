@@ -1,15 +1,15 @@
-%define date	20120811
-%define major 5
-%define majorminor 5.9
-%define utf8libname %mklibname %{name}w %{major}
-%define libname %mklibname %{name} %{major}
-%define develname %mklibname -d %{name}
-%define utf8develname %mklibname -d %{name}w
+%define date		20120811
+%define	major		5
+%define	majorminor	5.9
+%define utf8libname	%mklibname %{name}w %{major}
+%define libname		%mklibname %{name} %{major}
+%define devname		%mklibname -d %{name}
+%define utf8devname	%mklibname -d %{name}w
 
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
-Release:	5.%{date}.1
+Release:	6.%{date}.1
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
@@ -63,21 +63,21 @@ Requires:	ncurses = %{version}-%{release}
 %description	extraterms
 Install the ncurses-extraterms package if you use some exotic terminals.
 
-%package -n	%{develname}
+%package -n	%{devname}
 Summary:	The development files for applications which use ncurses
 Group:		Development/C
 Provides:	%{name}-devel = %{version}-%{release}
 Requires:	%{libname} = %{version}-%{release}
 Obsoletes:	%mklibname -d %name 5
 
-%description -n	%{develname}
+%description -n	%{devname}
 The header files and libraries for developing applications that use
 the ncurses CRT screen handling and optimization package.
 
 Install the ncurses-devel package if you want to develop applications
 which will use ncurses.
 
-%package -n	%{utf8develname}
+%package -n	%{utf8devname}
 Summary:	The development files for applications which use ncurses
 Group:		Development/C
 Requires:	%{utf8libname} = %{version}-%{release}
@@ -85,7 +85,7 @@ Provides:	ncursesw-devel = %{version}-%{release}
 Obsoletes:	%mklibname -d %{name}w 5
 Conflicts:	%{_lib}ncurses-devel < 5.7-3.20091128.2
 
-%description -n	%{utf8develname}
+%description -n	%{utf8devname}
 The libraries for developing applications that use ncurses CRT screen
 handling and optimization package. Install it if you want to develop
 applications which will use ncurses.
@@ -134,7 +134,7 @@ pushd ncurses-normal
 CONFIGURE_TOP=.. 
 %configure2_5x \
 	--includedir=%{_includedir}/ncurses \
-	--with-pkg-config-libdir=%_libdir/pkgconfig \
+	--with-pkg-config-libdir=%{_libdir}/pkgconfig \
 	--without-libtool \
 	--with-shared \
 	--with-normal \
@@ -165,7 +165,7 @@ pushd ncurses-utf8
 CONFIGURE_TOP=.. 
 %configure2_5x \
 	--includedir=%{_includedir}/ncursesw \
-	--with-pkg-config-libdir=%_libdir/pkgconfig \
+	--with-pkg-config-libdir=%{_libdir}/pkgconfig \
 	--without-libtool \
 	--with-shared \
 	--with-normal \
@@ -192,14 +192,12 @@ CONFIGURE_TOP=..
 popd
 
 %install
-rm -rf %{buildroot}
-
 pushd ncurses-utf8
-%{makeinstall_std}
+%makeinstall_std
 popd
 
 pushd ncurses-normal
-%{makeinstall_std}
+%makeinstall_std
 popd
 
 ln -sf ncurses/curses.h %{buildroot}/usr/include/ncurses.h
@@ -236,7 +234,7 @@ rm -f %{buildroot}%{_datadir}/terminfo/k/kon
 
 # bero: Build termcap from the terminfo database
 mkdir -p %{buildroot}%_sysconfdir
-LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%_lib:$RPM_BUILD_ROOT%_libdir:$LD_LIBRARY_PATH $RPM_BUILD_ROOT%_bindir/tic -Ct misc/terminfo.src >%buildroot%_sysconfdir/termcap
+LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%{_lib}:$RPM_BUILD_ROOT%{_libdir}:$LD_LIBRARY_PATH $RPM_BUILD_ROOT%{_bindir}/tic -Ct misc/terminfo.src > %{buildroot}%{_sysconfdir}/termcap
 
 #
 # FIXME
@@ -274,7 +272,7 @@ find %{buildroot}/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not
 %files extraterms -f %{name}-extraterms.list
 %doc README
 
-%files -n %{develname}
+%files -n %{devname}
 %doc doc c++ test
 /%{_lib}/libncurses.so
 %{_libdir}/libcurses.a
@@ -298,7 +296,7 @@ find %{buildroot}/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not
 %{_includedir}/*.h
 %{_mandir}/man3/*
 
-%files -n %{utf8develname}
+%files -n %{utf8devname}
 %{_includedir}/ncursesw
 %{_libdir}/pkgconfig/*w.pc
 %{multiarch_includedir}/ncursesw
