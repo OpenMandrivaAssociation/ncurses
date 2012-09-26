@@ -87,6 +87,8 @@ classic curses library.
 %libgen formw uclibc- %{uclibc_root}
 %libgen menuw uclibc- %{uclibc_root}
 %libgen panelw uclibc- %{uclibc_root}
+%libgen tic uclibc- %{uclibc_root}
+%libgen tinfo uclibc- %{uclibc_root}
 %endif
 
 %package -n	%{utf8libname}
@@ -191,8 +193,6 @@ chmod 755 c++/edit_cfg.sh test/listused.sh test/configure test/tracemunch
 rm -rf test/package
 
 %build
-
-exit 1
 export PKG_CONFIG_LIBDIR=%{_libdir}/pkgconfig
 
 CONFIGURE_TOP=$PWD
@@ -211,7 +211,7 @@ pushd uclibc
 	--enable-overwrite \
 	--without-profile \
 	--without-gpm \
-	--enable-termcap \
+	--disable-termcap \
 	--disable-getcap \
 	--enable-const \
 	--enable-hard-tabs \
@@ -228,7 +228,10 @@ pushd uclibc
 	--without-cxx-binding \
 	--without-tests \
 	--libdir=%{uclibc_root}%{_libdir} \
-	--bindir=%{uclibc_root}%{_bindir}
+	--bindir=%{uclibc_root}%{_bindir} \
+	--with-termlib=tinfo \
+	--with-ticlib=tic \
+	--disable-tic-depends
 
 %make
 popd
