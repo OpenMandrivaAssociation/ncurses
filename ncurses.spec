@@ -6,6 +6,8 @@
 %define devname		%mklibname -d %{name}
 %define utf8devname	%mklibname -d %{name}w
 
+%bcond_without	uclibc
+
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
@@ -22,6 +24,9 @@ Patch2:		ncurses-5.9-20120811-linux-console.patch
 Patch7:		ncurses-5.9-urxvt.patch
 BuildRequires:	gpm-devel
 BuildRequires:	sharutils
+%if %{with uclibc}
+BuildRequires:	uClibc-devel >= 0.9.33.2-9
+%endif
 Conflicts:	%{name}-extraterms < 5.6-1.20070721.1
 
 %description
@@ -47,6 +52,20 @@ Group:		System/Libraries
 Requires:	ncurses = %{version}-%{release}
 
 %description -n %{utf8libname}
+The curses library routines are a terminal-independent method of updating
+character screens with reasonalble optimization. The ncurses (new curses)
+library is a freely distributable replacement for the discontinued 4.4BSD
+classic curses library.
+
+This package contains ncurses libraries which support wide char (UTF8),
+and is not compatible with those without.
+
+%package -n	uclibc-%{utf8libname}
+Summary:	Ncurses libraries which support UTF8 (uClibc linked)
+Group:		System/Libraries
+Requires:	ncurses = %{version}-%{release}
+
+%description -n uclibc-%{utf8libname}
 The curses library routines are a terminal-independent method of updating
 character screens with reasonalble optimization. The ncurses (new curses)
 library is a freely distributable replacement for the discontinued 4.4BSD
@@ -129,9 +148,47 @@ rm -rf test/package
 %build
 export PKG_CONFIG_LIBDIR=%{_libdir}/pkgconfig
 
+CONFIGURE_TOP=$PWD
+
+%if %{with uclibc}
+mkdir -p uclibc
+pushd uclibc
+%configure2_5x \
+	CC=%{uclibc_cc} \
+	CFLAGS="%{uclibc_cflags}" \
+	--includedir=%{uclibc_root}%{_includedir} \
+	--without-libtool \
+	--with-shared \
+	--without-normal \
+	--with-cxx \
+	--enable-overwrite \
+	--without-profile \
+	--without-gpm \
+	--enable-termcap \
+	--disable-getcap \
+	--enable-const \
+	--enable-hard-tabs \
+	--enable-hash-map \
+	--enable-no-padding \
+	--enable-sigwinch \
+	--without-ada \
+	--enable-widec \
+	--enable-xmc-glitch \
+	--enable-colorfgbg \
+	--disable-pc-files \
+	--with-ospeed=unsigned \
+	--without-develop \
+	--without-progs \
+	--without-cxx-binding \
+	--without-tests \
+	--libdir=%{uclibc_root}/%{_libdir}
+
+%make
+popd
+%endif
+
 mkdir -p ncurses-normal
 pushd ncurses-normal
-CONFIGURE_TOP=.. 
 %configure2_5x \
 	--includedir=%{_includedir}/ncurses \
 	--with-pkg-config-libdir=%{_libdir}/pkgconfig \
@@ -162,7 +219,6 @@ popd
 
 mkdir -p ncurses-utf8
 pushd ncurses-utf8
-CONFIGURE_TOP=.. 
 %configure2_5x \
 	--includedir=%{_includedir}/ncursesw \
 	--with-pkg-config-libdir=%{_libdir}/pkgconfig \
@@ -192,6 +248,15 @@ CONFIGURE_TOP=..
 popd
 
 %install
+%if %{with uclibc}
+%makeinstall_std -C uclibc
+install -d %{buildroot}%{uclibc_root}/%{_lib}
+mv %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so.* %{buildroot}%{uclibc_root}/%{_lib}
+rm -f %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so
+ln -sr %{buildroot}%{uclibc_root}/%{_lib}/libncursesw.so.%{majorminor} %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so
+rm -f %{buildroot}%{uclibc_root}%{_libdir}/*.a
+%endif
+
 pushd ncurses-utf8
 %makeinstall_std
 popd
@@ -269,6 +334,13 @@ find %{buildroot}/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not
 %files -n %{utf8libname}
 %attr(755,root,root) %{_libdir}/lib*w.so.*
 
+%if %{with uclibc}
+%files -n uclibc-%{utf8libname}
+%defattr(755,root,root)
+%{uclibc_root}/%{_lib}/libncursesw.so.*
+%{uclibc_root}%{_libdir}/lib*w.so.*
+%endif
+
 %files extraterms -f %{name}-extraterms.list
 %doc README
 
@@ -295,6 +367,11 @@ find %{buildroot}/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not
 %{multiarch_includedir}/ncurses
 %{_includedir}/*.h
 %{_mandir}/man3/*
+%if %{with uclibc}
+%{uclibc_root}%{_libdir}/lib*.so
+# not final, but just work around library issues for now..
+%{uclibc_root}%{_includedir}/*
+%endif
 
 %files -n %{utf8devname}
 %{_includedir}/ncursesw
