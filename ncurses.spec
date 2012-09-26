@@ -8,6 +8,21 @@
 
 %bcond_without	uclibc
 
+# ugly as fuck, but at least mostly harmless to children and animals..
+%define libgen()\
+%package -n	%2%{_lib}%{1}%{major}\
+Summary:	Ncurses %{1} library\
+Group:		System/Libraries\
+Conflicts:	%{_lib}ncurses%{major} < 5.9-6.20120922.1 \
+Conflicts:	%{_lib}ncursesw%{major} < 5.9-6.20120922.1 \
+\
+%description -n	%2%{_lib}%{1}%{major}\
+This package comes with lib%{1} from the ncurses library.\
+\
+%files -n	%2%{_lib}%{1}%{major}\
+%{3}%{_libdir}/lib%{1}.so.%{major}*\
+%{nil}
+
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
@@ -45,6 +60,9 @@ character screens with reasonalble optimization. The ncurses (new curses)
 library is a freely distributable replacement for the discontinued 4.4BSD
 classic curses library.
 
+
+# to be killed
+###############################################################################
 %package -n	%{libname}
 Summary:	The development files for applications which use ncurses
 Group:		System/Libraries
@@ -55,6 +73,21 @@ The curses library routines are a terminal-independent method of updating
 character screens with reasonalble optimization. The ncurses (new curses)
 library is a freely distributable replacement for the discontinued 4.4BSD
 classic curses library.
+
+
+%libgen form %{nil} %{nil} %{nil}
+%libgen menu %{nil} %{nil} %{nil}
+%libgen panel %{nil} %{nil} %{nil}
+
+%libgen formw %{nil} %{nil} %{nil}
+%libgen menuw %{nil} %{nil} %{nil}
+%libgen panelw %{nil} %{nil} %{nil}
+
+%if %{with uclibc}
+%libgen formw uclibc- %{uclibc_root}
+%libgen menuw uclibc- %{uclibc_root}
+%libgen panelw uclibc- %{uclibc_root}
+%endif
 
 %package -n	%{utf8libname}
 Summary:	Ncurses libraries which support UTF8
@@ -82,7 +115,6 @@ library is a freely distributable replacement for the discontinued 4.4BSD
 classic curses library.
 
 This package contains ncurses libraries which support wide char (UTF8),
-and is not compatible with those without.
 
 %package	extraterms
 Summary:	Some exotic terminal descriptions
@@ -96,10 +128,24 @@ Install the ncurses-extraterms package if you use some exotic terminals.
 Summary:	The development files for applications which use ncurses
 Group:		Development/C
 Provides:	%{name}-devel = %{version}-%{release}
+# just keep this depdenency for untangling initial dependency issues..
+%if "%{_lib}" == "lib64"
+Provides:	devel(libncurses(64bit)) 
+%else
+Provides:	devel(libncurses) 
+%endif
 Provides:	ncursesw-devel = %{version}-%{release}
 Requires:	%{utf8libname} = %{version}-%{release}
+Requires:	%{_lib}formw%{major} = %{version}
+Requires:	%{_lib}menuw%{major} = %{version}
+Requires:	%{_lib}panelw%{major} = %{version}
 %if %{with uclibc}
-Requires:	uclibc-%{libname}
+Requires:	uclibc-%{_lib}formw%{major} = %{version}
+Requires:	uclibc-%{_lib}menuw%{major} = %{version}
+Requires:	uclibc-%{_lib}panelw%{major} = %{version}
+# /usr/include/termcap.h conflicts
+Conflicts:	termcap-devel > 2.0.8-53
+
 %endif
 Obsoletes:	%mklibname -d %name 5
 Obsoletes:	%mklibname -d %{name}w 5
@@ -145,6 +191,8 @@ chmod 755 c++/edit_cfg.sh test/listused.sh test/configure test/tracemunch
 rm -rf test/package
 
 %build
+
+exit 1
 export PKG_CONFIG_LIBDIR=%{_libdir}/pkgconfig
 
 CONFIGURE_TOP=$PWD
@@ -251,9 +299,9 @@ popd
 %makeinstall_std -C uclibc
 install -d %{buildroot}%{uclibc_root}/%{_lib}
 mv %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so.* %{buildroot}%{uclibc_root}/%{_lib}
-rm -f %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so
+rm %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so
 ln -sr %{buildroot}%{uclibc_root}/%{_lib}/libncursesw.so.%{majorminor} %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so
-rm -f %{buildroot}%{uclibc_root}%{_libdir}/*.a
+rm  %{buildroot}%{uclibc_root}%{_libdir}/*.a
 %endif
 
 # we only install the libraries for a while untill all our packages has been
@@ -274,12 +322,10 @@ rm -f c++/demo
 
 mkdir -p %{buildroot}/%{_lib}
 mv %{buildroot}%{_libdir}/libncurses{,w}.so.* %{buildroot}/%{_lib}
-rm -f %{buildroot}%{_libdir}/libncursesw.so
+rm %{buildroot}%{_libdir}/libncursesw.so
 ln -sr %{buildroot}/%{_lib}/libncursesw.so.%{majorminor} %{buildroot}%{_libdir}/libncursesw.so
-ln -sf libncursesw.so %{buildroot}%{_libdir}/libcurses.so
-ln -sf libncursesw.a %{buildroot}%{_libdir}/libcurses.a
-
-
+ln -s libncursesw.so %{buildroot}%{_libdir}/libcurses.so
+ln -s libncursesw.a %{buildroot}%{_libdir}/libcurses.a
 
 #
 # FIXME
@@ -328,20 +374,16 @@ find %{buildroot}/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not
 %endif
 
 %files -n %{libname}
-%attr(755,root,root) /%{_lib}/libncurses.so.*
-%attr(755,root,root) %{_libdir}/libform.so.*
-%attr(755,root,root) %{_libdir}/libmenu.so.*
-%attr(755,root,root) %{_libdir}/libpanel.so.*
+%attr(755,root,root) /%{_lib}/libncurses.so.%{major}*
 
 %files -n %{utf8libname}
 %attr(755,root,root) /%{_lib}/libncursesw.so.%{major}*
-%attr(755,root,root) %{_libdir}/lib*w.so.%{major}*
+# I have no clue on how nor where this actually gets created?!?!
+%attr(755,root,root) %{_libdir}/libncursesw.so.%{major}
 
 %if %{with uclibc}
 %files -n uclibc-%{utf8libname}
-%defattr(755,root,root)
-%{uclibc_root}/%{_lib}/libncursesw.so.*
-%{uclibc_root}%{_libdir}/lib*w.so.*
+%attr(755,root,root) %{uclibc_root}/%{_lib}/libncursesw.so.%{major}*
 %endif
 
 %files extraterms -f %{name}-extraterms.list
