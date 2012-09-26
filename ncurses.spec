@@ -35,6 +35,16 @@ character screens with reasonalble optimization. The ncurses (new curses)
 library is a freely distributable replacement for the discontinued 4.4BSD
 classic curses library.
 
+%package -n	uclibc-%{name}
+Summary:	Tools for ncurses built against uClibc
+Group:		System/Libraries
+
+%description -n	uclibc-%{name}
+The curses library routines are a terminal-independent method of updating
+character screens with reasonalble optimization. The ncurses (new curses)
+library is a freely distributable replacement for the discontinued 4.4BSD
+classic curses library.
+
 %package -n	%{libname}
 Summary:	The development files for applications which use ncurses
 Group:		System/Libraries
@@ -178,10 +188,10 @@ pushd uclibc
 	--disable-pc-files \
 	--with-ospeed=unsigned \
 	--without-develop \
-	--without-progs \
 	--without-cxx-binding \
 	--without-tests \
-	--libdir=%{uclibc_root}/%{_libdir}
+	--libdir=%{uclibc_root}%{_libdir} \
+	--bindir=%{uclibc_root}%{_bindir}
 
 %make
 popd
@@ -323,6 +333,11 @@ find %{buildroot}/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not
 %{_mandir}/man1/*
 %{_mandir}/man5/*
 %{_mandir}/man7/*
+
+%if %{with uclibc}
+%files -n uclibc-%{name}
+%{uclibc_root}%{_bindir}/*
+%endif
 
 %files -n %{libname}
 %attr(755,root,root) /%{_lib}/libncurses.so.*
