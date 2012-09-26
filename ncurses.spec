@@ -96,8 +96,15 @@ Install the ncurses-extraterms package if you use some exotic terminals.
 Summary:	The development files for applications which use ncurses
 Group:		Development/C
 Provides:	%{name}-devel = %{version}-%{release}
-Requires:	%{libname} = %{version}-%{release}
+Provides:	ncursesw-devel = %{version}-%{release}
+Requires:	%{utf8libname} = %{version}-%{release}
+%if %{with uclibc}
+Requires:	uclibc-%{libname}
+%endif
 Obsoletes:	%mklibname -d %name 5
+Obsoletes:	%mklibname -d %{name}w 5
+Conflicts:	%{_lib}ncurses-devel < 5.7-3.20091128.2
+%rename		%{utf8devname}
 
 %description -n	%{devname}
 The header files and libraries for developing applications that use
@@ -105,24 +112,6 @@ the ncurses CRT screen handling and optimization package.
 
 Install the ncurses-devel package if you want to develop applications
 which will use ncurses.
-
-%package -n	%{utf8devname}
-Summary:	The development files for applications which use ncurses
-Group:		Development/C
-Requires:	%{utf8libname} = %{version}-%{release}
-Provides:	ncursesw-devel = %{version}-%{release}
-Obsoletes:	%mklibname -d %{name}w 5
-Conflicts:	%{_lib}ncurses-devel < 5.7-3.20091128.2
-
-%description -n	%{utf8devname}
-The libraries for developing applications that use ncurses CRT screen
-handling and optimization package. Install it if you want to develop
-applications which will use ncurses.
-
-Note that the libraries included here supports wide char (UTF-8),
-and is not compatible with those without. When linking programs with
-these libraries, you will have to append a "w" to the library names,
-i.e. -lformw, -lmenuw, -lncursesw, -lpanelw.
 
 %package -n	termcap
 Summary:	The terminal feature database used by certain applications
@@ -197,11 +186,11 @@ pushd uclibc
 popd
 %endif
 
+
+# tODO: this should die
 mkdir -p ncurses-normal
 pushd ncurses-normal
 %configure2_5x \
-	--includedir=%{_includedir}/ncurses \
-	--with-pkg-config-libdir=%{_libdir}/pkgconfig \
 	--without-libtool \
 	--with-shared \
 	--with-normal \
@@ -221,8 +210,9 @@ pushd ncurses-normal
 	--disable-widec \
 	--enable-xmc-glitch \
 	--enable-colorfgbg \
-	--enable-pc-files \
-	--with-ospeed=unsigned
+	--disable-pc-files \
+	--with-ospeed=unsigned \
+	--without-progs
 
 %make
 popd
@@ -230,7 +220,6 @@ popd
 mkdir -p ncurses-utf8
 pushd ncurses-utf8
 %configure2_5x \
-	--includedir=%{_includedir}/ncursesw \
 	--with-pkg-config-libdir=%{_libdir}/pkgconfig \
 	--without-libtool \
 	--with-shared \
@@ -267,18 +256,16 @@ ln -sr %{buildroot}%{uclibc_root}/%{_lib}/libncursesw.so.%{majorminor} %{buildro
 rm -f %{buildroot}%{uclibc_root}%{_libdir}/*.a
 %endif
 
+# we only install the libraries for a while untill all our packages has been
+# rebuilt against the unicode version and no packages needs this anymore
+pushd ncurses-normal
+make install.libs DESTDIR=%{buildroot}
+rm -f %{buildroot}%{_libdir}/lib*.{a,so}
+popd
+
 pushd ncurses-utf8
 %makeinstall_std
 popd
-
-pushd ncurses-normal
-%makeinstall_std
-popd
-
-ln -sf ncurses/curses.h %{buildroot}/usr/include/ncurses.h
-for I in curses unctrl eti form menu panel term; do
-	ln -sf ncurses/$I.h %{buildroot}/usr/include/$I.h
-done
 
 # the resetall script
 install -m 755 %{SOURCE4} %{buildroot}%{_bindir}/resetall
@@ -286,10 +273,13 @@ install -m 755 %{SOURCE4} %{buildroot}%{_bindir}/resetall
 rm -f c++/demo
 
 mkdir -p %{buildroot}/%{_lib}
-mv %{buildroot}%{_libdir}/libncurses.so* %{buildroot}/%{_lib}
-ln -s /%{_lib}/libncurses.so.%{majorminor} %{buildroot}%{_libdir}/libncurses.so.%{majorminor}
-ln -s /%{_lib}/libncurses.so.%{majorminor} %{buildroot}%{_libdir}/libncurses.so.%{major}
-ln -s /%{_lib}/libncurses.so.%{majorminor} %{buildroot}%{_libdir}/libncurses.so
+mv %{buildroot}%{_libdir}/libncurses{,w}.so.* %{buildroot}/%{_lib}
+rm -f %{buildroot}%{_libdir}/libncursesw.so
+ln -sr %{buildroot}/%{_lib}/libncursesw.so.%{majorminor} %{buildroot}%{_libdir}/libncursesw.so
+ln -sf libncursesw.so %{buildroot}%{_libdir}/libcurses.so
+ln -sf libncursesw.a %{buildroot}%{_libdir}/libcurses.a
+
+
 
 #
 # FIXME
@@ -322,9 +312,7 @@ perl -ni -e 'BEGIN { open F, "%{name}.list"; /^%/ or $s{$_} = 1 foreach <F>; } p
 
 find %{buildroot}/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not -name "*_p.a" -not -name "*w.a" | sed -e "s#^%{buildroot}##" > %{libname}-devel.list
 
-%multiarch_includes %{buildroot}%{_includedir}/ncurses/curses.h
-
-%multiarch_includes %{buildroot}%{_includedir}/ncursesw/curses.h
+%multiarch_includes %{buildroot}%{_includedir}/curses.h
 
 %files -f %{name}.list
 %doc README ANNOUNCE
@@ -343,11 +331,11 @@ find %{buildroot}/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not
 %attr(755,root,root) /%{_lib}/libncurses.so.*
 %attr(755,root,root) %{_libdir}/libform.so.*
 %attr(755,root,root) %{_libdir}/libmenu.so.*
-%attr(755,root,root) %{_libdir}/libncurses.so.*
 %attr(755,root,root) %{_libdir}/libpanel.so.*
 
 %files -n %{utf8libname}
-%attr(755,root,root) %{_libdir}/lib*w.so.*
+%attr(755,root,root) /%{_lib}/libncursesw.so.%{major}*
+%attr(755,root,root) %{_libdir}/lib*w.so.%{major}*
 
 %if %{with uclibc}
 %files -n uclibc-%{utf8libname}
@@ -361,39 +349,30 @@ find %{buildroot}/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not
 
 %files -n %{devname}
 %doc doc c++ test
-/%{_lib}/libncurses.so
 %{_libdir}/libcurses.a
 %{_libdir}/libcurses.so
-%{_libdir}/libform.a
-%{_libdir}/libform.so
-%{_libdir}/libmenu.a
-%{_libdir}/libmenu.so
-%{_libdir}/libncurses++.a
-%{_libdir}/libncurses.a
-%{_libdir}/libncurses.so
-%{_libdir}/libpanel.a
-%{_libdir}/libpanel.so
-%{_libdir}/pkgconfig/form.pc
-%{_libdir}/pkgconfig/menu.pc
-%{_libdir}/pkgconfig/ncurses++.pc
-%{_libdir}/pkgconfig/ncurses.pc
-%{_libdir}/pkgconfig/panel.pc
-%{_includedir}/ncurses
-%{multiarch_includedir}/ncurses
+%{_libdir}/libformw.a
+%{_libdir}/libformw.so
+%{_libdir}/libmenuw.a
+%{_libdir}/libmenuw.so
+%{_libdir}/libncurses++w.a
+%{_libdir}/libncursesw.a
+%{_libdir}/libncursesw.so
+%{_libdir}/libpanelw.a
+%{_libdir}/libpanelw.so
+%{_libdir}/pkgconfig/formw.pc
+%{_libdir}/pkgconfig/menuw.pc
+%{_libdir}/pkgconfig/ncurses++w.pc
+%{_libdir}/pkgconfig/ncursesw.pc
+%{_libdir}/pkgconfig/panelw.pc
 %{_includedir}/*.h
+%{multiarch_includedir}/curses.h
 %{_mandir}/man3/*
 %if %{with uclibc}
 %{uclibc_root}%{_libdir}/lib*.so
 # not final, but just work around library issues for now..
 %{uclibc_root}%{_includedir}/*
 %endif
-
-%files -n %{utf8devname}
-%{_includedir}/ncursesw
-%{_libdir}/pkgconfig/*w.pc
-%{multiarch_includedir}/ncursesw
-%{_libdir}/lib*w.so
-%{_libdir}/lib*w.a
 
 %files -n termcap
 %{_sysconfdir}/termcap
