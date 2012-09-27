@@ -26,7 +26,7 @@ This package comes with lib%{1} from the ncurses library.\
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
-Release:	6.%{date}.1
+Release:	6.%{date}.2
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
@@ -328,7 +328,9 @@ mv %{buildroot}%{_libdir}/libncurses{,w}.so.* %{buildroot}/%{_lib}
 rm %{buildroot}%{_libdir}/libncursesw.so
 ln -sr %{buildroot}/%{_lib}/libncursesw.so.%{majorminor} %{buildroot}%{_libdir}/libncursesw.so
 ln -s libncursesw.so %{buildroot}%{_libdir}/libcurses.so
+ln -s libncursesw.so %{buildroot}%{_libdir}/libncurses.so
 ln -s libncursesw.a %{buildroot}%{_libdir}/libcurses.a
+ln -s libncursesw.a %{buildroot}%{_libdir}/libncurses.a
 
 #
 # FIXME
@@ -401,6 +403,8 @@ find %{buildroot}/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not
 %{_libdir}/libmenuw.a
 %{_libdir}/libmenuw.so
 %{_libdir}/libncurses++w.a
+%{_libdir}/libncurses.a
+%{_libdir}/libncurses.so
 %{_libdir}/libncursesw.a
 %{_libdir}/libncursesw.so
 %{_libdir}/libpanelw.a
