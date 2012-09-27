@@ -66,7 +66,7 @@ classic curses library.
 %package -n	%{libname}
 Summary:	The development files for applications which use ncurses
 Group:		System/Libraries
-Requires:	ncurses = %{version}-%{release}
+Requires:	ncurses = %{version}
 
 %description -n	%{libname}
 The curses library routines are a terminal-independent method of updating
@@ -94,7 +94,7 @@ classic curses library.
 %package -n	%{utf8libname}
 Summary:	Ncurses libraries which support UTF8
 Group:		System/Libraries
-Requires:	ncurses = %{version}-%{release}
+Requires:	ncurses = %{version}
 
 %description -n %{utf8libname}
 The curses library routines are a terminal-independent method of updating
@@ -108,7 +108,7 @@ and is not compatible with those without.
 %package -n	uclibc-%{utf8libname}
 Summary:	Ncurses libraries which support UTF8 (uClibc linked)
 Group:		System/Libraries
-Requires:	ncurses = %{version}-%{release}
+Requires:	ncurses = %{version}
 
 %description -n uclibc-%{utf8libname}
 The curses library routines are a terminal-independent method of updating
@@ -121,7 +121,7 @@ This package contains ncurses libraries which support wide char (UTF8),
 %package	extraterms
 Summary:	Some exotic terminal descriptions
 Group:		System/Libraries
-Requires:	ncurses = %{version}-%{release}
+Requires:	ncurses = %{version}
 
 %description	extraterms
 Install the ncurses-extraterms package if you use some exotic terminals.
@@ -129,7 +129,7 @@ Install the ncurses-extraterms package if you use some exotic terminals.
 %package -n	%{devname}
 Summary:	The development files for applications which use ncurses
 Group:		Development/C
-Provides:	%{name}-devel = %{version}-%{release}
+Provides:	%{name}-devel = %{version}
 # just keep this depdenency for untangling initial dependency issues..
 %if "%{_lib}" == "lib64"
 Provides:	devel(libncurses(64bit)) 
@@ -137,7 +137,7 @@ Provides:	devel(libncurses(64bit))
 Provides:	devel(libncurses) 
 %endif
 Provides:	ncursesw-devel = %{version}-%{release}
-Requires:	%{utf8libname} = %{version}-%{release}
+Requires:	%{utf8libname} = %{version}
 Requires:	%{_lib}formw%{major} = %{version}
 Requires:	%{_lib}menuw%{major} = %{version}
 Requires:	%{_lib}panelw%{major} = %{version}
