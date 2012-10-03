@@ -26,7 +26,7 @@ This package comes with lib%{1} from the ncurses library.\
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
-Release:	6.%{date}.3
+Release:	6.%{date}.4
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
@@ -367,6 +367,13 @@ perl -ni -e 'BEGIN { open F, "%{name}.list"; /^%/ or $s{$_} = 1 foreach <F>; } p
 
 find %{buildroot}/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not -name "*_p.a" -not -name "*w.a" | sed -e "s#^%{buildroot}##" > %{libname}-devel.list
 
+# can't replace directory with symlink (rpm bug), symlink all headers
+mkdir $RPM_BUILD_ROOT%{_includedir}/ncurses{,w}
+for l in $RPM_BUILD_ROOT%{_includedir}/*.h; do
+    ln -sr $l $RPM_BUILD_ROOT%{_includedir}/ncurses
+    ln -sr $l $RPM_BUILD_ROOT%{_includedir}/ncursesw
+done
+
 %multiarch_includes %{buildroot}%{_includedir}/curses.h
 
 %files -f %{name}.list
@@ -420,6 +427,10 @@ find %{buildroot}/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not
 %{_libdir}/pkgconfig/panelw.pc
 %{_includedir}/*.h
 %{multiarch_includedir}/curses.h
+%dir %{_includedir}/ncurses
+%{_includedir}/ncurses/*.h
+%dir %{_includedir}/ncursesw
+%{_includedir}/ncursesw/*.h
 %{_mandir}/man3/*
 %if %{with uclibc}
 %{uclibc_root}%{_libdir}/lib*.so
