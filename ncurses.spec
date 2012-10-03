@@ -142,6 +142,9 @@ Requires:	%{_lib}formw%{major} = %{version}
 Requires:	%{_lib}menuw%{major} = %{version}
 Requires:	%{_lib}panelw%{major} = %{version}
 %if %{with uclibc}
+Requires:	uclibc-%{utf8libname} = %{version}
+Requires:	uclibc-%{_lib}tic%{major} = %{version}
+Requires:	uclibc-%{_lib}tinfo%{major} = %{version}
 Requires:	uclibc-%{_lib}formw%{major} = %{version}
 Requires:	uclibc-%{_lib}menuw%{major} = %{version}
 Requires:	uclibc-%{_lib}panelw%{major} = %{version}
