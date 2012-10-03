@@ -26,7 +26,7 @@ This package comes with lib%{1} from the ncurses library.\
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
-Release:	6.%{date}.2
+Release:	6.%{date}.3
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
@@ -303,7 +303,11 @@ popd
 install -d %{buildroot}%{uclibc_root}/%{_lib}
 mv %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so.* %{buildroot}%{uclibc_root}/%{_lib}
 rm %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so
-ln -sr %{buildroot}%{uclibc_root}/%{_lib}/libncursesw.so.%{majorminor} %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so
+#ln -sr %{buildroot}%{uclibc_root}/%{_lib}/libncursesw.so.%{majorminor} %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so
+cat > %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so <<EOF
+GROUP ( AS_NEEDED ( %{uclibc_root}/%{_lib}/libncursesw.so.%{majorminor} %{uclibc_root}%{_libdir}/libtinfo.so.%{majorminor} %{uclibc_root}%{_libdir}/libtic.so.%{majorminor}) )
+EOF
+
 rm  %{buildroot}%{uclibc_root}%{_libdir}/*.a
 %endif
 
