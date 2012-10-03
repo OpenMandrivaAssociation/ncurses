@@ -129,7 +129,7 @@ Install the ncurses-extraterms package if you use some exotic terminals.
 %package -n	%{devname}
 Summary:	The development files for applications which use ncurses
 Group:		Development/C
-Provides:	%{name}-devel = %{version}
+Provides:	%{name}-devel = %{EVRD}
 # just keep this depdenency for untangling initial dependency issues..
 %if "%{_lib}" == "lib64"
 Provides:	devel(libncurses(64bit)) 
