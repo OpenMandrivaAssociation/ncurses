@@ -40,7 +40,7 @@ Patch7:		ncurses-5.9-urxvt.patch
 BuildRequires:	gpm-devel
 BuildRequires:	sharutils
 %if %{with uclibc}
-BuildRequires:	uClibc-devel >= 0.9.33.2-9
+BuildRequires:	uClibc-devel >= 0.9.33.2-15
 %endif
 Conflicts:	%{name}-extraterms < 5.6-1.20070721.1
 
