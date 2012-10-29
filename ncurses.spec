@@ -136,6 +136,7 @@ Provides:	devel(libncurses(64bit))
 %else
 Provides:	devel(libncurses) 
 %endif
+Provides:	pkgconfig(ncurses)
 Provides:	ncursesw-devel = %{version}-%{release}
 Requires:	%{utf8libname} = %{version}
 Requires:	%{_lib}formw%{major} = %{version}
@@ -245,7 +246,6 @@ popd
 mkdir -p ncurses-normal
 pushd ncurses-normal
 %configure2_5x \
-	--with-pkg-config-libdir=%{_libdir}/pkgconfig \
 	--without-libtool \
 	--with-shared \
 	--with-normal \
@@ -265,7 +265,7 @@ pushd ncurses-normal
 	--disable-widec \
 	--enable-xmc-glitch \
 	--enable-colorfgbg \
-	--enable-pc-files \
+	--disable-pc-files \
 	--with-ospeed=unsigned \
 	--without-progs
 
@@ -424,14 +424,6 @@ done
 %{_libdir}/libncursesw.so
 %{_libdir}/libpanelw.a
 %{_libdir}/libpanelw.so
-# still include for compatibiity..
-%if 1
-%{_libdir}/pkgconfig/form.pc
-%{_libdir}/pkgconfig/menu.pc
-%{_libdir}/pkgconfig/ncurses++.pc
-%{_libdir}/pkgconfig/ncurses.pc
-%{_libdir}/pkgconfig/panel.pc
-%endif
 %{_libdir}/pkgconfig/formw.pc
 %{_libdir}/pkgconfig/menuw.pc
 %{_libdir}/pkgconfig/ncurses++w.pc
