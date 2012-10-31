@@ -26,7 +26,7 @@ This package comes with lib%{1} from the ncurses library.\
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
-Release:	6.%{date}.2
+Release:	6.%{date}.3
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
@@ -42,7 +42,7 @@ BuildRequires:	sharutils
 %if %{with uclibc}
 BuildRequires:	uClibc-devel >= 0.9.33.2-15
 %endif
-Conflicts:	%{name}-extraterms < 5.6-1.20070721.1
+Conflicts:	%{name}-extraterms < 5.9-6.20121026.3
 
 %description
 The curses library routines are a terminal-independent method of updating
