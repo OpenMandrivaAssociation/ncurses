@@ -122,6 +122,7 @@ This package contains ncurses libraries which support wide char (UTF8),
 Summary:	Some exotic terminal descriptions
 Group:		System/Libraries
 Requires:	ncurses = %{version}
+BuildArch:	noarch
 
 %description	extraterms
 Install the ncurses-extraterms package if you use some exotic terminals.
