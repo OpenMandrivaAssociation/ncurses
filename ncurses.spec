@@ -205,9 +205,7 @@ CONFIGURE_TOP=$PWD
 %if %{with uclibc}
 mkdir -p uclibc
 pushd uclibc
-%configure2_5x \
-	CC=%{uclibc_cc} \
-	CFLAGS="%{uclibc_cflags}" \
+%uclibc_configure \
 	--includedir=%{uclibc_root}%{_includedir} \
 	--without-libtool \
 	--with-shared \
@@ -215,7 +213,7 @@ pushd uclibc
 	--with-cxx \
 	--enable-overwrite \
 	--without-profile \
-	--without-gpm \
+	--with-gpm \
 	--disable-termcap \
 	--disable-getcap \
 	--enable-const \
@@ -232,8 +230,6 @@ pushd uclibc
 	--without-develop \
 	--without-cxx-binding \
 	--without-tests \
-	--libdir=%{uclibc_root}%{_libdir} \
-	--bindir=%{uclibc_root}%{_bindir} \
 	--with-termlib=tinfo \
 	--with-ticlib=tic \
 	--disable-tic-depends
