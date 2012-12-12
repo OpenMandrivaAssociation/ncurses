@@ -1,4 +1,4 @@
-%define date		20121026
+%define date		20121208
 %define	major		5
 %define	majorminor	5.9
 %define utf8libname	%mklibname %{name}w %{major}
@@ -26,7 +26,7 @@ This package comes with lib%{1} from the ncurses library.\
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
-Release:	6.%{date}.3
+Release:	6.%{date}.1
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
@@ -443,6 +443,9 @@ done
 %{_sysconfdir}/termcap
 
 %changelog
+* Wed Oct 31 2012 Per Øyvind Karlsen <peroyvind@mandriva.org> 5.9-6.20121208.1
+- new version
+
 * Wed Oct 31 2012 Per Øyvind Karlsen <peroyvind@mandriva.org> 5.9-6.20121026.3
 + Revision: 821465
 - enable gpm support for uclibc build
