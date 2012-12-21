@@ -26,7 +26,7 @@ This package comes with lib%{1} from the ncurses library.\
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
-Release:	6.%{date}.1
+Release:	6.%{date}.2
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
@@ -305,9 +305,13 @@ install -d %{buildroot}%{uclibc_root}/%{_lib}
 mv %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so.* %{buildroot}%{uclibc_root}/%{_lib}
 rm %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so
 #ln -sr %{buildroot}%{uclibc_root}/%{_lib}/libncursesw.so.%{majorminor} %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so
-gcc -fuse-ld=bfd    -Wl,--verbose 2>&1 | sed -n '/OUTPUT_FORMAT/,/)/p' > %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so
-echo 'GROUP ( AS_NEEDED ( %{uclibc_root}/%{_lib}/libncursesw.so.%{majorminor} %{uclibc_root}%{_libdir}/libtinfo.so.%{majorminor} %{uclibc_root}%{_libdir}/libtic.so.%{majorminor}) )' >> \
-%{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so
+cat > %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so << EOF
+/* GNU ld script
+Just linking against all ncurses libraries as needed...
+*/
+`gcc -fuse-ld=bfd    -Wl,--verbose 2>&1 | sed -n '/OUTPUT_FORMAT/,/)/p'`
+GROUP ( AS_NEEDED ( %{uclibc_root}/%{_lib}/libncursesw.so.%{majorminor} %{uclibc_root}%{_libdir}/libtinfo.so.%{majorminor} %{uclibc_root}%{_libdir}/libtic.so.%{majorminor}) )
+EOF
 
 rm  %{buildroot}%{uclibc_root}%{_libdir}/*.a
 %endif
@@ -443,6 +447,9 @@ done
 %{_sysconfdir}/termcap
 
 %changelog
+* Fri Dec 21 2012 Per Øyvind Karlsen <peroyvind@mandriva.org> 5.9-6.20121208.2
+- fix libncursesw.so script
+
 * Wed Oct 31 2012 Per Øyvind Karlsen <peroyvind@mandriva.org> 5.9-6.20121208.1
 - new version
 
