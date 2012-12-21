@@ -200,7 +200,7 @@ rm -rf test/package
 %build
 export PKG_CONFIG_LIBDIR=%{_libdir}/pkgconfig
 
-CONFIGURE_TOP=$PWD
+CONFIGURE_TOP="$PWD"
 
 %if %{with uclibc}
 mkdir -p uclibc
