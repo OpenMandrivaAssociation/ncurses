@@ -1,0 +1,11 @@
+--- ncurses-5.9-20121208/misc/ncurses-config.in.libpath~	2012-12-27 07:06:18.412997431 +0100
++++ ncurses-5.9-20121208/misc/ncurses-config.in	2012-12-27 07:09:18.599276454 +0100
+@@ -109,7 +109,7 @@ while test $# -gt 0; do
+ ENDECHO
+ 		;;
+ 	--libs)
+-		if test "$libdir" = /usr/lib
++		if [ "$libdir" = /usr/lib -o "$libdir" = /usr/lib64 ]
+ 		then
+ 			LIBDIR=
+ 		else

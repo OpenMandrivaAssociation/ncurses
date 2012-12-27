@@ -32,11 +32,12 @@ Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
 Source0:	ftp://invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 Source4:	ncurses-resetall.sh
-Source5:    	ncurses-useful-terms
+Source5:	ncurses-useful-terms
 Patch1:		ncurses-5.6-xterm-debian.patch
 # Alias "console" to "linux"
 Patch2:		ncurses-5.9-20120811-linux-console.patch
 Patch7:		ncurses-5.9-urxvt.patch
+Patch8:		ncurses-5.9-20121208-config-dont-print-standard-lib64-path.patch
 BuildRequires:	gpm-devel
 BuildRequires:	sharutils
 %if %{with uclibc}
@@ -186,9 +187,10 @@ etc.).
 
 # regenerating configure needs patched autoconf, so modify configure
 # directly
-%patch1 -p1 -b .deb
+%patch1 -p1 -b .deb~
 
 %patch2 -p1 -b .console~
+%patch8 -p1 -b .lib64~
 
 find . -name "*.orig" -o -name "*~" | xargs rm -f
 # fix some permissions
