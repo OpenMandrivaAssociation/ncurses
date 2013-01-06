@@ -26,7 +26,7 @@ This package comes with lib%{1} from the ncurses library.\
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
-Release:	6.%{date}.2
+Release:	6.%{date}.3
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
@@ -67,7 +67,6 @@ classic curses library.
 %package -n	%{libname}
 Summary:	The development files for applications which use ncurses
 Group:		System/Libraries
-Requires:	ncurses = %{version}
 
 %description -n	%{libname}
 The curses library routines are a terminal-independent method of updating
@@ -95,7 +94,6 @@ classic curses library.
 %package -n	%{utf8libname}
 Summary:	Ncurses libraries which support UTF8
 Group:		System/Libraries
-Requires:	ncurses = %{version}
 
 %description -n %{utf8libname}
 The curses library routines are a terminal-independent method of updating
@@ -109,7 +107,6 @@ and is not compatible with those without.
 %package -n	uclibc-%{utf8libname}
 Summary:	Ncurses libraries which support UTF8 (uClibc linked)
 Group:		System/Libraries
-Requires:	ncurses = %{version}
 
 %description -n uclibc-%{utf8libname}
 The curses library routines are a terminal-independent method of updating
@@ -122,7 +119,6 @@ This package contains ncurses libraries which support wide char (UTF8),
 %package	extraterms
 Summary:	Some exotic terminal descriptions
 Group:		System/Libraries
-Requires:	ncurses = %{version}
 BuildArch:	noarch
 
 %description	extraterms
@@ -449,8 +445,13 @@ done
 %{_sysconfdir}/termcap
 
 %changelog
+* Sun Jan  6 2013 Per Øyvind Karlsen <peroyvind@mandriva.org> 5.9-6.20121208.3
+- drop dependency in library packages on 'ncurses' package as it's now being
+  pulled in by 'basesystem-minimal' package in stead, thus eliminating a
+  dependency loop
+
 * Fri Dec 21 2012 Per Øyvind Karlsen <peroyvind@mandriva.org> 5.9-6.20121208.2
-- fix libncursesw.so script
+- fix libncursesw.so linker script
 
 * Wed Oct 31 2012 Per Øyvind Karlsen <peroyvind@mandriva.org> 5.9-6.20121208.1
 - new version
