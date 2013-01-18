@@ -7,12 +7,6 @@
 %define utf8devname	%mklibname -d %{name}w
 
 %bcond_without	uclibc
-# (tpg) let's try this way
-%ifarch %x86_64
-%define _requires_exceptions uClibc(devel(libtinfo(64bit)))
-%else
-%define _requires_exceptions uClibc(devel(libtinfo()))
-%endif
 
 # ugly as fuck, but at least mostly harmless to children and animals..
 %define libgen()\
