@@ -1,4 +1,4 @@
-%define date		20121208
+%define date		20130202
 %define	major		5
 %define	majorminor	5.9
 %define utf8libname	%mklibname %{name}w %{major}
@@ -26,7 +26,7 @@ This package comes with lib%{1} from the ncurses library.\
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
-Release:	6.%{date}.5
+Release:	6.%{date}.1
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
@@ -307,7 +307,7 @@ cat > %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so << EOF
 /* GNU ld script
 Just linking against all ncurses libraries as needed...
 */
-`gcc -fuse-ld=bfd    -Wl,--verbose 2>&1 | sed -n '/OUTPUT_FORMAT/,/)/p'`
+`%__cc -fuse-ld=bfd    -Wl,--verbose 2>&1 | sed -n '/OUTPUT_FORMAT/,/)/p'`
 GROUP ( AS_NEEDED ( %{uclibc_root}/%{_lib}/libncursesw.so.%{majorminor} %{uclibc_root}%{_libdir}/libtinfo.so.%{majorminor} %{uclibc_root}%{_libdir}/libtic.so.%{majorminor}) )
 EOF
 
