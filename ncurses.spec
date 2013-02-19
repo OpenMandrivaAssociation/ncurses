@@ -338,6 +338,7 @@ ln -s libncursesw.so %{buildroot}%{_libdir}/libcurses.so
 ln -s libncursesw.so %{buildroot}%{_libdir}/libncurses.so
 ln -s libncursesw.a %{buildroot}%{_libdir}/libcurses.a
 ln -s libncursesw.a %{buildroot}%{_libdir}/libncurses.a
+[ -e %buildroot%_libdir/libncursesw.so.5 ] || ln -s ../../lib/libncursesw.so.5 %{buildroot}%{_libdir}/
 
 #
 # FIXME
@@ -357,7 +358,11 @@ rm -f %{buildroot}%{_datadir}/terminfo/k/kon
 
 # bero: Build termcap from the terminfo database
 mkdir -p %{buildroot}%_sysconfdir
+%if ! %cross_compiling
 LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%{_lib}:$RPM_BUILD_ROOT%{_libdir}:$LD_LIBRARY_PATH $RPM_BUILD_ROOT%{_bindir}/tic -Ct misc/terminfo.src > %{buildroot}%{_sysconfdir}/termcap
+%else
+tic -Ct misc/terminfo.src > %{buildroot}%{_sysconfdir}/termcap
+%endif
 
 #
 # FIXME
