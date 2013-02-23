@@ -1,4 +1,2 @@
-removed_sources:
-  ncurses-5.9-20121208.tgz: 4524dc05804d17de58b886d93b9457a123a78852
 sources:
-  ncurses-5.9-20130202.tgz: eae28cedd03c345af0872f69c318a766505bdeca
+  ncurses-5.9-20130218.tgz: 56e77bfead209e54cbfb212b173c37f3c4efa2a1
