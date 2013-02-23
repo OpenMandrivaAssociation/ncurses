@@ -26,7 +26,7 @@ This package comes with lib%{1} from the ncurses library.\
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
-Release:	6.%{date}.1
+Release:	6.%{date}.2
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
@@ -334,11 +334,13 @@ mkdir -p %{buildroot}/%{_lib}
 mv %{buildroot}%{_libdir}/libncurses{,w}.so.* %{buildroot}/%{_lib}
 rm %{buildroot}%{_libdir}/libncursesw.so
 ln -sr %{buildroot}/%{_lib}/libncursesw.so.%{majorminor} %{buildroot}%{_libdir}/libncursesw.so
+for i in form menu ncurses panel; do
+	ln -s lib${i}w.a %{buildroot}%{_libdir}/lib${i}.a
+	ln -s lib${i}w.so %{buildroot}%{_libdir}/lib${i}.so
+done
 ln -s libncursesw.so %{buildroot}%{_libdir}/libcurses.so
-ln -s libncursesw.so %{buildroot}%{_libdir}/libncurses.so
 ln -s libncursesw.a %{buildroot}%{_libdir}/libcurses.a
-ln -s libncursesw.a %{buildroot}%{_libdir}/libncurses.a
-[ -e %buildroot%_libdir/libncursesw.so.5 ] || ln -s ../../lib/libncursesw.so.5 %{buildroot}%{_libdir}/
+ln -s libncurses++w.a %{buildroot}%{_libdir}/libncurses++.a
 
 #
 # FIXME
@@ -417,15 +419,22 @@ done
 %doc doc c++ test
 %{_libdir}/libcurses.a
 %{_libdir}/libcurses.so
+%{_libdir}/libform.a
+%{_libdir}/libform.so
 %{_libdir}/libformw.a
 %{_libdir}/libformw.so
+%{_libdir}/libmenu.a
+%{_libdir}/libmenu.so
 %{_libdir}/libmenuw.a
 %{_libdir}/libmenuw.so
+%{_libdir}/libncurses++.a
 %{_libdir}/libncurses++w.a
 %{_libdir}/libncurses.a
 %{_libdir}/libncurses.so
 %{_libdir}/libncursesw.a
 %{_libdir}/libncursesw.so
+%{_libdir}/libpanel.a
+%{_libdir}/libpanel.so
 %{_libdir}/libpanelw.a
 %{_libdir}/libpanelw.so
 %{_libdir}/pkgconfig/formw.pc
