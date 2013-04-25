@@ -76,13 +76,13 @@ library is a freely distributable replacement for the discontinued 4.4BSD
 classic curses library.
 
 
-%libgen form %{nil} %{nil} %{nil} %{oldmajor}
-%libgen menu %{nil} %{nil} %{nil} %{oldmajor}
-%libgen panel %{nil} %{nil} %{nil} %{oldmajor}
+%libgen form %{nil} %{nil} %{oldmajor}
+%libgen menu %{nil} %{nil} %{oldmajor}
+%libgen panel %{nil} %{nil} %{oldmajor}
 
-%libgen formw %{nil} %{nil} %{nil} %{major}
-%libgen menuw %{nil} %{nil} %{nil} %{major}
-%libgen panelw %{nil} %{nil} %{nil} %{major}
+%libgen formw %{nil} %{nil} %{major}
+%libgen menuw %{nil} %{nil} %{major}
+%libgen panelw %{nil} %{nil} %{major}
 
 %if %{with uclibc}
 %libgen formw uclibc- %{uclibc_root} %{major}
