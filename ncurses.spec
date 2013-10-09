@@ -233,7 +233,10 @@ pushd uclibc
 	--without-tests \
 	--with-termlib=tinfo \
 	--with-ticlib=tic \
-	--disable-tic-depends
+	--disable-tic-depends \
+	--enable-ext-colors \
+	--enable-ext-mouse \
+	--enable-sp-funcs
 
 %make
 popd
@@ -265,6 +268,9 @@ pushd ncurses-normal
 	--enable-colorfgbg \
 	--disable-pc-files \
 	--with-ospeed=unsigned \
+	--enable-ext-colors \
+	--enable-ext-mouse \
+	--enable-sp-funcs \
 	--without-progs
 
 %make
@@ -294,7 +300,10 @@ pushd ncurses-utf8
 	--enable-xmc-glitch \
 	--enable-colorfgbg \
 	--enable-pc-files \
-	--with-ospeed=unsigned
+	--with-ospeed=unsigned \
+	--enable-ext-colors \
+	--enable-ext-mouse \
+	--enable-sp-funcs
 
 %make
 popd
