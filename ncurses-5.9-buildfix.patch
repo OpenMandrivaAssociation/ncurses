@@ -1,0 +1,13 @@
+--- ncurses-5.9-20131005/configure.bf~	2013-10-10 00:29:52.260914640 +0200
++++ ncurses-5.9-20131005/configure	2013-10-10 00:30:29.037913273 +0200
+@@ -318,6 +318,10 @@ do
+   | --locals=* | --local=* | --loca=* | --loc=* | --lo=*)
+     localstatedir=$ac_optarg ;;
+ 
++  --localedir=*)
++    # passed by rpm
++    ;;
++
+   -mandir | --mandir | --mandi | --mand | --man | --ma | --m)
+     ac_prev=mandir ;;
+   -mandir=* | --mandir=* | --mandi=* | --mand=* | --man=* | --ma=* | --m=*)
