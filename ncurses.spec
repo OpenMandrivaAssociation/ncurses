@@ -1,8 +1,9 @@
 %define date 20131005
-%define major 5
+%define	oldmajor 5
+%define major 6
 %define majorminor 5.9
 %define utf8libname %mklibname %{name}w %{major}
-%define libname %mklibname %{name} %{major}
+%define libname %mklibname %{name} %{oldmajor}
 %define devname %mklibname -d %{name}
 %define utf8devname %mklibname -d %{name}w
 
@@ -10,17 +11,17 @@
 
 # ugly as fuck, but at least mostly harmless to children and animals..
 %define libgen()\
-%package -n	%2%{_lib}%{1}%{major}\
+%package -n	%2%{_lib}%{1}%{4}\
 Summary:	Ncurses %{1} library\
 Group:		System/Libraries\
 Conflicts:	%{_lib}ncurses%{major} < 5.9-6.20120922.1 \
 Conflicts:	%{_lib}ncursesw%{major} < 5.9-6.20120922.1 \
 \
-%description -n	%2%{_lib}%{1}%{major}\
+%description -n	%2%{_lib}%{1}%{4}\
 This package comes with lib%{1} from the ncurses library.\
 \
-%files -n	%2%{_lib}%{1}%{major}\
-%{3}%{_libdir}/lib%{1}.so.%{major}*\
+%files -n	%2%{_lib}%{1}%{4}\
+%{3}%{_libdir}/lib%{1}.so.%{4}*\
 %{nil}
 
 Summary:	A CRT screen handling and optimization package
@@ -76,20 +77,20 @@ library is a freely distributable replacement for the discontinued 4.4BSD
 classic curses library.
 
 
-%libgen form %{nil} %{nil} %{nil}
-%libgen menu %{nil} %{nil} %{nil}
-%libgen panel %{nil} %{nil} %{nil}
+%libgen form %{nil} %{nil} %{oldmajor}
+%libgen menu %{nil} %{nil} %{oldmajor}
+%libgen panel %{nil} %{nil} %{oldmajor}
 
-%libgen formw %{nil} %{nil} %{nil}
-%libgen menuw %{nil} %{nil} %{nil}
-%libgen panelw %{nil} %{nil} %{nil}
+%libgen formw %{nil} %{nil} %{major}
+%libgen menuw %{nil} %{nil} %{major}
+%libgen panelw %{nil} %{nil} %{major}
 
 %if %{with uclibc}
-%libgen formw uclibc- %{uclibc_root}
-%libgen menuw uclibc- %{uclibc_root}
-%libgen panelw uclibc- %{uclibc_root}
-%libgen tic uclibc- %{uclibc_root}
-%libgen tinfo uclibc- %{uclibc_root}
+%libgen formw uclibc- %{uclibc_root} %{major}
+%libgen menuw uclibc- %{uclibc_root} %{major}
+%libgen panelw uclibc- %{uclibc_root} %{major}
+%libgen tic uclibc- %{uclibc_root} %{major}
+%libgen tinfo uclibc- %{uclibc_root} %{major}
 %endif
 
 %package -n	%{utf8libname}
@@ -412,7 +413,7 @@ done
 %endif
 
 %files -n %{libname}
-%attr(755,root,root) /%{_lib}/libncurses.so.%{major}*
+%attr(755,root,root) /%{_lib}/libncurses.so.%{oldmajor}*
 
 %files -n %{utf8libname}
 %attr(755,root,root) /%{_lib}/libncursesw.so.%{major}*
