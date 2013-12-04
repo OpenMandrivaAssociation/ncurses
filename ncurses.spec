@@ -7,6 +7,7 @@
 %define utf8devname %mklibname -d %{name}w
 
 %bcond_without	uclibc
+%bcond_with	crosscompile
 
 # ugly as fuck, but at least mostly harmless to children and animals..
 %define libgen()\
@@ -410,7 +411,10 @@ done
 %files -n %{utf8libname}
 %attr(755,root,root) /%{_lib}/libncursesw.so.%{major}*
 # I have no clue on how nor where this actually gets created?!?!
+# file not exist when crosscompile it
+%if !%{with crosscompile}
 %attr(755,root,root) %{_libdir}/libncursesw.so.%{major}
+%endif
 
 %if %{with uclibc}
 %files -n uclibc-%{utf8libname}
