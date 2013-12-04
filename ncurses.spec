@@ -155,6 +155,7 @@ Requires:	uclibc-%{_lib}menuw%{major} = %{version}
 Requires:	uclibc-%{_lib}panelw%{major} = %{version}
 # /usr/include/termcap.h conflicts
 Conflicts:	termcap-devel > 2.0.8-53
+Conflicts:	ncurses < 5.9-7.20131123.1
 
 %endif
 Obsoletes:	%mklibname -d %name 5
@@ -403,6 +404,7 @@ done
 %doc README ANNOUNCE
 %{_datadir}/tabset
 %{_bindir}/*
+%exclude %{_bindir}/ncurses*-config
 %{_mandir}/man1/*
 %{_mandir}/man5/*
 %{_mandir}/man7/*
@@ -433,6 +435,7 @@ done
 
 %files -n %{devname}
 %doc doc c++ test
+%{_bindir}/ncurses*-config
 %{_libdir}/libcurses.a
 %{_libdir}/libcurses.so
 %{_libdir}/libform.a
