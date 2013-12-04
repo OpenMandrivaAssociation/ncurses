@@ -1,4 +1,4 @@
-%define date		20130615
+%define date		20131123
 %define	oldmajor	5
 %define	major		6
 %define	majorminor	6.0
@@ -28,7 +28,7 @@ This package comes with lib%{1} from the ncurses library.\
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
-Release:	7.%{date}.4
+Release:	7.%{date}.1
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
