@@ -153,11 +153,12 @@ Requires:	uclibc-%{_lib}tinfo%{major} = %{version}
 Requires:	uclibc-%{_lib}formw%{major} = %{version}
 Requires:	uclibc-%{_lib}menuw%{major} = %{version}
 Requires:	uclibc-%{_lib}panelw%{major} = %{version}
+Conflicts:	uclibc-ncurses < 5.9-7.20131123.1
+%endif
 # /usr/include/termcap.h conflicts
 Conflicts:	termcap-devel > 2.0.8-53
 Conflicts:	ncurses < 5.9-7.20131123.1
 
-%endif
 Obsoletes:	%mklibname -d %name 5
 Obsoletes:	%mklibname -d %{name}w 5
 Conflicts:	%{_lib}ncurses-devel < 5.7-3.20091128.2
@@ -412,6 +413,7 @@ done
 %if %{with uclibc}
 %files -n uclibc-%{name}
 %{uclibc_root}%{_bindir}/*
+%exclude %{uclibc_root}%{_bindir}/ncurses*-config
 %endif
 
 %files -n %{libname}
@@ -469,6 +471,7 @@ done
 %{_includedir}/ncursesw/*.h
 %{_mandir}/man3/*
 %if %{with uclibc}
+%{uclibc_root}%{_bindir}/ncurses*-config
 %{uclibc_root}%{_libdir}/lib*.so
 # not final, but just work around library issues for now..
 %{uclibc_root}%{_includedir}/*
