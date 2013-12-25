@@ -34,6 +34,7 @@ Url:		http://www.gnu.org/software/ncurses/ncurses.html
 Source0:	ftp://invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 Source4:	ncurses-resetall.sh
 Source5:	ncurses-useful-terms
+Source6:	ncurses.rpmlintrc	
 Patch1:		ncurses-5.6-xterm-debian.patch
 # Alias "console" to "linux"
 Patch2:		ncurses-5.9-20120811-linux-console.patch
