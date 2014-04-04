@@ -1,33 +1,34 @@
-%define date 20130218
-%define major 5
-%define majorminor 5.9
-%define utf8libname %mklibname %{name}w %{major}
-%define libname %mklibname %{name} %{major}
-%define devname %mklibname -d %{name}
-%define utf8devname %mklibname -d %{name}w
+%define date		20131123
+%define	oldmajor	5
+%define	major		6
+%define	majorminor	6.0
+%define utf8libname	%mklibname %{name}w %{major}
+%define libname		%mklibname %{name} %{oldmajor}
+%define devname		%mklibname -d %{name}
+%define utf8devname	%mklibname -d %{name}w
 
 %bcond_without	uclibc
 %bcond_with	crosscompile
 
 # ugly as fuck, but at least mostly harmless to children and animals..
 %define libgen()\
-%package -n	%2%{_lib}%{1}%{major}\
+%package -n	%2%{_lib}%{1}%{4}\
 Summary:	Ncurses %{1} library\
 Group:		System/Libraries\
 Conflicts:	%{_lib}ncurses%{major} < 5.9-6.20120922.1 \
 Conflicts:	%{_lib}ncursesw%{major} < 5.9-6.20120922.1 \
 \
-%description -n	%2%{_lib}%{1}%{major}\
+%description -n	%2%{_lib}%{1}%{4}\
 This package comes with lib%{1} from the ncurses library.\
 \
-%files -n	%2%{_lib}%{1}%{major}\
-%{3}%{_libdir}/lib%{1}.so.%{major}*\
+%files -n	%2%{_lib}%{1}%{4}\
+%{3}%{_libdir}/lib%{1}.so.%{4}*\
 %{nil}
 
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
-Release:	7.%{date}.4
+Release:	7.%{date}.1
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
@@ -79,20 +80,20 @@ library is a freely distributable replacement for the discontinued 4.4BSD
 classic curses library.
 
 
-%libgen form %{nil} %{nil} %{nil}
-%libgen menu %{nil} %{nil} %{nil}
-%libgen panel %{nil} %{nil} %{nil}
+%libgen form %{nil} %{nil} %{oldmajor}
+%libgen menu %{nil} %{nil} %{oldmajor}
+%libgen panel %{nil} %{nil} %{oldmajor}
 
-%libgen formw %{nil} %{nil} %{nil}
-%libgen menuw %{nil} %{nil} %{nil}
-%libgen panelw %{nil} %{nil} %{nil}
+%libgen formw %{nil} %{nil} %{major}
+%libgen menuw %{nil} %{nil} %{major}
+%libgen panelw %{nil} %{nil} %{major}
 
 %if %{with uclibc}
-%libgen formw uclibc- %{uclibc_root}
-%libgen menuw uclibc- %{uclibc_root}
-%libgen panelw uclibc- %{uclibc_root}
-%libgen tic uclibc- %{uclibc_root}
-%libgen tinfo uclibc- %{uclibc_root}
+%libgen formw uclibc- %{uclibc_root} %{major}
+%libgen menuw uclibc- %{uclibc_root} %{major}
+%libgen panelw uclibc- %{uclibc_root} %{major}
+%libgen tic uclibc- %{uclibc_root} %{major}
+%libgen tinfo uclibc- %{uclibc_root} %{major}
 %endif
 
 %package -n	%{utf8libname}
@@ -153,10 +154,12 @@ Requires:	uclibc-%{_lib}tinfo%{major} = %{version}
 Requires:	uclibc-%{_lib}formw%{major} = %{version}
 Requires:	uclibc-%{_lib}menuw%{major} = %{version}
 Requires:	uclibc-%{_lib}panelw%{major} = %{version}
+Conflicts:	uclibc-ncurses < 5.9-7.20131123.1
+%endif
 # /usr/include/termcap.h conflicts
 Conflicts:	termcap-devel > 2.0.8-53
+Conflicts:	ncurses < 5.9-7.20131123.1
 
-%endif
 Obsoletes:	%mklibname -d %name 5
 Obsoletes:	%mklibname -d %{name}w 5
 Conflicts:	%{_lib}ncurses-devel < 5.7-3.20091128.2
@@ -237,7 +240,10 @@ pushd uclibc
 	--without-tests \
 	--with-termlib=tinfo \
 	--with-ticlib=tic \
-	--disable-tic-depends
+	--disable-tic-depends \
+	--enable-ext-colors \
+	--enable-ext-mouse \
+	--enable-sp-funcs
 
 %make
 popd
@@ -298,7 +304,10 @@ pushd ncurses-utf8
 	--enable-xmc-glitch \
 	--enable-colorfgbg \
 	--enable-pc-files \
-	--with-ospeed=unsigned
+	--with-ospeed=unsigned \
+	--enable-ext-colors \
+	--enable-ext-mouse \
+	--enable-sp-funcs
 
 %make
 popd
@@ -397,6 +406,7 @@ done
 %doc README ANNOUNCE
 %{_datadir}/tabset
 %{_bindir}/*
+%exclude %{_bindir}/ncurses*-config
 %{_mandir}/man1/*
 %{_mandir}/man5/*
 %{_mandir}/man7/*
@@ -404,10 +414,11 @@ done
 %if %{with uclibc}
 %files -n uclibc-%{name}
 %{uclibc_root}%{_bindir}/*
+%exclude %{uclibc_root}%{_bindir}/ncurses*-config
 %endif
 
 %files -n %{libname}
-%attr(755,root,root) /%{_lib}/libncurses.so.%{major}*
+%attr(755,root,root) /%{_lib}/libncurses.so.%{oldmajor}*
 
 %files -n %{utf8libname}
 %attr(755,root,root) /%{_lib}/libncursesw.so.%{major}*
@@ -427,6 +438,7 @@ done
 
 %files -n %{devname}
 %doc doc c++ test
+%{_bindir}/ncurses*-config
 %{_libdir}/libcurses.a
 %{_libdir}/libcurses.so
 %{_libdir}/libform.a
@@ -460,6 +472,7 @@ done
 %{_includedir}/ncursesw/*.h
 %{_mandir}/man3/*
 %if %{with uclibc}
+%{uclibc_root}%{_bindir}/ncurses*-config
 %{uclibc_root}%{_libdir}/lib*.so
 # not final, but just work around library issues for now..
 %{uclibc_root}%{_includedir}/*
