@@ -1,14 +1,14 @@
-%define date		20140609
-%define	oldmajor	5
-%define	major		6
-%define	majorminor	6.0
-%define utf8libname	%mklibname %{name}w %{major}
-%define libname		%mklibname %{name} %{oldmajor}
-%define devname		%mklibname -d %{name}
-%define utf8devname	%mklibname -d %{name}w
+%define date 20141129
+%define oldmajor 5
+%define major 6
+%define majorminor 6.0
+%define utf8libname %mklibname %{name}w %{major}
+%define libname %mklibname %{name} %{oldmajor}
+%define devname %mklibname -d %{name}
+%define utf8devname %mklibname -d %{name}w
 
-%bcond_without	uclibc
-%bcond_with	crosscompile
+%bcond_without uclibc
+%bcond_with crosscompile
 
 # ugly as fuck, but at least mostly harmless to children and animals..
 %define libgen()\
