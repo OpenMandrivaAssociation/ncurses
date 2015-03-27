@@ -28,7 +28,7 @@ This package comes with lib%{1} from the ncurses library.\
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
-Release:	1.%{date}.1
+Release:	8.%{date}.1
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
