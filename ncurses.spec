@@ -8,6 +8,7 @@
 %define utf8devname %mklibname -d %{name}w
 
 %bcond_without uclibc
+%bcond_without cplusplus
 
 # ugly as fuck, but at least mostly harmless to children and animals..
 %define libgen()\
@@ -444,8 +445,11 @@ done
 %{_libdir}/libmenu.so
 %{_libdir}/libmenuw.a
 %{_libdir}/libmenuw.so
+%if %{with cplusplus}
 %{_libdir}/libncurses++.a
 %{_libdir}/libncurses++w.a
+%{_libdir}/pkgconfig/ncurses++w.pc
+%endif
 %{_libdir}/libncurses.a
 %{_libdir}/libncurses.so
 %{_libdir}/libncursesw.a
@@ -456,15 +460,10 @@ done
 %{_libdir}/libpanelw.so
 %{_libdir}/pkgconfig/formw.pc
 %{_libdir}/pkgconfig/menuw.pc
-%{_libdir}/pkgconfig/ncurses++w.pc
 %{_libdir}/pkgconfig/ncursesw.pc
 %{_libdir}/pkgconfig/panelw.pc
 %{_includedir}/*.h
-%{multiarch_includedir}/curses.h
-%if "%_lib" == "libx32"
-# x32 is tri-arch...
-%{_includedir}/multiarch-x86_64-linux/curses.h
-%endif
+%optional %{_includedir}/multiarch-*/curses.h
 %dir %{_includedir}/ncurses
 %{_includedir}/ncurses/*.h
 %dir %{_includedir}/ncursesw
