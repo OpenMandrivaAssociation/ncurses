@@ -1,4 +1,4 @@
-%define date 20150321
+%define date 20150509
 %define oldmajor 5
 %define major 6
 %define majorminor 6.0
@@ -8,7 +8,6 @@
 %define utf8devname %mklibname -d %{name}w
 
 %bcond_without uclibc
-%bcond_with crosscompile
 
 # ugly as fuck, but at least mostly harmless to children and animals..
 %define libgen()\
@@ -422,11 +421,7 @@ done
 
 %files -n %{utf8libname}
 %attr(755,root,root) /%{_lib}/libncursesw.so.%{major}*
-# I have no clue on how nor where this actually gets created?!?!
-# file not exist when crosscompile it
-%if !%{with crosscompile}
-%attr(755,root,root) %{_libdir}/libncursesw.so.%{major}
-%endif
+%optional %attr(755,root,root) %{_libdir}/libncursesw.so.%{major}
 
 %if %{with uclibc}
 %files -n uclibc-%{utf8libname}
@@ -466,6 +461,10 @@ done
 %{_libdir}/pkgconfig/panelw.pc
 %{_includedir}/*.h
 %{multiarch_includedir}/curses.h
+%if "%_lib" == "libx32"
+# x32 is tri-arch...
+%{_includedir}/multiarch-x86_64-linux/curses.h
+%endif
 %dir %{_includedir}/ncurses
 %{_includedir}/ncurses/*.h
 %dir %{_includedir}/ncursesw

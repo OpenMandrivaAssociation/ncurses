@@ -1,11 +1,13 @@
---- ncurses-5.9-20120811/misc/terminfo.src.console~	2012-08-17 22:37:12.000000000 +0200
-+++ ncurses-5.9-20120811/misc/terminfo.src	2012-08-17 22:38:56.089024452 +0200
-@@ -964,7 +964,7 @@ linux3.0|linux 3.0 kernels,
- 	E3=\E[3;J, use=linux2.6,
+--- ncurses-5.9-20150509/misc/terminfo.src.console~	2015-05-10 19:48:41.889118810 +0200
++++ ncurses-5.9-20150509/misc/terminfo.src	2015-05-10 19:49:46.441713743 +0200
+@@ -1656,8 +1656,8 @@ linux3.0|linux 3.0 kernels,
+ 	E3=\E[3J, use=linux2.6,
  
  # This is Linux console for ncurses.
 -linux|linux console,
+-	use=linux2.2,
 +linux|console|linux console,
- 	use=linux2.2,
++	use=linux3.0,
  
  # Subject: linux 2.6.26 vt back_color_erase
+ # Changes to the Linux console driver broke bce model as reported in
