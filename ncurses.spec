@@ -1,4 +1,4 @@
-%define date 20150509
+%define date 20150523
 %define oldmajor 5
 %define major 6
 %define majorminor 6.0
@@ -8,7 +8,7 @@
 %define utf8devname %mklibname -d %{name}w
 
 %bcond_without uclibc
-%bcond_without cplusplus
+%bcond_with cplusplus
 
 # ugly as fuck, but at least mostly harmless to children and animals..
 %define libgen()\
@@ -218,7 +218,11 @@ pushd uclibc
 	--without-libtool \
 	--with-shared \
 	--without-normal \
+%if %{with cplusplus}
 	--with-cxx \
+%else
+	--without-cxx \
+%endif
 	--enable-overwrite \
 	--without-profile \
 	--with-gpm \
@@ -257,7 +261,11 @@ pushd ncurses-normal
 	--without-libtool \
 	--with-shared \
 	--with-normal \
+%if %{with cplusplus}
 	--with-cxx \
+%else
+	--without-cxx \
+%endif
 	--without-debug \
 	--enable-overwrite \
 	--without-profile \
@@ -287,7 +295,11 @@ pushd ncurses-utf8
 	--without-libtool \
 	--with-shared \
 	--with-normal \
+%if %{with cplusplus}
 	--with-cxx \
+%else
+	--without-cxx \
+%endif
 	--without-debug \
 	--enable-overwrite \
 	--without-profile \

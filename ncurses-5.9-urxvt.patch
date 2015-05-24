@@ -1,7 +1,7 @@
---- ncurses-5.9/misc/terminfo.src.urxvt~	2012-01-09 17:50:39.000000000 +0100
-+++ ncurses-5.9/misc/terminfo.src	2012-01-09 17:53:43.393378540 +0100
-@@ -4399,6 +4399,175 @@ rxvt-cygwin-native|rxvt terminal emulato
- rxvt-16color|xterm with 16 colors like aixterm,
+--- ncurses-5.9-20150523/misc/terminfo.src.urxvt~	2015-05-24 14:26:12.025332921 +0200
++++ ncurses-5.9-20150523/misc/terminfo.src	2015-05-24 14:29:59.999815924 +0200
+@@ -5208,6 +5208,176 @@ rxvt-cygwin-native|rxvt terminal emulato
+ rxvt-16color|rxvt with 16 colors like aixterm,
  	ncv#32, use=ibm+16color, use=rxvt,
  
 +# From: Thomas Dickey <dickey@clark.net> 04 Oct 1997
@@ -173,6 +173,7 @@
 +	colors#256,
 +	pairs#32767,
 +	use=rxvt-unicode,
++
  #### MRXVT
  # mrxvt 0.5.4
  #
