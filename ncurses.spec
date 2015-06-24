@@ -28,14 +28,14 @@ This package comes with lib%{1} from the ncurses library.\
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
-Release:	8.%{date}.1
+Release:	8.%{date}.2
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
 Source0:	ftp://invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 Source4:	ncurses-resetall.sh
 Source5:	ncurses-useful-terms
-Source6:	ncurses.rpmlintrc	
+Source6:	ncurses.rpmlintrc
 Patch1:		ncurses-5.6-xterm-debian.patch
 # Alias "console" to "linux"
 Patch2:		ncurses-5.9-20120811-linux-console.patch
@@ -131,23 +131,12 @@ BuildArch:	noarch
 %description	extraterms
 Install the ncurses-extraterms package if you use some exotic terminals.
 
-%package -n	%{devname}
+%if %{with uclibc}
+%package -n	uclibc-%{devname}
 Summary:	The development files for applications which use ncurses
 Group:		Development/C
-Provides:	%{name}-devel = %{EVRD}
-# just keep this depdenency for untangling initial dependency issues..
-%if "%{_lib}" == "lib64"
-Provides:	devel(libncurses(64bit)) 
-%else
-Provides:	devel(libncurses) 
-%endif
-Provides:	pkgconfig(ncurses)
-Provides:	ncursesw-devel = %{version}-%{release}
-Requires:	%{utf8libname} = %{version}
-Requires:	%{_lib}formw%{major} = %{version}
-Requires:	%{_lib}menuw%{major} = %{version}
-Requires:	%{_lib}panelw%{major} = %{version}
-%if %{with uclibc}
+Provides:	uclibc-%{name}-devel = %{EVRD}
+Requires:	%{devname} = %{EVRD}
 Requires:	uclibc-%{utf8libname} = %{version}
 Requires:	uclibc-%{_lib}tic%{major} = %{version}
 Requires:	uclibc-%{_lib}tinfo%{major} = %{version}
@@ -155,7 +144,32 @@ Requires:	uclibc-%{_lib}formw%{major} = %{version}
 Requires:	uclibc-%{_lib}menuw%{major} = %{version}
 Requires:	uclibc-%{_lib}panelw%{major} = %{version}
 Conflicts:	uclibc-ncurses < 5.9-7.20131123.1
+Conflicts:	ncurses < 5.9-8.20150523.2
+
+%description -n	uclibc-%{devname}
+The header files and libraries for developing applications that use
+the ncurses CRT screen handling and optimization package.
+
+Install the ncurses-devel package if you want to develop applications
+which will use ncurses.
 %endif
+
+%package -n	%{devname}
+Summary:	The development files for applications which use ncurses
+Group:		Development/C
+Provides:	%{name}-devel = %{EVRD}
+# just keep this depdenency for untangling initial dependency issues..
+%if "%{_lib}" == "lib64"
+Provides:	devel(libncurses(64bit))
+%else
+Provides:	devel(libncurses)
+%endif
+Provides:	pkgconfig(ncurses)
+Provides:	ncursesw-devel = %{version}-%{release}
+Requires:	%{utf8libname} = %{version}
+Requires:	%{_lib}formw%{major} = %{version}
+Requires:	%{_lib}menuw%{major} = %{version}
+Requires:	%{_lib}panelw%{major} = %{version}
 # /usr/include/termcap.h conflicts
 Conflicts:	termcap-devel > 2.0.8-53
 Conflicts:	ncurses < 5.9-7.20131123.1
@@ -444,6 +458,14 @@ done
 %files extraterms -f %{name}-extraterms.list
 %doc README
 
+%if %{with uclibc}
+%files -n uclibc%{devname}
+%{uclibc_root}%{_bindir}/ncurses*-config
+%{uclibc_root}%{_libdir}/lib*.so
+# not final, but just work around library issues for now..
+%{uclibc_root}%{_includedir}/*
+%endif
+
 %files -n %{devname}
 %doc doc c++ test
 %{_bindir}/ncurses*-config
@@ -481,12 +503,6 @@ done
 %dir %{_includedir}/ncursesw
 %{_includedir}/ncursesw/*.h
 %{_mandir}/man3/*
-%if %{with uclibc}
-%{uclibc_root}%{_bindir}/ncurses*-config
-%{uclibc_root}%{_libdir}/lib*.so
-# not final, but just work around library issues for now..
-%{uclibc_root}%{_includedir}/*
-%endif
 
 %files -n termcap
 %{_sysconfdir}/termcap
