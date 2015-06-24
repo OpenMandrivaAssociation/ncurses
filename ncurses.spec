@@ -459,7 +459,7 @@ done
 %doc README
 
 %if %{with uclibc}
-%files -n uclibc%{devname}
+%files -n uclibc-%{devname}
 %{uclibc_root}%{_bindir}/ncurses*-config
 %{uclibc_root}%{_libdir}/lib*.so
 # not final, but just work around library issues for now..
