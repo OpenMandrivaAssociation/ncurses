@@ -1,4 +1,4 @@
-%define date 20150523
+%define date 20150530
 %define oldmajor 5
 %define major 6
 %define majorminor 6.0
