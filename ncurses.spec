@@ -8,6 +8,7 @@
 
 %bcond_without uclibc
 %bcond_with cplusplus
+%bcond_with gpm
 
 # ugly as fuck, but at least mostly harmless to children and animals..
 %define libgen()\
@@ -42,7 +43,9 @@ Patch3:		ncurses-5.9-buildfix.patch
 Patch7:		ncurses-5.9-urxvt.patch
 Patch8:		ncurses-5.9-20121208-config-dont-print-standard-lib64-path.patch
 Patch9:		ncurses-6.0-20150725-dl-linkage.patch
+%if %{with gpm}
 BuildRequires:	gpm-devel
+%endif
 BuildRequires:	sharutils
 %if %{with uclibc}
 BuildRequires:	uClibc-devel >= 0.9.33.2-15
@@ -240,7 +243,9 @@ pushd uclibc
 %endif
 	--enable-overwrite \
 	--without-profile \
+%if %{with gpm}
 	--with-gpm \
+%endif
 	--disable-termcap \
 	--disable-getcap \
 	--enable-const \
@@ -283,7 +288,9 @@ pushd ncurses-normal
 	--without-debug \
 	--enable-overwrite \
 	--without-profile \
+%if %{with gpm}
 	--with-gpm \
+%endif
 	--enable-termcap \
 	--enable-getcap \
 	--enable-const \
@@ -316,7 +323,9 @@ pushd ncurses-utf8
 	--without-debug \
 	--enable-overwrite \
 	--without-profile \
+%if %{with gpm}
 	--with-gpm \
+%endif
 	--enable-termcap \
 	--enable-getcap \
 	--enable-const \
