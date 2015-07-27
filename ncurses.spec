@@ -6,7 +6,7 @@
 %define devname %mklibname -d %{name}
 %define utf8devname %mklibname -d %{name}w
 
-%bcond_with uclibc
+%bcond_without uclibc
 %bcond_with cplusplus
 
 # ugly as fuck, but at least mostly harmless to children and animals..
