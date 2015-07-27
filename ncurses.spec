@@ -1,13 +1,12 @@
-%define date 20150530
-%define oldmajor 5
+%define date 20150725
 %define major 6
 %define majorminor 6.0
 %define utf8libname %mklibname %{name}w %{major}
-%define libname %mklibname %{name} %{oldmajor}
+%define libname %mklibname %{name} %{major}
 %define devname %mklibname -d %{name}
 %define utf8devname %mklibname -d %{name}w
 
-%bcond_without uclibc
+%bcond_with uclibc
 %bcond_with cplusplus
 
 # ugly as fuck, but at least mostly harmless to children and animals..
@@ -27,8 +26,8 @@ This package comes with lib%{1} from the ncurses library.\
 
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
-Version:	5.9
-Release:	8.%{date}.3
+Version:	6.0
+Release:	0.%{date}.1
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
@@ -42,6 +41,7 @@ Patch2:		ncurses-5.9-20120811-linux-console.patch
 Patch3:		ncurses-5.9-buildfix.patch
 Patch7:		ncurses-5.9-urxvt.patch
 Patch8:		ncurses-5.9-20121208-config-dont-print-standard-lib64-path.patch
+Patch9:		ncurses-6.0-20150725-dl-linkage.patch
 BuildRequires:	gpm-devel
 BuildRequires:	sharutils
 %if %{with uclibc}
@@ -80,9 +80,9 @@ library is a freely distributable replacement for the discontinued 4.4BSD
 classic curses library.
 
 
-%libgen form %{nil} %{nil} %{oldmajor}
-%libgen menu %{nil} %{nil} %{oldmajor}
-%libgen panel %{nil} %{nil} %{oldmajor}
+%libgen form %{nil} %{nil} %{major}
+%libgen menu %{nil} %{nil} %{major}
+%libgen panel %{nil} %{nil} %{major}
 
 %libgen formw %{nil} %{nil} %{major}
 %libgen menuw %{nil} %{nil} %{major}
@@ -211,6 +211,7 @@ etc.).
 
 %patch2 -p1 -b .console~
 %patch8 -p1 -b .lib64~
+%patch9 -p1 -b .dllinkage~
 
 find . -name "*.orig" -o -name "*~" | xargs rm -f
 # fix some permissions
@@ -252,7 +253,6 @@ pushd uclibc
 	--enable-xmc-glitch \
 	--enable-colorfgbg \
 	--disable-pc-files \
-	--with-ospeed=unsigned \
 	--without-develop \
 	--without-cxx-binding \
 	--without-tests \
@@ -296,7 +296,6 @@ pushd ncurses-normal
 	--enable-xmc-glitch \
 	--enable-colorfgbg \
 	--disable-pc-files \
-	--with-ospeed=unsigned \
 	--without-progs
 
 %make
@@ -330,7 +329,6 @@ pushd ncurses-utf8
 	--enable-xmc-glitch \
 	--enable-colorfgbg \
 	--enable-pc-files \
-	--with-ospeed=unsigned \
 	--enable-ext-colors \
 	--enable-ext-mouse \
 	--enable-sp-funcs
@@ -444,7 +442,7 @@ done
 %endif
 
 %files -n %{libname}
-%attr(755,root,root) /%{_lib}/libncurses.so.%{oldmajor}*
+%attr(755,root,root) /%{_lib}/libncurses.so.%{major}*
 
 %files -n %{utf8libname}
 %attr(755,root,root) /%{_lib}/libncursesw.so.%{major}*
