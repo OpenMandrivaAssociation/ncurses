@@ -1,4 +1,4 @@
-%define date 20150725
+%define date 20150810
 %define major 6
 %define majorminor 6.0
 %define utf8libname %mklibname %{name}w %{major}
@@ -28,11 +28,16 @@ This package comes with lib%{1} from the ncurses library.\
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	6.0
+%if "%{date}" != ""
 Release:	0.%{date}.1
+Source0:	ftp://invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
+%else
+Release:	1
+Source0:	ftp://invisible-island.net/ncurses/%{name}-%{version}.tar.gz
+%endif
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
-Source0:	ftp://invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 Source4:	ncurses-resetall.sh
 Source5:	ncurses-useful-terms
 Source6:	ncurses.rpmlintrc
@@ -45,6 +50,9 @@ Patch8:		ncurses-5.9-20121208-config-dont-print-standard-lib64-path.patch
 Patch9:		ncurses-6.0-20150725-dl-linkage.patch
 %if %{with gpm}
 BuildRequires:	gpm-devel
+%if %{with uclibc}
+BuildRequires:	uclibc-%{lib}gpm-devel
+%endif
 %endif
 BuildRequires:	sharutils
 %if %{with uclibc}
@@ -203,7 +211,11 @@ access various features of terminals (the bell, colors, and graphics,
 etc.).
 
 %prep
+%if "%{date}" != ""
 %setup -q -n %{name}-%{version}-%{date}
+%else
+%setup -q
+%endif
 
 %patch7 -p1 -b .urxvt~
 
