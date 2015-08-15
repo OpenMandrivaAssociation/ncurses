@@ -235,6 +235,9 @@ chmod 755 c++/edit_cfg.sh test/listused.sh test/configure test/tracemunch
 # we don't need nor want this, and it also pulls in a dependency on /usr/bin/make
 rm -rf test/package
 
+# FIXME workaround for misdetection when using musl
+sed -i -e 's,#if HAVE_GETTTYNAM,#if 0,g' progs/tset.c
+
 %build
 export PKG_CONFIG_LIBDIR=%{_libdir}/pkgconfig
 
@@ -353,7 +356,6 @@ pushd ncurses-utf8
 	--enable-ext-colors \
 	--enable-ext-mouse \
 	--enable-sp-funcs
-
 %make
 popd
 
