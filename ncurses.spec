@@ -6,7 +6,7 @@
 %define devname %mklibname -d %{name}
 %define utf8devname %mklibname -d %{name}w
 
-%bcond_without uclibc
+%bcond_with uclibc
 %bcond_with cplusplus
 %bcond_with gpm
 
@@ -29,7 +29,7 @@ Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	6.0
 %if "%{date}" != ""
-Release:	0.%{date}.1
+Release:	0.%{date}.2
 Source0:	ftp://invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
 Release:	1
