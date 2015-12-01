@@ -26,7 +26,7 @@ This package comes with lib%{1} from the ncurses library.\
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	5.9
-Release:	7.%{date}.4
+Release:	7.%{date}.5
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
@@ -391,6 +391,11 @@ done
 
 %multiarch_includes %{buildroot}%{_includedir}/curses.h
 
+%if %{with uclibc}
+%multiarch_includes %{buildroot}%{uclibc_root}%{_includedir}/curses.h
+
+%endif
+
 %files -f %{name}.list
 %doc README ANNOUNCE
 %{_datadir}/tabset
@@ -458,6 +463,7 @@ done
 %{uclibc_root}%{_libdir}/lib*.so
 # not final, but just work around library issues for now..
 %{uclibc_root}%{_includedir}/*
+%{uclibc_root}%{multiarch_includedir}/curses.h
 %endif
 
 %files -n termcap
