@@ -463,7 +463,6 @@ done
 %{uclibc_root}%{_libdir}/lib*.so
 # not final, but just work around library issues for now..
 %{uclibc_root}%{_includedir}/*
-%{uclibc_root}%{multiarch_includedir}/curses.h
 %endif
 
 %files -n termcap
