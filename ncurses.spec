@@ -47,7 +47,6 @@ Patch2:		ncurses-5.9-20120811-linux-console.patch
 Patch3:		ncurses-5.9-buildfix.patch
 Patch7:		ncurses-5.9-urxvt.patch
 Patch8:		ncurses-5.9-20121208-config-dont-print-standard-lib64-path.patch
-Patch9:		ncurses-6.0-20150725-dl-linkage.patch
 %if %{with gpm}
 BuildRequires:	gpm-devel
 %if %{with uclibc}
@@ -226,7 +225,6 @@ etc.).
 
 %patch2 -p1 -b .console~
 %patch8 -p1 -b .lib64~
-%patch9 -p1 -b .dllinkage~
 
 find . -name "*.orig" -o -name "*~" | xargs rm -f
 # fix some permissions
