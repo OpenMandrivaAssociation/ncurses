@@ -407,8 +407,10 @@ ln -s libncurses++w.a %{buildroot}%{_libdir}/libncurses++.a
 # FIXME
 # OK do not time to debug it now
 #
+%ifnarch armv7hl
 cp %{buildroot}%{_datadir}/terminfo/x/xterm %{buildroot}%{_datadir}/terminfo/x/xterm2
 cp %{buildroot}%{_datadir}/terminfo/x/xterm-new %{buildroot}%{_datadir}/terminfo/x/xterm
+%endif
 
 #
 # remove unneeded/unwanted files
