@@ -1,4 +1,4 @@
-%define date 20160130
+%define date 20160220
 %define major 6
 %define majorminor 6.0
 %define utf8libname %mklibname %{name}w %{major}
@@ -6,7 +6,6 @@
 %define devname %mklibname -d %{name}
 %define utf8devname %mklibname -d %{name}w
 
-%bcond_with uclibc
 %bcond_with cplusplus
 %bcond_with gpm
 
@@ -29,7 +28,7 @@ Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	6.0
 %if "%{date}" != ""
-Release:	0.%{date}.5
+Release:	0.%{date}.6
 Source0:	ftp://invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
 Release:	1
@@ -49,14 +48,8 @@ Patch7:		ncurses-5.9-urxvt.patch
 Patch8:		ncurses-5.9-20121208-config-dont-print-standard-lib64-path.patch
 %if %{with gpm}
 BuildRequires:	gpm-devel
-%if %{with uclibc}
-BuildRequires:	uclibc-%{lib}gpm-devel
-%endif
 %endif
 BuildRequires:	sharutils
-%if %{with uclibc}
-BuildRequires:	uClibc-devel >= 0.9.33.2-15
-%endif
 Conflicts:	%{name}-extraterms < 5.9-6.20121026.3
 
 %description
@@ -64,18 +57,6 @@ The curses library routines are a terminal-independent method of updating
 character screens with reasonalble optimization. The ncurses (new curses)
 library is a freely distributable replacement for the discontinued 4.4BSD
 classic curses library.
-
-%if %{with uclibc}
-%package -n	uclibc-%{name}
-Summary:	Tools for ncurses built against uClibc
-Group:		System/Libraries
-
-%description -n	uclibc-%{name}
-The curses library routines are a terminal-independent method of updating
-character screens with reasonalble optimization. The ncurses (new curses)
-library is a freely distributable replacement for the discontinued 4.4BSD
-classic curses library.
-%endif
 
 # to be killed
 ###############################################################################
@@ -98,14 +79,6 @@ classic curses library.
 %libgen menuw %{nil} %{nil} %{major}
 %libgen panelw %{nil} %{nil} %{major}
 
-%if %{with uclibc}
-%libgen formw uclibc- %{uclibc_root} %{major}
-%libgen menuw uclibc- %{uclibc_root} %{major}
-%libgen panelw uclibc- %{uclibc_root} %{major}
-%libgen tic uclibc- %{uclibc_root} %{major}
-%libgen tinfo uclibc- %{uclibc_root} %{major}
-%endif
-
 %package -n	%{utf8libname}
 Summary:	Ncurses libraries which support UTF8
 Group:		System/Libraries
@@ -119,20 +92,6 @@ classic curses library.
 This package contains ncurses libraries which support wide char (UTF8),
 and is not compatible with those without.
 
-%if %{with uclibc}
-%package -n	uclibc-%{utf8libname}
-Summary:	Ncurses libraries which support UTF8 (uClibc linked)
-Group:		System/Libraries
-
-%description -n uclibc-%{utf8libname}
-The curses library routines are a terminal-independent method of updating
-character screens with reasonalble optimization. The ncurses (new curses)
-library is a freely distributable replacement for the discontinued 4.4BSD
-classic curses library.
-
-This package contains ncurses libraries which support wide char (UTF8),
-%endif
-
 %package	extraterms
 Summary:	Some exotic terminal descriptions
 Group:		System/Libraries
@@ -140,29 +99,6 @@ BuildArch:	noarch
 
 %description	extraterms
 Install the ncurses-extraterms package if you use some exotic terminals.
-
-%if %{with uclibc}
-%package -n	uclibc-%{devname}
-Summary:	The development files for applications which use ncurses
-Group:		Development/C
-Provides:	uclibc-%{name}-devel = %{EVRD}
-Requires:	%{devname} = %{EVRD}
-Requires:	uclibc-%{utf8libname} = %{version}
-Requires:	uclibc-%{_lib}tic%{major} = %{version}
-Requires:	uclibc-%{_lib}tinfo%{major} = %{version}
-Requires:	uclibc-%{_lib}formw%{major} = %{version}
-Requires:	uclibc-%{_lib}menuw%{major} = %{version}
-Requires:	uclibc-%{_lib}panelw%{major} = %{version}
-Conflicts:	uclibc-ncurses < 5.9-7.20131123.1
-Conflicts:	ncurses < 5.9-8.20150523.2
-
-%description -n	uclibc-%{devname}
-The header files and libraries for developing applications that use
-the ncurses CRT screen handling and optimization package.
-
-Install the ncurses-devel package if you want to develop applications
-which will use ncurses.
-%endif
 
 %package -n	%{devname}
 Summary:	The development files for applications which use ncurses
@@ -241,51 +177,6 @@ export PKG_CONFIG_LIBDIR=%{_libdir}/pkgconfig
 
 CONFIGURE_TOP="$PWD"
 
-%if %{with uclibc}
-mkdir -p uclibc
-pushd uclibc
-%uclibc_configure \
-	--includedir=%{uclibc_root}%{_includedir} \
-	--without-libtool \
-	--with-shared \
-	--without-normal \
-%if %{with cplusplus}
-	--with-cxx \
-%else
-	--without-cxx \
-%endif
-	--enable-overwrite \
-	--without-profile \
-%if %{with gpm}
-	--with-gpm \
-%endif
-	--disable-termcap \
-	--disable-getcap \
-	--enable-const \
-	--enable-hard-tabs \
-	--enable-hash-map \
-	--enable-no-padding \
-	--enable-sigwinch \
-	--without-ada \
-	--enable-widec \
-	--enable-xmc-glitch \
-	--enable-colorfgbg \
-	--disable-pc-files \
-	--without-develop \
-	--without-cxx-binding \
-	--without-tests \
-	--with-termlib=tinfo \
-	--with-ticlib=tic \
-	--disable-tic-depends \
-	--enable-ext-colors \
-	--enable-ext-mouse \
-	--enable-sp-funcs
-
-%make
-popd
-%endif
-
-
 # tODO: this should die
 mkdir -p ncurses-normal
 pushd ncurses-normal
@@ -358,23 +249,6 @@ pushd ncurses-utf8
 popd
 
 %install
-%if %{with uclibc}
-%makeinstall_std -C uclibc
-install -d %{buildroot}%{uclibc_root}/%{_lib}
-mv %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so.* %{buildroot}%{uclibc_root}/%{_lib}
-rm %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so
-#ln -sr %{buildroot}%{uclibc_root}/%{_lib}/libncursesw.so.%{majorminor} %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so
-cat > %{buildroot}%{uclibc_root}%{_libdir}/libncursesw.so << EOF
-/* GNU ld script
-Just linking against all ncurses libraries as needed...
-*/
-`%__cc -fuse-ld=bfd    -Wl,--verbose 2>&1 | sed -n '/OUTPUT_FORMAT/,/)/p'`
-GROUP ( AS_NEEDED ( %{uclibc_root}/%{_lib}/libncursesw.so.%{majorminor} %{uclibc_root}%{_libdir}/libtinfo.so.%{majorminor} %{uclibc_root}%{_libdir}/libtic.so.%{majorminor}) )
-EOF
-
-rm  %{buildroot}%{uclibc_root}%{_libdir}/*.a
-%endif
-
 # we only install the libraries for a while untill all our packages has been
 # rebuilt against the unicode version and no packages needs this anymore
 pushd ncurses-normal
@@ -458,12 +332,6 @@ done
 %{_mandir}/man5/*
 %{_mandir}/man7/*
 
-%if %{with uclibc}
-%files -n uclibc-%{name}
-%{uclibc_root}%{_bindir}/*
-%exclude %{uclibc_root}%{_bindir}/ncurses*-config
-%endif
-
 %files -n %{libname}
 %attr(755,root,root) /%{_lib}/libncurses.so.%{major}*
 
@@ -471,21 +339,8 @@ done
 %attr(755,root,root) /%{_lib}/libncursesw.so.%{major}*
 %optional %attr(755,root,root) %{_libdir}/libncursesw.so.%{major}
 
-%if %{with uclibc}
-%files -n uclibc-%{utf8libname}
-%attr(755,root,root) %{uclibc_root}/%{_lib}/libncursesw.so.%{major}*
-%endif
-
 %files extraterms -f %{name}-extraterms.list
 %doc README
-
-%if %{with uclibc}
-%files -n uclibc-%{devname}
-%{uclibc_root}%{_bindir}/ncurses*-config
-%{uclibc_root}%{_libdir}/lib*.so
-# not final, but just work around library issues for now..
-%{uclibc_root}%{_includedir}/*
-%endif
 
 %files -n %{devname}
 %doc doc c++ test
