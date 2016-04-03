@@ -298,7 +298,7 @@ rm -f %{buildroot}%{_datadir}/terminfo/k/kon
 # bero: Build termcap from the terminfo database
 mkdir -p %{buildroot}%{_sysconfdir}
 %if ! %cross_compiling
-LD_LIBRARY_PATH=${buildroot}/%{_lib}:${buildroot}%{_libdir}:$LD_LIBRARY_PATH ${buildroot}%{_bindir}/tic -Ct misc/terminfo.src > %{buildroot}%{_sysconfdir}/termcap
+LD_LIBRARY_PATH=%{buildroot}/%{_lib}:%{buildroot}%{_libdir}:$LD_LIBRARY_PATH %{buildroot}%{_bindir}/tic -Ct misc/terminfo.src > %{buildroot}%{_sysconfdir}/termcap
 %else
 tic -Ct misc/terminfo.src > %{buildroot}%{_sysconfdir}/termcap
 %endif
@@ -315,10 +315,10 @@ perl -ni -e 'BEGIN { open F, "%{name}.list"; /^%/ or $s{$_} = 1 foreach <F>; } p
 find %{buildroot}/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not -name "*_p.a" -not -name "*w.a" | sed -e "s#^%{buildroot}##" > %{libname}-devel.list
 
 # can't replace directory with symlink (rpm bug), symlink all headers
-mkdir ${buildroot}%{_includedir}/ncurses{,w}
-for l in ${buildroot}%{_includedir}/*.h; do
-    ln -sr $l ${buildroot}%{_includedir}/ncurses
-    ln -sr $l ${buildroot}%{_includedir}/ncursesw
+mkdir %{buildroot}%{_includedir}/ncurses{,w}
+for l in %{buildroot}%{_includedir}/*.h; do
+    ln -sr $l %{buildroot}%{_includedir}/ncurses
+    ln -sr $l %{buildroot}%{_includedir}/ncursesw
 done
 
 %multiarch_includes %{buildroot}%{_includedir}/curses.h
