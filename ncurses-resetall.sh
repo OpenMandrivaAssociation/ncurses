@@ -18,4 +18,3 @@ fi
 if [ -f /usr/bin/resize ]; then
         eval `resize`
 fi
-

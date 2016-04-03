@@ -1,4 +1,4 @@
-%define date 20160220
+%define date 20160402
 %define major 6
 %define majorminor 6.0
 %define utf8libname %mklibname %{name}w %{major}
@@ -28,7 +28,7 @@ Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	6.0
 %if "%{date}" != ""
-Release:	0.%{date}.6
+Release:	0.%{date}.7
 Source0:	ftp://invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
 Release:	1
@@ -296,9 +296,9 @@ rm -f %{buildroot}%{_libdir}/terminfo
 rm -f %{buildroot}%{_datadir}/terminfo/k/kon
 
 # bero: Build termcap from the terminfo database
-mkdir -p %{buildroot}%_sysconfdir
+mkdir -p %{buildroot}%{_sysconfdir}
 %if ! %cross_compiling
-LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%{_lib}:$RPM_BUILD_ROOT%{_libdir}:$LD_LIBRARY_PATH $RPM_BUILD_ROOT%{_bindir}/tic -Ct misc/terminfo.src > %{buildroot}%{_sysconfdir}/termcap
+LD_LIBRARY_PATH=${buildroot}/%{_lib}:${buildroot}%{_libdir}:$LD_LIBRARY_PATH ${buildroot}%{_bindir}/tic -Ct misc/terminfo.src > %{buildroot}%{_sysconfdir}/termcap
 %else
 tic -Ct misc/terminfo.src > %{buildroot}%{_sysconfdir}/termcap
 %endif
@@ -315,10 +315,10 @@ perl -ni -e 'BEGIN { open F, "%{name}.list"; /^%/ or $s{$_} = 1 foreach <F>; } p
 find %{buildroot}/%{_libdir} -name 'lib*.a' -not -type d -not -name "*_g.a" -not -name "*_p.a" -not -name "*w.a" | sed -e "s#^%{buildroot}##" > %{libname}-devel.list
 
 # can't replace directory with symlink (rpm bug), symlink all headers
-mkdir $RPM_BUILD_ROOT%{_includedir}/ncurses{,w}
-for l in $RPM_BUILD_ROOT%{_includedir}/*.h; do
-    ln -sr $l $RPM_BUILD_ROOT%{_includedir}/ncurses
-    ln -sr $l $RPM_BUILD_ROOT%{_includedir}/ncursesw
+mkdir ${buildroot}%{_includedir}/ncurses{,w}
+for l in ${buildroot}%{_includedir}/*.h; do
+    ln -sr $l ${buildroot}%{_includedir}/ncurses
+    ln -sr $l ${buildroot}%{_includedir}/ncursesw
 done
 
 %multiarch_includes %{buildroot}%{_includedir}/curses.h
