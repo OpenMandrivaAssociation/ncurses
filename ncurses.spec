@@ -28,7 +28,7 @@ Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	6.0
 %if "%{date}" != ""
-Release:	0.%{date}.8
+Release:	0.%{date}.9
 Source0:	ftp://invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
 Release:	1
@@ -44,7 +44,8 @@ Patch1:		ncurses-5.6-xterm-debian.patch
 # Alias "console" to "linux"
 Patch2:		ncurses-5.9-20120811-linux-console.patch
 Patch3:		ncurses-5.9-buildfix.patch
-Patch7:		ncurses-5.9-urxvt.patch
+Patch4:		ncurses-compheader.patch
+Patch7:		ncurses-urxvt.patch
 Patch8:		ncurses-5.9-20121208-config-dont-print-standard-lib64-path.patch
 %if %{with gpm}
 BuildRequires:	gpm-devel
@@ -158,7 +159,7 @@ etc.).
 # directly
 %patch1 -p1 -b .deb~
 %patch3 -p1 -b .bf~
-
+%patch4 -p1
 %patch2 -p1 -b .console~
 %patch8 -p1 -b .lib64~
 
@@ -306,8 +307,8 @@ tic -Ct misc/terminfo.src > %{buildroot}%{_sysconfdir}/termcap
 #
 # FIXME
 #
-(cd %{buildroot} ; find usr/share/terminfo      -type d | perl -pe 's||%%dir /|') > %{name}.list
-(cd %{buildroot} ; find usr/share/terminfo -not -type d | perl -pe 's||/|')       > %{name}-extraterms.list
+(cd %{buildroot} ; find usr/share/terminfo -type d | perl -pe 's||%%dir /|') > %{name}.list
+(cd %{buildroot} ; find usr/share/terminfo -not -type d | perl -pe 's||/|') > %{name}-extraterms.list
 perl -pe 's||%{_datadir}/terminfo/|' %{SOURCE5} >> %{name}.list
 
 perl -ni -e 'BEGIN { open F, "%{name}.list"; /^%/ or $s{$_} = 1 foreach <F>; } print unless $s{$_}' %{name}-extraterms.list
