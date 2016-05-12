@@ -1,4 +1,4 @@
-%define date 20160423
+%define date 20160507
 %define major 6
 %define majorminor 6.0
 %define utf8libname %mklibname %{name}w %{major}
@@ -28,7 +28,7 @@ Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	6.0
 %if "%{date}" != ""
-Release:	0.%{date}.9
+Release:	0.%{date}.10
 Source0:	ftp://invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
 Release:	1
