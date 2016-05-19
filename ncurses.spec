@@ -276,6 +276,9 @@ for i in form menu ncurses panel; do
 done
 ln -s libncursesw.so %{buildroot}%{_libdir}/libcurses.so
 ln -s libncursesw.a %{buildroot}%{_libdir}/libcurses.a
+%if %{with cplusplus}
+ln -s libncurses++w.a %{buildroot}%{_libdir}/libncurses++.a
+%endif
 
 #
 # FIXME
