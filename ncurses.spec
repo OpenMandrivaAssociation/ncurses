@@ -358,9 +358,9 @@ done
 %{_libdir}/libmenu.so
 %{_libdir}/libmenuw.a
 %{_libdir}/libmenuw.so
-%{_libdir}/libncurses++.a
 %if %{with cplusplus}
 %{_libdir}/libncurses++w.a
+%{_libdir}/libncurses++.a
 %{_libdir}/pkgconfig/ncurses++w.pc
 %endif
 %{_libdir}/libncurses.a
