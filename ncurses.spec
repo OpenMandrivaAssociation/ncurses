@@ -41,8 +41,6 @@ Source4:	ncurses-resetall.sh
 Source5:	ncurses-useful-terms
 Source6:	ncurses.rpmlintrc
 Patch1:		ncurses-5.6-xterm-debian.patch
-# Alias "console" to "linux"
-Patch2:		ncurses-5.9-20120811-linux-console.patch
 Patch3:		ncurses-5.9-buildfix.patch
 Patch4:		ncurses-compheader.patch
 Patch7:		ncurses-urxvt.patch
@@ -160,7 +158,6 @@ etc.).
 %patch1 -p1 -b .deb~
 %patch3 -p1 -b .bf~
 %patch4 -p1
-%patch2 -p1 -b .console~
 %patch8 -p1 -b .lib64~
 
 find . -name "*.orig" -o -name "*~" | xargs rm -f
