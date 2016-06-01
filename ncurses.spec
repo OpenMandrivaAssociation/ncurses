@@ -1,4 +1,4 @@
-%define date 20160507
+%define date 20160521
 %define major 6
 %define majorminor 6.0
 %define utf8libname %mklibname %{name}w %{major}
@@ -28,7 +28,7 @@ Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	6.0
 %if "%{date}" != ""
-Release:	0.%{date}.11
+Release:	0.%{date}.12
 Source0:	ftp://invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
 Release:	1
@@ -41,8 +41,6 @@ Source4:	ncurses-resetall.sh
 Source5:	ncurses-useful-terms
 Source6:	ncurses.rpmlintrc
 Patch1:		ncurses-5.6-xterm-debian.patch
-# Alias "console" to "linux"
-Patch2:		ncurses-5.9-20120811-linux-console.patch
 Patch3:		ncurses-5.9-buildfix.patch
 Patch4:		ncurses-compheader.patch
 Patch7:		ncurses-urxvt.patch
@@ -160,7 +158,6 @@ etc.).
 %patch1 -p1 -b .deb~
 %patch3 -p1 -b .bf~
 %patch4 -p1
-%patch2 -p1 -b .console~
 %patch8 -p1 -b .lib64~
 
 find . -name "*.orig" -o -name "*~" | xargs rm -f
