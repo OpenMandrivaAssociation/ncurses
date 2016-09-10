@@ -1,4 +1,4 @@
-%define date 20160625
+%define date 20160903
 %define major 6
 %define majorminor 6.0
 %define utf8libname %mklibname %{name}w %{major}
@@ -184,6 +184,7 @@ pushd ncurses-normal
 	--with-normal \
 %if %{with cplusplus}
 	--with-cxx \
+	--with-cxx-shared \
 %else
 	--without-cxx \
 %endif
@@ -205,6 +206,7 @@ pushd ncurses-normal
 	--enable-xmc-glitch \
 	--enable-colorfgbg \
 	--disable-pc-files \
+	--with-ospeed=unsigned \
 	--without-progs
 
 %make
@@ -219,6 +221,7 @@ pushd ncurses-utf8
 	--with-normal \
 %if %{with cplusplus}
 	--with-cxx \
+	--with-cxx-shared \
 %else
 	--without-cxx \
 %endif
@@ -242,6 +245,7 @@ pushd ncurses-utf8
 	--enable-pc-files \
 	--enable-ext-colors \
 	--enable-ext-mouse \
+	--with-ospeed=unsigned \
 	--enable-sp-funcs
 %make
 popd
