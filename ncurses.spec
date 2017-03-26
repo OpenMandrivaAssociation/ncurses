@@ -42,7 +42,6 @@ Source5:	ncurses-useful-terms
 Source6:	ncurses.rpmlintrc
 Patch1:		ncurses-5.6-xterm-debian.patch
 Patch3:		ncurses-5.9-buildfix.patch
-Patch4:		ncurses-compheader.patch
 Patch7:		ncurses-urxvt.patch
 Patch8:		ncurses-5.9-20121208-config-dont-print-standard-lib64-path.patch
 %if %{with gpm}
@@ -157,7 +156,6 @@ etc.).
 # directly
 %patch1 -p1 -b .deb~
 %patch3 -p1 -b .bf~
-%patch4 -p1
 %patch8 -p1 -b .lib64~
 
 find . -name "*.orig" -o -name "*~" | xargs rm -f
@@ -207,6 +205,7 @@ pushd ncurses-normal
 	--enable-colorfgbg \
 	--disable-pc-files \
 	--with-ospeed=unsigned \
+	--disable-wattr-macros \
 	--without-progs
 
 %make
@@ -246,6 +245,7 @@ pushd ncurses-utf8
 	--enable-ext-colors \
 	--enable-ext-mouse \
 	--with-ospeed=unsigned \
+	--disable-wattr-macros \
 	--enable-sp-funcs
 %make
 popd
