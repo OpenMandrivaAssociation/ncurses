@@ -1,10 +1,11 @@
-%define date 20170318
+%define date 20170527
 %define major 6
 %define majorminor 6.0
 %define utf8libname %mklibname %{name}w %{major}
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname -d %{name}
 %define utf8devname %mklibname -d %{name}w
+%global ldflags %{ldflags} -ldl
 
 %bcond_with cplusplus
 %bcond_with gpm
@@ -28,7 +29,7 @@ Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	6.0
 %if "%{date}" != ""
-Release:	0.%{date}.14
+Release:	0.%{date}.1
 Source0:	ftp://invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
 Release:	1
@@ -190,7 +191,7 @@ pushd ncurses-normal
 	--enable-overwrite \
 	--without-profile \
 %if %{with gpm}
-	--with-gpm \
+	--with-gpm --with-dlsym \
 %endif
 	--enable-termcap \
 	--enable-getcap \
@@ -228,7 +229,7 @@ pushd ncurses-utf8
 	--enable-overwrite \
 	--without-profile \
 %if %{with gpm}
-	--with-gpm \
+	--with-gpm --with-dlsym \
 %endif
 	--enable-termcap \
 	--enable-getcap \
@@ -325,8 +326,6 @@ for l in %{buildroot}%{_includedir}/*.h; do
     ln -sr $l %{buildroot}%{_includedir}/ncursesw
 done
 
-%multiarch_includes %{buildroot}%{_includedir}/curses.h
-
 %files -f %{name}.list
 %doc README ANNOUNCE
 %{_datadir}/tabset
@@ -377,7 +376,6 @@ done
 %{_libdir}/pkgconfig/ncursesw.pc
 %{_libdir}/pkgconfig/panelw.pc
 %{_includedir}/*.h
-%optional %{_includedir}/multiarch-*/curses.h
 %dir %{_includedir}/ncurses
 %{_includedir}/ncurses/*.h
 %dir %{_includedir}/ncursesw
