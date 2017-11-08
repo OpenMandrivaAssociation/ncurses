@@ -1,4 +1,4 @@
-%define date 20171007
+%define date 20171104
 %define major 6
 %define majorminor 6.0
 %define utf8libname %mklibname %{name}w %{major}
@@ -282,6 +282,11 @@ ln -s libncursesw.a %{buildroot}%{_libdir}/libcurses.a
 ln -s libncurses++w.a %{buildroot}%{_libdir}/libncurses++.a
 %endif
 
+# There are no binary incompatibilities here -- it's just
+# a version number related soname increase. Let's keep binaries
+# built against previous versions happy...
+ln -s libncurses.so.6.0 %{buildroot}/%{_lib}/libncurses.so.5
+
 #
 # FIXME
 # OK do not time to debug it now
@@ -335,6 +340,7 @@ done
 
 %files -n %{libname}
 %attr(755,root,root) /%{_lib}/libncurses.so.%{major}*
+%attr(755,root,root) /%{_lib}/libncurses.so.5
 
 %files -n %{utf8libname}
 %attr(755,root,root) /%{_lib}/libncursesw.so.%{major}*
