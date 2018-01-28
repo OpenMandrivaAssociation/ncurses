@@ -1,6 +1,6 @@
-%define date 20171104
+%define date 20180127
 %define major 6
-%define majorminor 6.0
+%define majorminor 6.1
 %define utf8libname %mklibname %{name}w %{major}
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname -d %{name}
@@ -27,13 +27,13 @@ This package comes with lib%{1} from the ncurses library.\
 
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
-Version:	6.0
+Version:	6.1
 %if "%{date}" != ""
 Release:	0.%{date}.1
-Source0:	ftp://invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
+Source0:	ftp://ftp.invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
 Release:	1
-Source0:	ftp://invisible-island.net/ncurses/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.invisible-island.net/ncurses/%{name}-%{version}.tar.gz
 %endif
 License:	MIT
 Group:		System/Libraries
@@ -285,7 +285,7 @@ ln -s libncurses++w.a %{buildroot}%{_libdir}/libncurses++.a
 # There are no binary incompatibilities here -- it's just
 # a version number related soname increase. Let's keep binaries
 # built against previous versions happy...
-ln -s libncurses.so.6.0 %{buildroot}/%{_lib}/libncurses.so.5
+ln -s libncurses.so.%{majorminor} %{buildroot}/%{_lib}/libncurses.so.5
 
 #
 # FIXME
