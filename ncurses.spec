@@ -1,4 +1,4 @@
-%define date 20180127
+%define date 20180324
 %define major 6
 %define majorminor 6.1
 %define utf8libname %mklibname %{name}w %{major}
@@ -70,13 +70,13 @@ library is a freely distributable replacement for the discontinued 4.4BSD
 classic curses library.
 
 
-%libgen form %{nil} %{nil} %{major}
-%libgen menu %{nil} %{nil} %{major}
-%libgen panel %{nil} %{nil} %{major}
+%libpackage form %{major}
+%libpackage menu %{major}
+%libpackage panel %{major}
 
-%libgen formw %{nil} %{nil} %{major}
-%libgen menuw %{nil} %{nil} %{major}
-%libgen panelw %{nil} %{nil} %{major}
+%libpackage formw %{major}
+%libpackage menuw %{major}
+%libpackage panelw %{major}
 
 %package -n	%{utf8libname}
 Summary:	Ncurses libraries which support UTF8
