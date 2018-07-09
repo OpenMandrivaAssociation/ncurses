@@ -1,6 +1,6 @@
-%define date 20180526
+%define date 20180707
 %define major 6
-%define majorminor 6.1
+%define majorminor 6.1.0
 %define utf8libname %mklibname %{name}w %{major}
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname -d %{name}
@@ -169,6 +169,9 @@ rm -rf test/package
 # FIXME workaround for misdetection when using musl
 sed -i -e 's,#if HAVE_GETTTYNAM,#if 0,g' progs/tset.c
 
+# Pull in support for newer architectures and OSes
+cp -f %{_datadir}/libtool/config/config.{guess,sub} .
+
 %build
 export PKG_CONFIG_LIBDIR=%{_libdir}/pkgconfig
 
@@ -215,8 +218,8 @@ popd
 mkdir -p ncurses-utf8
 pushd ncurses-utf8
 %configure \
-	--with-pkg-config-libdir=%{_libdir}/pkgconfig \
 	--without-libtool \
+	--with-pkg-config-libdir=%{_libdir}/pkgconfig \
 	--with-shared \
 	--with-normal \
 %if %{with cplusplus}
@@ -282,11 +285,6 @@ ln -s libncursesw.a %{buildroot}%{_libdir}/libcurses.a
 ln -s libncurses++w.a %{buildroot}%{_libdir}/libncurses++.a
 %endif
 
-# There are no binary incompatibilities here -- it's just
-# a version number related soname increase. Let's keep binaries
-# built against previous versions happy...
-ln -s libncurses.so.%{majorminor} %{buildroot}/%{_lib}/libncurses.so.5
-
 #
 # FIXME
 # OK do not time to debug it now
@@ -328,6 +326,16 @@ for l in %{buildroot}%{_includedir}/*.h; do
     ln -sr $l %{buildroot}%{_includedir}/ncurses
     ln -sr $l %{buildroot}%{_includedir}/ncursesw
 done
+
+# There are no binary incompatibilities here -- it's just
+# a version number related soname increase. Let's keep binaries
+# built against previous versions happy...
+ln -s libncurses.so.%{majorminor} %{buildroot}/%{_lib}/libncurses.so.5
+
+# Don't allow rpm helpers to get rid of that seemingly "wrong" symlink
+export DONT_SYMLINK_LIBS=1
+export DONT_RELINK=1
+
 
 %files -f %{name}.list
 %doc README ANNOUNCE
