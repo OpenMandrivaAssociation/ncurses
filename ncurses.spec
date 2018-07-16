@@ -1,6 +1,6 @@
-%define date 20180707
+%define date 20180714
 %define major 6
-%define majorminor 6.1.0
+%define majorminor 6.1
 %define utf8libname %mklibname %{name}w %{major}
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname -d %{name}
