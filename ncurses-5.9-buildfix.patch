@@ -1,8 +1,9 @@
---- ncurses-5.9-20131005/configure.bf~	2013-10-10 00:29:52.260914640 +0200
-+++ ncurses-5.9-20131005/configure	2013-10-10 00:30:29.037913273 +0200
-@@ -318,6 +318,10 @@ do
-   | --locals=* | --local=* | --loca=* | --loc=* | --lo=*)
-     localstatedir=$ac_optarg ;;
+diff -Naur ncurses-6.1-20180908/configure ncurses-6.1-20180908.tpg/configure
+--- ncurses-6.1-20180908/configure	2018-09-01 19:37:24.000000000 +0000
++++ ncurses-6.1-20180908.tpg/configure	2018-09-20 16:18:48.920021391 +0000
+@@ -328,6 +328,10 @@
+   | --runs=* | --run=* | --ru=*)
+     runstatedir=$ac_optarg ;;
  
 +  --localedir=*)
 +    # passed by rpm
