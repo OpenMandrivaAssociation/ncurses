@@ -1,4 +1,4 @@
-%define date 20180908
+%define date 20181013
 %define major 6
 %define majorminor 6.1
 %define utf8libname %mklibname %{name}w %{major}
@@ -109,7 +109,6 @@ Provides:	devel(libncurses(64bit))
 %else
 Provides:	devel(libncurses)
 %endif
-Provides:	pkgconfig(ncurses)
 Provides:	ncursesw-devel = %{version}-%{release}
 Requires:	%{utf8libname} = %{version}
 Requires:	%{_lib}formw%{major} = %{version}
@@ -327,6 +326,11 @@ for l in %{buildroot}%{_includedir}/*.h; do
     ln -sr $l %{buildroot}%{_includedir}/ncursesw
 done
 
+# Add a few symlinks for legacy compatibility
+for i in form menu ncurses panel; do
+	ln -s ${i}w.pc %{buildroot}%{_libdir}/pkgconfig/$i.pc
+done
+
 # There are no binary incompatibilities here -- it's just
 # a version number related soname increase. Let's keep binaries
 # built against previous versions happy...
@@ -387,6 +391,10 @@ export DONT_RELINK=1
 %{_libdir}/pkgconfig/menuw.pc
 %{_libdir}/pkgconfig/ncursesw.pc
 %{_libdir}/pkgconfig/panelw.pc
+%{_libdir}/pkgconfig/form.pc
+%{_libdir}/pkgconfig/menu.pc
+%{_libdir}/pkgconfig/ncurses.pc
+%{_libdir}/pkgconfig/panel.pc
 %{_includedir}/*.h
 %dir %{_includedir}/ncurses
 %{_includedir}/ncurses/*.h
