@@ -32,7 +32,7 @@ Version:	6.1
 Release:	0.%{date}.1
 Source0:	ftp://ftp.invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
-Release:	1
+Release:	2
 Source0:	ftp://ftp.invisible-island.net/ncurses/%{name}-%{version}.tar.gz
 %endif
 License:	MIT
