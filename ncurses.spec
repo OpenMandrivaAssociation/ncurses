@@ -1,4 +1,4 @@
-%define date 20181013
+%define date 20181201
 %define major 6
 %define majorminor 6.1
 %define utf8libname %mklibname %{name}w %{major}
@@ -7,7 +7,7 @@
 %define utf8devname %mklibname -d %{name}w
 %global ldflags %{ldflags} -ldl
 
-%bcond_with cplusplus
+%bcond_without cplusplus
 %bcond_with gpm
 
 # ugly as fuck, but at least mostly harmless to children and animals..
@@ -32,7 +32,7 @@ Version:	6.1
 Release:	0.%{date}.1
 Source0:	ftp://ftp.invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
-Release:	2
+Release:	1
 Source0:	ftp://ftp.invisible-island.net/ncurses/%{name}-%{version}.tar.gz
 %endif
 License:	MIT
@@ -77,6 +77,11 @@ classic curses library.
 %libpackage formw %{major}
 %libpackage menuw %{major}
 %libpackage panelw %{major}
+
+%if %{with cplusplus}
+%libpackage ncurses++ %{major}
+%libpackage ncurses++w %{major}
+%endif
 
 %package -n	%{utf8libname}
 Summary:	Ncurses libraries which support UTF8
@@ -273,11 +278,17 @@ rm -f c++/demo
 mkdir -p %{buildroot}/%{_lib}
 mv %{buildroot}%{_libdir}/libncurses{,w}.so.* %{buildroot}/%{_lib}
 rm %{buildroot}%{_libdir}/libncursesw.so
+ln -sr %{buildroot}/%{_lib}/libncursesw.so.%{majorminor} %{buildroot}%{_libdir}/libncursesw.so.%{major}
 ln -sr %{buildroot}/%{_lib}/libncursesw.so.%{majorminor} %{buildroot}%{_libdir}/libncursesw.so
 for i in form menu ncurses panel; do
 	ln -s lib${i}w.a %{buildroot}%{_libdir}/lib${i}.a
 	ln -s lib${i}w.so %{buildroot}%{_libdir}/lib${i}.so
 done
+%if %{with cplusplus}
+for i in ncurses++; do
+	ln -s lib${i}w.so %{buildroot}%{_libdir}/lib${i}.so
+done
+%endif
 ln -s libncursesw.so %{buildroot}%{_libdir}/libcurses.so
 ln -s libncursesw.a %{buildroot}%{_libdir}/libcurses.a
 %if %{with cplusplus}
@@ -375,7 +386,9 @@ export DONT_RELINK=1
 %{_libdir}/libmenuw.a
 %{_libdir}/libmenuw.so
 %if %{with cplusplus}
+%{_libdir}/libncurses++w.so
 %{_libdir}/libncurses++w.a
+%{_libdir}/libncurses++.so
 %{_libdir}/libncurses++.a
 %{_libdir}/pkgconfig/ncurses++w.pc
 %endif
