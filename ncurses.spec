@@ -1,4 +1,4 @@
-%define date 20181201
+%define date 20181208
 %define major 6
 %define majorminor 6.1
 %define utf8libname %mklibname %{name}w %{major}
@@ -216,7 +216,7 @@ pushd ncurses-normal
 	--disable-wattr-macros \
 	--without-progs
 
-%make
+%make_build
 popd
 
 mkdir -p ncurses-utf8
@@ -255,7 +255,7 @@ pushd ncurses-utf8
 	--with-ospeed=unsigned \
 	--disable-wattr-macros \
 	--enable-sp-funcs
-%make
+%make_build
 popd
 
 %install
@@ -267,7 +267,7 @@ rm -f %{buildroot}%{_libdir}/lib*.{a,so}
 popd
 
 pushd ncurses-utf8
-%makeinstall_std
+%make_install
 popd
 
 # the resetall script
@@ -350,7 +350,6 @@ ln -s libncurses.so.%{majorminor} %{buildroot}/%{_lib}/libncurses.so.5
 # Don't allow rpm helpers to get rid of that seemingly "wrong" symlink
 export DONT_SYMLINK_LIBS=1
 export DONT_RELINK=1
-
 
 %files -f %{name}.list
 %doc README ANNOUNCE
