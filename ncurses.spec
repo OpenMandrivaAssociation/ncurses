@@ -1,4 +1,4 @@
-%define date 20190112
+%define date 20190413
 %define major 6
 %define majorminor 6.1
 %define utf8libname %mklibname %{name}w %{major}
@@ -183,7 +183,7 @@ CONFIGURE_TOP="$PWD"
 
 # tODO: this should die
 mkdir -p ncurses-normal
-pushd ncurses-normal
+cd ncurses-normal
 %configure \
 	--without-libtool \
 	--with-shared \
@@ -217,10 +217,10 @@ pushd ncurses-normal
 	--without-progs
 
 %make_build
-popd
+cd -
 
 mkdir -p ncurses-utf8
-pushd ncurses-utf8
+cd ncurses-utf8
 %configure \
 	--without-libtool \
 	--with-pkg-config-libdir=%{_libdir}/pkgconfig \
@@ -256,19 +256,19 @@ pushd ncurses-utf8
 	--disable-wattr-macros \
 	--enable-sp-funcs
 %make_build
-popd
+cd -
 
 %install
 # we only install the libraries for a while untill all our packages has been
 # rebuilt against the unicode version and no packages needs this anymore
-pushd ncurses-normal
+cd ncurses-normal
 make install.libs DESTDIR=%{buildroot}
 rm -f %{buildroot}%{_libdir}/lib*.{a,so}
-popd
+cd -
 
-pushd ncurses-utf8
+cd ncurses-utf8
 %make_install
-popd
+cd -
 
 # the resetall script
 install -m 755 %{SOURCE4} %{buildroot}%{_bindir}/resetall
