@@ -44,7 +44,6 @@ Source6:	ncurses.rpmlintrc
 Patch1:		ncurses-5.6-xterm-debian.patch
 Patch3:		ncurses-5.9-buildfix.patch
 Patch7:		ncurses-urxvt.patch
-Patch8:		ncurses-5.9-20121208-config-dont-print-standard-lib64-path.patch
 %if %{with gpm}
 BuildRequires:	gpm-devel
 %endif
@@ -161,7 +160,6 @@ etc.).
 # directly
 %patch1 -p1 -b .deb~
 %patch3 -p1 -b .bf~
-%patch8 -p1 -b .lib64~
 
 find . -name "*.orig" -o -name "*~" | xargs rm -f
 # fix some permissions
