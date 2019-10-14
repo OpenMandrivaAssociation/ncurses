@@ -1,4 +1,4 @@
-%define date 20190928
+%define date 20191012
 %define major 6
 %define majorminor 6.1
 %define utf8libname %mklibname %{name}w %{major}
@@ -173,6 +173,9 @@ sed -i -e 's,#if HAVE_GETTTYNAM,#if 0,g' progs/tset.c
 
 # Pull in support for newer architectures and OSes
 cp -f %{_datadir}/libtool/config/config.{guess,sub} .
+
+# (tpg) do not push our LDFLAGS
+sed -i -e 's/@LDFLAGS@//g' misc/ncurses-config.in
 
 %build
 export PKG_CONFIG_LIBDIR=%{_libdir}/pkgconfig
