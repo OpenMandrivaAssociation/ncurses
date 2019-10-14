@@ -174,8 +174,6 @@ sed -i -e 's,#if HAVE_GETTTYNAM,#if 0,g' progs/tset.c
 # Pull in support for newer architectures and OSes
 cp -f %{_datadir}/libtool/config/config.{guess,sub} .
 
-# (tpg) do not push our LDFLAGS
-sed -i -e 's/@LDFLAGS@//g' misc/ncurses-config.in
 
 %build
 export PKG_CONFIG_LIBDIR=%{_libdir}/pkgconfig
@@ -282,12 +280,12 @@ rm %{buildroot}%{_libdir}/libncursesw.so
 ln -sr %{buildroot}/%{_lib}/libncursesw.so.%{majorminor} %{buildroot}%{_libdir}/libncursesw.so.%{major}
 ln -sr %{buildroot}/%{_lib}/libncursesw.so.%{majorminor} %{buildroot}%{_libdir}/libncursesw.so
 for i in form menu ncurses panel; do
-	ln -s lib${i}w.a %{buildroot}%{_libdir}/lib${i}.a
-	ln -s lib${i}w.so %{buildroot}%{_libdir}/lib${i}.so
+    ln -s lib${i}w.a %{buildroot}%{_libdir}/lib${i}.a
+    ln -s lib${i}w.so %{buildroot}%{_libdir}/lib${i}.so
 done
 %if %{with cplusplus}
 for i in ncurses++; do
-	ln -s lib${i}w.so %{buildroot}%{_libdir}/lib${i}.so
+    ln -s lib${i}w.so %{buildroot}%{_libdir}/lib${i}.so
 done
 %endif
 ln -s libncursesw.so %{buildroot}%{_libdir}/libcurses.so
@@ -340,7 +338,7 @@ done
 
 # Add a few symlinks for legacy compatibility
 for i in form menu ncurses panel; do
-	ln -s ${i}w.pc %{buildroot}%{_libdir}/pkgconfig/$i.pc
+    ln -s ${i}w.pc %{buildroot}%{_libdir}/pkgconfig/$i.pc
 done
 
 # There are no binary incompatibilities here -- it's just
@@ -351,6 +349,9 @@ ln -s libncurses.so.%{majorminor} %{buildroot}/%{_lib}/libncurses.so.5
 # Don't allow rpm helpers to get rid of that seemingly "wrong" symlink
 export DONT_SYMLINK_LIBS=1
 export DONT_RELINK=1
+
+# (tpg) do not push our LDFLAGS
+sed -i -e 's/%{ldflags}//g' %{buildroot}%{_bindir}/ncurses*-config
 
 %files -f %{name}.list
 %doc README ANNOUNCE
