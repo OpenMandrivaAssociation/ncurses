@@ -1,10 +1,11 @@
-%define date 20191012
+%define date 20200104
 %define major 6
 %define majorminor 6.1
 %define utf8libname %mklibname %{name}w %{major}
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname -d %{name}
 %define utf8devname %mklibname -d %{name}w
+%global optflags %{optflags} -Oz
 %global ldflags %{ldflags} -ldl
 
 %bcond_without cplusplus
