@@ -1,4 +1,4 @@
-%define date %{nil}
+%define date 20200502
 %define major 6
 %define majorminor 6.2
 %define utf8libname %mklibname %{name}w %{major}
@@ -30,7 +30,7 @@ Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	6.2
 %if "%{date}" != ""
-Release:	0.%{date}.1
+Release:	1.%{date}.1
 Source0:	ftp://ftp.invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
 Release:	1
@@ -138,7 +138,6 @@ which will use ncurses.
 %package -n	termcap
 Summary:	The terminal feature database used by certain applications
 Group:		System/Libraries
-Epoch:		1
 BuildArch:	noarch
 
 %description -n	termcap
@@ -181,11 +180,107 @@ export PKG_CONFIG_LIBDIR=%{_libdir}/pkgconfig
 
 CONFIGURE_TOP="$PWD"
 
-# tODO: this should die
+%ifarch %{x86_64}
+mkdir -p ncurses-normal-32
+cd ncurses-normal-32
+export CC=gcc
+export CXX=g++
+export CFLAGS="`echo %{optflags} |sed -e 's, -m64,,g'` -m32"
+export CXXFLAGS="$CFLAGS"
+export LDFLAGS="$CFLAGS"
+export AR=llvm-ar
+export RANLIB=llvm-ranlib
+../configure \
+	--prefix=%{_prefix} \
+	--libdir=%{_prefix}/lib \
+	--with-pkg-config-libdir=%{_prefix}/lib/pkgconfig \
+	--without-libtool \
+	--with-shared \
+	--with-normal \
+%if %{with cplusplus}
+	--with-cxx \
+	--with-cxx-shared \
+%else
+	--without-cxx \
+%endif
+	--without-debug \
+	--enable-overwrite \
+	--without-profile \
+%if %{with gpm}
+	--with-gpm --with-dlsym \
+%endif
+	--enable-termcap \
+	--enable-getcap \
+	--enable-const \
+	--enable-hard-tabs \
+	--enable-hash-map \
+	--enable-no-padding \
+	--enable-sigwinch \
+	--enable-pc-files \
+	--without-ada \
+	--disable-widec \
+	--enable-xmc-glitch \
+	--enable-colorfgbg \
+	--with-ospeed=unsigned \
+	--disable-wattr-macros \
+	--without-progs
+%make_build
+cd ..
+
+mkdir -p ncurses-utf8-32
+cd ncurses-utf8-32
+%configure \
+	--prefix=%{_prefix} \
+	--libdir=%{_prefix}/lib \
+	--with-pkg-config-libdir=%{_prefix}/lib/pkgconfig \
+	--without-libtool \
+	--with-shared \
+	--with-normal \
+%if %{with cplusplus}
+	--with-cxx \
+	--with-cxx-shared \
+%else
+	--without-cxx \
+%endif
+	--without-debug \
+	--enable-overwrite \
+	--without-profile \
+%if %{with gpm}
+	--with-gpm --with-dlsym \
+%endif
+	--enable-termcap \
+	--enable-getcap \
+	--enable-const \
+	--enable-hard-tabs \
+	--enable-hash-map \
+	--enable-no-padding \
+	--enable-sigwinch \
+	--without-ada \
+	--enable-widec \
+	--enable-xmc-glitch \
+	--enable-colorfgbg \
+	--enable-pc-files \
+	--enable-ext-colors \
+	--enable-ext-mouse \
+	--with-ospeed=unsigned \
+	--disable-wattr-macros \
+	--enable-sp-funcs
+%make_build
+cd -
+unset CFLAGS
+unset CXXFLAGS
+unset LDFLAGS
+unset AR
+unset RANLIB
+unset CC
+unset CXX
+%endif
+
 mkdir -p ncurses-normal
 cd ncurses-normal
 %configure \
 	--without-libtool \
+	--with-pkg-config-libdir=%{_libdir}/pkgconfig \
 	--with-shared \
 	--with-normal \
 %if %{with cplusplus}
@@ -259,11 +354,18 @@ cd ncurses-utf8
 cd -
 
 %install
-# we only install the libraries for a while untill all our packages has been
-# rebuilt against the unicode version and no packages needs this anymore
+%ifarch %{x86_64}
+cd ncurses-normal-32
+%make_install
+
+cd ../ncurses-utf8-32
+%make_install
+
+cd ..
+%endif
+
 cd ncurses-normal
-make install.libs DESTDIR=%{buildroot}
-rm -f %{buildroot}%{_libdir}/lib*.{a,so}
+%make_install
 cd -
 
 cd ncurses-utf8
@@ -277,22 +379,22 @@ rm -f c++/demo
 
 mkdir -p %{buildroot}/%{_lib}
 mv %{buildroot}%{_libdir}/libncurses{,w}.so.* %{buildroot}/%{_lib}
-rm %{buildroot}%{_libdir}/libncursesw.so
-ln -sr %{buildroot}/%{_lib}/libncursesw.so.%{majorminor} %{buildroot}%{_libdir}/libncursesw.so.%{major}
-ln -sr %{buildroot}/%{_lib}/libncursesw.so.%{majorminor} %{buildroot}%{_libdir}/libncursesw.so
 for i in form menu ncurses panel; do
-    ln -s lib${i}w.a %{buildroot}%{_libdir}/lib${i}.a
-    ln -s lib${i}w.so %{buildroot}%{_libdir}/lib${i}.so
+    ln -sf lib${i}w.a %{buildroot}%{_libdir}/lib${i}.a
+    ln -sf lib${i}w.so %{buildroot}%{_libdir}/lib${i}.so
 done
+ln -sf ../../%{_lib}/libncursesw.so.6 %{buildroot}%{_libdir}/libncursesw.so.6
+ln -sf ../../%{_lib}/libncursesw.so.6 %{buildroot}%{_libdir}/libncursesw.so
+
 %if %{with cplusplus}
 for i in ncurses++; do
-    ln -s lib${i}w.so %{buildroot}%{_libdir}/lib${i}.so
+    ln -sf lib${i}w.so %{buildroot}%{_libdir}/lib${i}.so
 done
 %endif
-ln -s libncursesw.so %{buildroot}%{_libdir}/libcurses.so
-ln -s libncursesw.a %{buildroot}%{_libdir}/libcurses.a
+ln -sf libncursesw.so %{buildroot}%{_libdir}/libcurses.so
+ln -sf libncursesw.a %{buildroot}%{_libdir}/libcurses.a
 %if %{with cplusplus}
-ln -s libncurses++w.a %{buildroot}%{_libdir}/libncurses++.a
+ln -sf libncurses++w.a %{buildroot}%{_libdir}/libncurses++.a
 %endif
 
 #
@@ -307,6 +409,9 @@ cp %{buildroot}%{_datadir}/terminfo/x/xterm-new %{buildroot}%{_datadir}/terminfo
 # have to be done before find commands below
 #
 rm -f %{buildroot}%{_libdir}/terminfo
+%ifarch %{x86_64}
+rm -f %{buildroot}%{_prefix}/lib/terminfo
+%endif
 
 # fwang: avoid conflict with kon package
 rm -f %{buildroot}%{_datadir}/terminfo/k/kon
@@ -419,3 +524,54 @@ sed -i -e 's/%{ldflags}//g' %{buildroot}%{_bindir}/ncurses*-config
 
 %files -n termcap
 %{_sysconfdir}/termcap
+
+%ifarch %{x86_64}
+# 32-bit compat bits
+%(for i in ncurses form menu ncurses++ panel ncursesw formw menuw ncurses++w panelw; do
+	if [ "$i" = "ncurses" ]; then
+		EXTRA="%{_prefix}/lib/libcurses.so"
+		EXTRASTATIC="%{_prefix}/lib/libcurses.a"
+	else
+		EXTRA=""
+		EXTRASTATIC=""
+	fi
+	cat <<EOF
+%package -n lib${i}6
+Summary: 32-bit compatibility version of the ${i} library
+Group: System/Libraries
+
+%description -n lib${i}6
+32-bit compatibility version of the ${i} library
+
+%files -n lib${i}6
+%{_prefix}/lib/lib${i}.so.6*
+
+%package -n lib${i}-devel
+Summary: Development files for the 32-bit version of the ${i} library
+Group: Development/C
+Requires: lib${i}6 = %{EVRD}
+# Headers are shared between 32-bit and 64-bit versions
+Requires: %{devname} = %{EVRD}
+
+%description -n lib${i}-devel
+Development files for the 32-bit version of the ${i} library
+
+%files -n lib${i}-devel
+%{_prefix}/lib/lib${i}.so
+$EXTRA
+%{_prefix}/lib/pkgconfig/${i}.pc
+
+%package -n lib${i}-static-devel
+Summary: Static library files for the 32-bit version of the ${i} library
+Group: Development/C
+Requires: lib${i}-devel = %{EVRD}
+
+%description -n lib${i}-static-devel
+Static library files for the 32-bit version of the ${i} library
+
+%files -n lib${i}-static-devel
+%{_prefix}/lib/lib${i}.a
+$EXTRASTATIC
+EOF
+done)
+%endif
