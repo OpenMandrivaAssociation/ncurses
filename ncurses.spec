@@ -1,4 +1,4 @@
-%define date 20200502
+%define date 20200808
 %define major 6
 %define majorminor 6.2
 %define utf8libname %mklibname %{name}w %{major}
