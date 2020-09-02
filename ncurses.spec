@@ -197,6 +197,7 @@ export RANLIB=llvm-ranlib
 	--without-libtool \
 	--with-shared \
 	--with-normal \
+	--with-termlib=tinfo \
 %if %{with cplusplus}
 	--with-cxx \
 	--with-cxx-shared \
