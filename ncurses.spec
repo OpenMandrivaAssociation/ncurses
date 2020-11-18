@@ -1,4 +1,4 @@
-%define date 20200808
+%define date 20201114
 %define major 6
 %define majorminor 6.2
 %define utf8libname %mklibname %{name}w %{major}
@@ -13,16 +13,16 @@
 
 # ugly as fuck, but at least mostly harmless to children and animals..
 %define libgen()\
-%package -n	%2%{_lib}%{1}%{4}\
+%package -n %2%{_lib}%{1}%{4}\
 Summary:	Ncurses %{1} library\
 Group:		System/Libraries\
 Conflicts:	%{_lib}ncurses%{major} < 5.9-6.20120922.1 \
 Conflicts:	%{_lib}ncursesw%{major} < 5.9-6.20120922.1 \
 \
-%description -n	%2%{_lib}%{1}%{4}\
+%description -n %2%{_lib}%{1}%{4}\
 This package comes with lib%{1} from the ncurses library.\
 \
-%files -n	%2%{_lib}%{1}%{4}\
+%files -n %2%{_lib}%{1}%{4}\
 %{3}%{_libdir}/lib%{1}.so.%{4}*\
 %{nil}
 
@@ -59,11 +59,11 @@ classic curses library.
 
 # to be killed
 ###############################################################################
-%package -n	%{libname}
+%package -n %{libname}
 Summary:	The development files for applications which use ncurses
 Group:		System/Libraries
 
-%description -n	%{libname}
+%description -n %{libname}
 The curses library routines are a terminal-independent method of updating
 character screens with reasonalble optimization. The ncurses (new curses)
 library is a freely distributable replacement for the discontinued 4.4BSD
@@ -83,7 +83,7 @@ classic curses library.
 %libpackage ncurses++w %{major}
 %endif
 
-%package -n	%{utf8libname}
+%package -n %{utf8libname}
 Summary:	Ncurses libraries which support UTF8
 Group:		System/Libraries
 
@@ -96,15 +96,15 @@ classic curses library.
 This package contains ncurses libraries which support wide char (UTF8),
 and is not compatible with those without.
 
-%package	extraterms
+%package extraterms
 Summary:	Some exotic terminal descriptions
 Group:		System/Libraries
 BuildArch:	noarch
 
-%description	extraterms
+%description extraterms
 Install the ncurses-extraterms package if you use some exotic terminals.
 
-%package -n	%{devname}
+%package -n %{devname}
 Summary:	The development files for applications which use ncurses
 Group:		Development/C
 Provides:	%{name}-devel = %{EVRD}
@@ -128,19 +128,19 @@ Obsoletes:	%mklibname -d %{name}w 5
 Conflicts:	%{_lib}ncurses-devel < 5.7-3.20091128.2
 %rename		%{utf8devname}
 
-%description -n	%{devname}
+%description -n %{devname}
 The header files and libraries for developing applications that use
 the ncurses CRT screen handling and optimization package.
 
 Install the ncurses-devel package if you want to develop applications
 which will use ncurses.
 
-%package -n	termcap
+%package -n termcap
 Summary:	The terminal feature database used by certain applications
 Group:		System/Libraries
 BuildArch:	noarch
 
-%description -n	termcap
+%description -n termcap
 The termcap package provides the /etc/termcap file.  /etc/termcap is
 a database which defines the capabilities of various terminals and
 terminal emulators.  Certain programs use the /etc/termcap file to
@@ -173,7 +173,6 @@ sed -i -e 's,#if HAVE_GETTTYNAM,#if 0,g' progs/tset.c
 
 # Pull in support for newer architectures and OSes
 cp -f %{_datadir}/libtool/config/config.{guess,sub} .
-
 
 %build
 export PKG_CONFIG_LIBDIR=%{_libdir}/pkgconfig
