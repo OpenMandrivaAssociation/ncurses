@@ -463,9 +463,9 @@ sed -i -e 's/%{ldflags}//g' %{buildroot}%{_bindir}/ncurses*-config
 %{_datadir}/tabset
 %{_bindir}/*
 %exclude %{_bindir}/ncurses*-config
-%{_mandir}/man1/*
-%{_mandir}/man5/*
-%{_mandir}/man7/*
+%doc %{_mandir}/man1/*
+%doc %{_mandir}/man5/*
+%doc %{_mandir}/man7/*
 
 %files -n %{libname}
 %attr(755,root,root) /%{_lib}/libncurses.so.%{major}*
@@ -519,7 +519,7 @@ sed -i -e 's/%{ldflags}//g' %{buildroot}%{_bindir}/ncurses*-config
 %{_includedir}/ncurses/*.h
 %dir %{_includedir}/ncursesw
 %{_includedir}/ncursesw/*.h
-%{_mandir}/man3/*
+%doc %{_mandir}/man3/*
 
 %files -n termcap
 %{_sysconfdir}/termcap
@@ -540,7 +540,7 @@ Summary: 32-bit compatibility version of the ${i} library
 Group: System/Libraries
 
 %description -n lib${i}6
-32-bit compatibility version of the ${i} library
+32-bit compatibility version of the ${i} library.
 
 %files -n lib${i}6
 %{_prefix}/lib/lib${i}.so.6*
@@ -553,7 +553,7 @@ Requires: lib${i}6 = %{EVRD}
 Requires: %{devname} = %{EVRD}
 
 %description -n lib${i}-devel
-Development files for the 32-bit version of the ${i} library
+Development files for the 32-bit version of the ${i} library.
 
 %files -n lib${i}-devel
 %{_prefix}/lib/lib${i}.so
@@ -566,7 +566,7 @@ Group: Development/C
 Requires: lib${i}-devel = %{EVRD}
 
 %description -n lib${i}-static-devel
-Static library files for the 32-bit version of the ${i} library
+Static library files for the 32-bit version of the ${i} library.
 
 %files -n lib${i}-static-devel
 %{_prefix}/lib/lib${i}.a
