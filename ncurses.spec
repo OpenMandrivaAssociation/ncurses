@@ -222,7 +222,9 @@ export RANLIB=llvm-ranlib
 	--enable-colorfgbg \
 	--with-ospeed=unsigned \
 	--disable-wattr-macros \
-	--without-progs
+	--without-progs \
+	--with-termlib=tinfo 
+
 %make_build
 cd ..
 
@@ -263,7 +265,9 @@ cd ncurses-utf8-32
 	--enable-ext-mouse \
 	--with-ospeed=unsigned \
 	--disable-wattr-macros \
-	--enable-sp-funcs
+	--enable-sp-funcs \
+	--with-termlib=tinfo 
+
 %make_build
 cd -
 unset CFLAGS
@@ -308,7 +312,8 @@ cd ncurses-normal
 	--disable-pc-files \
 	--with-ospeed=unsigned \
 	--disable-wattr-macros \
-	--without-progs
+	--without-progs \
+	--with-termlib=tinfo 
 
 %make_build
 cd -
@@ -348,7 +353,9 @@ cd ncurses-utf8
 	--enable-ext-mouse \
 	--with-ospeed=unsigned \
 	--disable-wattr-macros \
-	--enable-sp-funcs
+	--enable-sp-funcs \
+	--with-termlib=tinfo
+	
 %make_build
 cd -
 
@@ -468,12 +475,14 @@ sed -i -e 's/%{ldflags}//g' %{buildroot}%{_bindir}/ncurses*-config
 %doc %{_mandir}/man7/*
 
 %files -n %{libname}
-%attr(755,root,root) /%{_lib}/libncurses.so.%{major}*
-%attr(755,root,root) /%{_lib}/libncurses.so.5
+/%{_lib}/libncurses.so.%{major}*
+/%{_lib}/libncurses.so.5
+/%{_libdir}/libtinfo.so.%{major}*
 
 %files -n %{utf8libname}
 %attr(755,root,root) /%{_lib}/libncursesw.so.%{major}*
 %optional %attr(755,root,root) %{_libdir}/libncursesw.so.%{major}
+%optional %attr(755,root,root) %{_libdir}/libtinfo.so.%{major}
 
 %files extraterms -f %{name}-extraterms.list
 %doc README
@@ -510,10 +519,13 @@ sed -i -e 's/%{ldflags}//g' %{buildroot}%{_bindir}/ncurses*-config
 %{_libdir}/pkgconfig/menuw.pc
 %{_libdir}/pkgconfig/ncursesw.pc
 %{_libdir}/pkgconfig/panelw.pc
+%{_libdir}/libtinfo.a
+%{_libdir}/libtinfo.so
 %{_libdir}/pkgconfig/form.pc
 %{_libdir}/pkgconfig/menu.pc
 %{_libdir}/pkgconfig/ncurses.pc
 %{_libdir}/pkgconfig/panel.pc
+%{_libdir}/pkgconfig/tinfo.pc
 %{_includedir}/*.h
 %dir %{_includedir}/ncurses
 %{_includedir}/ncurses/*.h
@@ -526,7 +538,7 @@ sed -i -e 's/%{ldflags}//g' %{buildroot}%{_bindir}/ncurses*-config
 
 %ifarch %{x86_64}
 # 32-bit compat bits
-%(for i in ncurses form menu ncurses++ panel ncursesw formw menuw ncurses++w panelw; do
+%(for i in ncurses form menu ncurses++ panel tinfo ncursesw formw menuw ncurses++w panelw; do
 	if [ "$i" = "ncurses" ]; then
 		EXTRA="%{_prefix}/lib/libcurses.so"
 		EXTRASTATIC="%{_prefix}/lib/libcurses.a"
