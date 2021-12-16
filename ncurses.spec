@@ -30,7 +30,7 @@ Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	6.2
 %if "%{date}" != ""
-Release:	1.%{date}.1
+Release:	1.%{date}.2
 Source0:	ftp://ftp.invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
 Release:	1
