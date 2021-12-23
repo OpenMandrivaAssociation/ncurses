@@ -5,6 +5,7 @@
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname -d %{name}
 %define utf8devname %mklibname -d %{name}w
+%define staticname %mklibname -d -s %{name}
 %global optflags %{optflags} -Oz
 %global ldflags %{ldflags} -ldl
 
@@ -30,7 +31,7 @@ Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	6.3
 %if "%{date}" != ""
-Release:	1.%{date}.1
+Release:	1.%{date}.2
 Source0:	ftp://ftp.invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
 Release:	1
@@ -62,6 +63,11 @@ classic curses library.
 %package -n %{libname}
 Summary:	The development files for applications which use ncurses
 Group:		System/Libraries
+%if "%_lib" == "lib64"
+Provides:	libtinfo.so.6()(64bit)
+%else
+Provides:	libtinfo.so.6
+%endif
 
 %description -n %{libname}
 The curses library routines are a terminal-independent method of updating
@@ -134,6 +140,18 @@ the ncurses CRT screen handling and optimization package.
 
 Install the ncurses-devel package if you want to develop applications
 which will use ncurses.
+
+%package -n %{staticname}
+Summary:	Static libraries for applications which use ncurses
+Group:		Development/C
+Requires:	%{devname} = %{EVRD}
+
+%description -n %{staticname}
+Static libraries for developing applications that use
+the ncurses CRT screen handling and optimization package.
+
+Install the ncurses-devel package if you want to develop applications
+which will use ncurses and link them statically.
 
 %package -n termcap
 Summary:	The terminal feature database used by certain applications
@@ -222,8 +240,7 @@ export RANLIB=llvm-ranlib
 	--enable-colorfgbg \
 	--with-ospeed=unsigned \
 	--disable-wattr-macros \
-	--without-progs \
-	--with-termlib=tinfo 
+	--without-progs
 
 %make_build
 cd ..
@@ -265,8 +282,7 @@ cd ncurses-utf8-32
 	--enable-ext-mouse \
 	--with-ospeed=unsigned \
 	--disable-wattr-macros \
-	--enable-sp-funcs \
-	--with-termlib=tinfo 
+	--enable-sp-funcs
 
 %make_build
 cd -
@@ -312,8 +328,7 @@ cd ncurses-normal
 	--disable-pc-files \
 	--with-ospeed=unsigned \
 	--disable-wattr-macros \
-	--without-progs \
-	--with-termlib=tinfo 
+	--without-progs
 
 %make_build
 cd -
@@ -353,8 +368,7 @@ cd ncurses-utf8
 	--enable-ext-mouse \
 	--with-ospeed=unsigned \
 	--disable-wattr-macros \
-	--enable-sp-funcs \
-	--with-termlib=tinfo
+	--enable-sp-funcs
 	
 %make_build
 cd -
@@ -453,10 +467,26 @@ for i in form menu ncurses panel; do
     ln -s ${i}w.pc %{buildroot}%{_libdir}/pkgconfig/$i.pc
 done
 
-# There are no binary incompatibilities here -- it's just
-# a version number related soname increase. Let's keep binaries
-# built against previous versions happy...
+# ncurses includes tinfo - let's be compatible with stuff
+# that assumes tinfo is a separate library
+ln -s ncursesw.pc %{buildroot}%{_libdir}/pkgconfig/tinfo.pc
+ln -s libncursesw.so.%{majorminor} %{buildroot}/%{_lib}/libtinfo.so.%{majorminor}
+ln -s libncursesw.so.%{majorminor} %{buildroot}/%{_lib}/libtinfo.so.%{major}
+ln -s libncursesw.so.%{major} %{buildroot}%{_libdir}/libtinfo.so.%{major}
+ln -s libncursesw.so %{buildroot}%{_libdir}/libtinfo.so
+ln -s libncursesw.a %{buildroot}%{_libdir}/libtinfo.a
+%ifarch %{x86_64}
+ln -s libncursesw.so.%{major} %{buildroot}%{_prefix}/lib/libtinfo.so.%{major}
+ln -s libncursesw.so.%{major} %{buildroot}%{_prefix}/lib/libtinfo.so
+ln -s ncursesw.pc %{buildroot}%{_prefix}/lib/pkgconfig/tinfo.pc
+ln -s libncursesw.a %{buildroot}%{_prefix}/lib/libtinfo.a
+%endif
+
+# Binary incompatibilities between ncurses 5 and 6 are small.
+# Small enough for this to provide reasonable compatibility with
+# some non-free stuff built on prehistoric distros.
 ln -s libncurses.so.%{majorminor} %{buildroot}/%{_lib}/libncurses.so.5
+ln -s libtinfo.so.%{majorminor} %{buildroot}/%{_lib}/libtinfo.so.5
 
 # Don't allow rpm helpers to get rid of that seemingly "wrong" symlink
 export DONT_SYMLINK_LIBS=1
@@ -477,12 +507,13 @@ sed -i -e 's/%{ldflags}//g' %{buildroot}%{_bindir}/ncurses*-config
 %files -n %{libname}
 /%{_lib}/libncurses.so.%{major}*
 /%{_lib}/libncurses.so.5
-/%{_libdir}/libtinfo.so.%{major}*
+/%{_lib}/libtinfo.so.%{major}*
+/%{_lib}/libtinfo.so.5
 
 %files -n %{utf8libname}
 %attr(755,root,root) /%{_lib}/libncursesw.so.%{major}*
-%optional %attr(755,root,root) %{_libdir}/libncursesw.so.%{major}
-%optional %attr(755,root,root) %{_libdir}/libtinfo.so.%{major}
+%attr(755,root,root) %{_libdir}/libncursesw.so.%{major}
+%attr(755,root,root) %{_libdir}/libtinfo.so.%{major}
 
 %files extraterms -f %{name}-extraterms.list
 %doc README
@@ -490,37 +521,25 @@ sed -i -e 's/%{ldflags}//g' %{buildroot}%{_bindir}/ncurses*-config
 %files -n %{devname}
 %doc doc c++ test
 %{_bindir}/ncurses*-config
-%{_libdir}/libcurses.a
 %{_libdir}/libcurses.so
-%{_libdir}/libform.a
 %{_libdir}/libform.so
-%{_libdir}/libformw.a
 %{_libdir}/libformw.so
-%{_libdir}/libmenu.a
 %{_libdir}/libmenu.so
-%{_libdir}/libmenuw.a
 %{_libdir}/libmenuw.so
 %if %{with cplusplus}
 %{_libdir}/libncurses++w.so
-%{_libdir}/libncurses++w.a
 %{_libdir}/libncurses++.so
-%{_libdir}/libncurses++.a
 %{_libdir}/pkgconfig/ncurses++w.pc
 %endif
-%{_libdir}/libncurses.a
 %{_libdir}/libncurses.so
-%{_libdir}/libncursesw.a
 %{_libdir}/libncursesw.so
-%{_libdir}/libpanel.a
 %{_libdir}/libpanel.so
-%{_libdir}/libpanelw.a
 %{_libdir}/libpanelw.so
+%{_libdir}/libtinfo.so
 %{_libdir}/pkgconfig/formw.pc
 %{_libdir}/pkgconfig/menuw.pc
 %{_libdir}/pkgconfig/ncursesw.pc
 %{_libdir}/pkgconfig/panelw.pc
-%{_libdir}/libtinfo.a
-%{_libdir}/libtinfo.so
 %{_libdir}/pkgconfig/form.pc
 %{_libdir}/pkgconfig/menu.pc
 %{_libdir}/pkgconfig/ncurses.pc
@@ -532,6 +551,22 @@ sed -i -e 's/%{ldflags}//g' %{buildroot}%{_bindir}/ncurses*-config
 %dir %{_includedir}/ncursesw
 %{_includedir}/ncursesw/*.h
 %doc %{_mandir}/man3/*
+
+%files -n %{staticname}
+%{_libdir}/libcurses.a
+%{_libdir}/libform.a
+%{_libdir}/libformw.a
+%{_libdir}/libmenu.a
+%{_libdir}/libmenuw.a
+%{_libdir}/libncurses.a
+%{_libdir}/libncursesw.a
+%{_libdir}/libpanel.a
+%{_libdir}/libpanelw.a
+%{_libdir}/libtinfo.a
+%if %{with cplusplus}
+%{_libdir}/libncurses++w.a
+%{_libdir}/libncurses++.a
+%endif
 
 %files -n termcap
 %{_sysconfdir}/termcap
