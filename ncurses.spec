@@ -1,4 +1,4 @@
-%define date 20211219
+%define date 20220521
 %define major 6
 %define majorminor 6.3
 %define utf8libname %mklibname %{name}w %{major}
@@ -31,7 +31,7 @@ Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	6.3
 %if "%{date}" != ""
-Release:	1.%{date}.2
+Release:	1.%{date}.1
 Source0:	ftp://ftp.invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
 Release:	1
@@ -202,7 +202,7 @@ mkdir -p ncurses-normal-32
 cd ncurses-normal-32
 export CC=gcc
 export CXX=g++
-export CFLAGS="`echo %{optflags} |sed -e 's, -m64,,g'` -m32"
+export CFLAGS="$(echo %{optflags} |sed -e 's, -m64,,g') -m32"
 export CXXFLAGS="$CFLAGS"
 export LDFLAGS="$CFLAGS"
 export AR=llvm-ar
@@ -394,26 +394,17 @@ cd -
 
 # the resetall script
 install -m 755 %{SOURCE4} %{buildroot}%{_bindir}/resetall
+
 # we don't want this in doc
 rm -f c++/demo
 
-mkdir -p %{buildroot}/%{_lib}
-mv %{buildroot}%{_libdir}/libncurses{,w}.so.* %{buildroot}/%{_lib}
 for i in form menu ncurses panel; do
     ln -sf lib${i}w.a %{buildroot}%{_libdir}/lib${i}.a
     ln -sf lib${i}w.so %{buildroot}%{_libdir}/lib${i}.so
 done
-ln -sf ../../%{_lib}/libncursesw.so.6 %{buildroot}%{_libdir}/libncursesw.so.6
-ln -sf ../../%{_lib}/libncursesw.so.6 %{buildroot}%{_libdir}/libncursesw.so
 
 %if %{with cplusplus}
-for i in ncurses++; do
-    ln -sf lib${i}w.so %{buildroot}%{_libdir}/lib${i}.so
-done
-%endif
-ln -sf libncursesw.so %{buildroot}%{_libdir}/libcurses.so
-ln -sf libncursesw.a %{buildroot}%{_libdir}/libcurses.a
-%if %{with cplusplus}
+ln -sf libncurses++w.so %{buildroot}%{_libdir}/libncurses++.so
 ln -sf libncurses++w.a %{buildroot}%{_libdir}/libncurses++.a
 %endif
 
@@ -439,7 +430,7 @@ rm -f %{buildroot}%{_datadir}/terminfo/k/kon
 # bero: Build termcap from the terminfo database
 mkdir -p %{buildroot}%{_sysconfdir}
 %if ! %cross_compiling
-LD_LIBRARY_PATH=%{buildroot}/%{_lib}:%{buildroot}%{_libdir}:$LD_LIBRARY_PATH %{buildroot}%{_bindir}/tic -Ct misc/terminfo.src > %{buildroot}%{_sysconfdir}/termcap
+LD_LIBRARY_PATH=%{buildroot}%{_libdir}:$LD_LIBRARY_PATH %{buildroot}%{_bindir}/tic -Ct misc/terminfo.src > %{buildroot}%{_sysconfdir}/termcap
 %else
 tic -Ct misc/terminfo.src > %{buildroot}%{_sysconfdir}/termcap
 %endif
@@ -470,9 +461,8 @@ done
 # ncurses includes tinfo - let's be compatible with stuff
 # that assumes tinfo is a separate library
 ln -s ncursesw.pc %{buildroot}%{_libdir}/pkgconfig/tinfo.pc
-ln -s libncursesw.so.%{majorminor} %{buildroot}/%{_lib}/libtinfo.so.%{majorminor}
-ln -s libncursesw.so.%{majorminor} %{buildroot}/%{_lib}/libtinfo.so.%{major}
-ln -s libncursesw.so.%{major} %{buildroot}%{_libdir}/libtinfo.so.%{major}
+ln -s libncursesw.so.%{majorminor} %{buildroot}/%{_libdir}/libtinfo.so.%{majorminor}
+ln -s libncursesw.so.%{majorminor} %{buildroot}/%{_libdir}/libtinfo.so.%{major}
 ln -s libncursesw.so %{buildroot}%{_libdir}/libtinfo.so
 ln -s libncursesw.a %{buildroot}%{_libdir}/libtinfo.a
 %ifarch %{x86_64}
@@ -485,15 +475,15 @@ ln -s libncursesw.a %{buildroot}%{_prefix}/lib/libtinfo.a
 # Binary incompatibilities between ncurses 5 and 6 are small.
 # Small enough for this to provide reasonable compatibility with
 # some non-free stuff built on prehistoric distros.
-ln -s libncurses.so.%{majorminor} %{buildroot}/%{_lib}/libncurses.so.5
-ln -s libtinfo.so.%{majorminor} %{buildroot}/%{_lib}/libtinfo.so.5
+ln -s libncurses.so.%{majorminor} %{buildroot}/%{_libdir}/libncurses.so.5
+ln -s libtinfo.so.%{majorminor} %{buildroot}/%{_libdir}/libtinfo.so.5
 
 # Don't allow rpm helpers to get rid of that seemingly "wrong" symlink
 export DONT_SYMLINK_LIBS=1
 export DONT_RELINK=1
 
 # (tpg) do not push our LDFLAGS
-sed -i -e 's/%{ldflags}//g' %{buildroot}%{_bindir}/ncurses*-config
+sed -i -e 's/%{build_ldflags}//g' %{buildroot}%{_bindir}/ncurses*-config
 
 %files -f %{name}.list
 %doc README ANNOUNCE
@@ -505,15 +495,13 @@ sed -i -e 's/%{ldflags}//g' %{buildroot}%{_bindir}/ncurses*-config
 %doc %{_mandir}/man7/*
 
 %files -n %{libname}
-/%{_lib}/libncurses.so.%{major}*
-/%{_lib}/libncurses.so.5
-/%{_lib}/libtinfo.so.%{major}*
-/%{_lib}/libtinfo.so.5
+%{_libdir}/libncurses.so.%{major}*
+%{_libdir}/libncurses.so.5
+%{_libdir}/libtinfo.so.%{major}*
+%{_libdir}/libtinfo.so.5
 
 %files -n %{utf8libname}
-%attr(755,root,root) /%{_lib}/libncursesw.so.%{major}*
-%attr(755,root,root) %{_libdir}/libncursesw.so.%{major}
-%attr(755,root,root) %{_libdir}/libtinfo.so.%{major}
+%{_libdir}/libncursesw.so.%{major}*
 
 %files extraterms -f %{name}-extraterms.list
 %doc README
