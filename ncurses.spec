@@ -1,4 +1,4 @@
-%define date 20220521
+%define date 20220618
 %define major 6
 %define majorminor 6.3
 %define utf8libname %mklibname %{name}w %{major}
@@ -31,8 +31,8 @@ Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	6.3
 %if "%{date}" != ""
-Release:	1.%{date}.1
-Source0:	ftp://ftp.invisible-island.net/ncurses/current/%{name}-%{version}-%{date}.tgz
+Release:	0.%{date}.1
+Source0:	https://invisible-mirror.net/archives/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
 Release:	1
 Source0:	ftp://ftp.invisible-island.net/ncurses/%{name}-%{version}.tar.gz
