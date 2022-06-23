@@ -1,3 +1,9 @@
+%ifarch %{x86_64}
+%bcond_without compat32
+%else
+%bcond_with compat32
+%endif
+
 %define date 20220618
 %define major 6
 %define majorminor 6.3
@@ -51,6 +57,9 @@ BuildRequires:	gpm-devel
 %endif
 BuildRequires:	sharutils
 Conflicts:	%{name}-extraterms < 5.9-6.20121026.3
+%if %{with compat32}
+BuildRequires:	libc6
+%endif
 
 %description
 The curses library routines are a terminal-independent method of updating
@@ -197,7 +206,7 @@ export PKG_CONFIG_LIBDIR=%{_libdir}/pkgconfig
 
 CONFIGURE_TOP="$PWD"
 
-%ifarch %{x86_64}
+%if %{with compat32}
 mkdir -p ncurses-normal-32
 cd ncurses-normal-32
 export CC=gcc
@@ -374,7 +383,7 @@ cd ncurses-utf8
 cd -
 
 %install
-%ifarch %{x86_64}
+%if %{with compat32}
 cd ncurses-normal-32
 %make_install
 
@@ -420,7 +429,7 @@ cp %{buildroot}%{_datadir}/terminfo/x/xterm-new %{buildroot}%{_datadir}/terminfo
 # have to be done before find commands below
 #
 rm -f %{buildroot}%{_libdir}/terminfo
-%ifarch %{x86_64}
+%if %{with compat32}
 rm -f %{buildroot}%{_prefix}/lib/terminfo
 %endif
 
@@ -465,7 +474,7 @@ ln -s libncursesw.so.%{majorminor} %{buildroot}/%{_libdir}/libtinfo.so.%{majormi
 ln -s libncursesw.so.%{majorminor} %{buildroot}/%{_libdir}/libtinfo.so.%{major}
 ln -s libncursesw.so %{buildroot}%{_libdir}/libtinfo.so
 ln -s libncursesw.a %{buildroot}%{_libdir}/libtinfo.a
-%ifarch %{x86_64}
+%if %{with compat32}
 ln -s libncursesw.so.%{major} %{buildroot}%{_prefix}/lib/libtinfo.so.%{major}
 ln -s libncursesw.so.%{major} %{buildroot}%{_prefix}/lib/libtinfo.so
 ln -s ncursesw.pc %{buildroot}%{_prefix}/lib/pkgconfig/tinfo.pc
@@ -559,7 +568,7 @@ sed -i -e 's/%{build_ldflags}//g' %{buildroot}%{_bindir}/ncurses*-config
 %files -n termcap
 %{_sysconfdir}/termcap
 
-%ifarch %{x86_64}
+%if %{with compat32}
 # 32-bit compat bits
 %(for i in ncurses form menu ncurses++ panel tinfo ncursesw formw menuw ncurses++w panelw; do
 	if [ "$i" = "ncurses" ]; then
