@@ -4,7 +4,7 @@
 %bcond_with compat32
 %endif
 
-%define date 20220618
+%define date 20220703
 %define major 6
 %define majorminor 6.3
 %define utf8libname %mklibname %{name}w %{major}
@@ -13,7 +13,7 @@
 %define utf8devname %mklibname -d %{name}w
 %define staticname %mklibname -d -s %{name}
 %global optflags %{optflags} -Oz
-%global ldflags %{ldflags} -ldl
+%global build_ldflags %{build_ldflags} -ldl
 
 %bcond_without cplusplus
 %bcond_with gpm
@@ -595,6 +595,7 @@ Group: Development/C
 Requires: lib${i}6 = %{EVRD}
 # Headers are shared between 32-bit and 64-bit versions
 Requires: %{devname} = %{EVRD}
+Requires: libc6
 
 %description -n lib${i}-devel
 Development files for the 32-bit version of the ${i} library.
