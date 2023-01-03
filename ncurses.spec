@@ -4,9 +4,9 @@
 %bcond_with compat32
 %endif
 
-%define date 20220703
+%define date 20221231
 %define major 6
-%define majorminor 6.3
+%define majorminor 6.4
 %define utf8libname %mklibname %{name}w %{major}
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname -d %{name}
@@ -35,9 +35,9 @@ This package comes with lib%{1} from the ncurses library.\
 
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
-Version:	6.3
+Version:	6.4
 %if "%{date}" != ""
-Release:	0.%{date}.2
+Release:	0.%{date}.1
 Source0:	https://invisible-mirror.net/archives/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
 Release:	1
