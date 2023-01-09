@@ -4,7 +4,7 @@
 %bcond_with compat32
 %endif
 
-%define date 20221231
+%define date 20230107
 %define major 6
 %define majorminor 6.4
 %define utf8libname %mklibname %{name}w %{major}
@@ -480,6 +480,10 @@ ln -s libncursesw.so.%{major} %{buildroot}%{_prefix}/lib/libtinfo.so
 ln -s ncursesw.pc %{buildroot}%{_prefix}/lib/pkgconfig/tinfo.pc
 ln -s libncursesw.a %{buildroot}%{_prefix}/lib/libtinfo.a
 %endif
+
+# Prevent weird upgrade failure in which something symlinks libncursesw.so.6 to libtinfo.so.6.3
+ln -sf libncursesw.so.%{majorminor} %{buildroot}%{_libdir}/libncursesw.so.%{major}
+ln -sf libncursesw.so.%{majorminor} %{buildroot}%{_prefix}/lib/libncursesw.so.%{major}
 
 # Binary incompatibilities between ncurses 5 and 6 are small.
 # Small enough for this to provide reasonable compatibility with
