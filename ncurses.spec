@@ -483,7 +483,9 @@ ln -s libncursesw.a %{buildroot}%{_prefix}/lib/libtinfo.a
 
 # Prevent weird upgrade failure in which something symlinks libncursesw.so.6 to libtinfo.so.6.3
 ln -sf libncursesw.so.%{majorminor} %{buildroot}%{_libdir}/libncursesw.so.%{major}
+%if %{with compat32}
 ln -sf libncursesw.so.%{majorminor} %{buildroot}%{_prefix}/lib/libncursesw.so.%{major}
+%endif
 
 # Binary incompatibilities between ncurses 5 and 6 are small.
 # Small enough for this to provide reasonable compatibility with
