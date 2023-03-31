@@ -40,7 +40,7 @@ Version:	6.4
 Release:	0.%{date}.1
 Source0:	https://invisible-mirror.net/archives/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
-Release:	1
+Release:	2
 Source0:	ftp://ftp.invisible-island.net/ncurses/%{name}-%{version}.tar.gz
 %endif
 License:	MIT
