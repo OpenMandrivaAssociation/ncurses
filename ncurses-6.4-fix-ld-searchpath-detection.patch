@@ -1,0 +1,26 @@
+diff -up ncurses-6.4-20230603/aclocal.m4.omv~ ncurses-6.4-20230603/aclocal.m4
+--- ncurses-6.4-20230603/aclocal.m4.omv~	2023-06-07 00:42:38.909034638 +0200
++++ ncurses-6.4-20230603/aclocal.m4	2023-06-07 00:44:07.732700611 +0200
+@@ -4437,7 +4437,8 @@ AC_CACHE_CHECK(for linker search path,cf
+ if test "$cross_compiling" != yes ; then
+ 
+ # GNU binutils' ld does not involve permissions which may stop ldconfig.
+-cf_pathlist=`${LD:-ld} --verbose 2>/dev/null | grep SEARCH_DIR | sed -e 's,SEARCH_DIR[[("=]][[("=]]*,,g' -e 's/"[[)]];//gp' | sort -u`
++# The SEARCH_DIR trick below doesn't work with lld, so use ld.bfd
++cf_pathlist=`ld.bfd --verbose 2>/dev/null | grep SEARCH_DIR | sed -e 's,SEARCH_DIR[[("=]][[("=]]*,,g' -e 's/"[[)]];//gp' | sort -u`
+ 
+ # The -NX options tell newer versions of Linux ldconfig to not attempt to
+ # update the cache, which makes it run faster.
+diff -up ncurses-6.4-20230603/configure.omv~ ncurses-6.4-20230603/configure
+--- ncurses-6.4-20230603/configure.omv~	2023-06-07 00:45:25.725282487 +0200
++++ ncurses-6.4-20230603/configure	2023-06-07 00:45:46.191434779 +0200
+@@ -29229,7 +29229,8 @@ else
+ if test "$cross_compiling" != yes ; then
+ 
+ # GNU binutils' ld does not involve permissions which may stop ldconfig.
+-cf_pathlist=`${LD:-ld} --verbose 2>/dev/null | grep SEARCH_DIR | sed -e 's,SEARCH_DIR[("=][("=]*,,g' -e 's/"[)];//gp' | sort -u`
++# The SEARCH_DIR trick below doesn't work with lld, so use ld.bfd
++cf_pathlist=`ld.bfd --verbose 2>/dev/null | grep SEARCH_DIR | sed -e 's,SEARCH_DIR[("=][("=]*,,g' -e 's/"[)];//gp' | sort -u`
+ 
+ # The -NX options tell newer versions of Linux ldconfig to not attempt to
+ # update the cache, which makes it run faster.

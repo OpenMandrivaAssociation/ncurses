@@ -7,7 +7,8 @@
 %define date 20230603
 %define major 6
 %define majorminor 6.4
-%define utf8libname %mklibname %{name}w %{major}
+%define utf8libname %mklibname %{name}w
+%define oldutf8libname %mklibname %{name}w %{major}
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname -d %{name}
 %define utf8devname %mklibname -d %{name}w
@@ -20,11 +21,13 @@
 
 # ugly as fuck, but at least mostly harmless to children and animals..
 %define libgen()\
-%package -n %2%{_lib}%{1}%{4}\
+%package -n %2%{_lib}%{1}\
 Summary:	Ncurses %{1} library\
 Group:		System/Libraries\
 Conflicts:	%{_lib}ncurses%{major} < 5.9-6.20120922.1 \
 Conflicts:	%{_lib}ncursesw%{major} < 5.9-6.20120922.1 \
+Obsoletes:	%2%{_lib}%{1}%{4} < %{EVRD} \
+Provides:	%2%{_lib}%{1}%{4} = %{EVRD} \
 \
 %description -n %2%{_lib}%{1}%{4}\
 This package comes with lib%{1} from the ncurses library.\
@@ -37,7 +40,7 @@ Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	6.4
 %if "%{date}" != ""
-Release:	0.%{date}.1
+Release:	0.%{date}.2
 Source0:	https://invisible-mirror.net/archives/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
 Release:	1
@@ -50,7 +53,11 @@ Source4:	ncurses-resetall.sh
 Source5:	ncurses-useful-terms
 Source6:	ncurses.rpmlintrc
 Patch1:		ncurses-5.6-xterm-debian.patch
+# regenerating configure needs patched autoconf, so modify configure
+# directly
+Patch2:		ncurses-6.4-fix-ld-searchpath-detection.patch
 Patch3:		ncurses-5.9-buildfix.patch
+Patch4:		ncurses-6.4-no-Lusrlib.patch
 Patch7:		ncurses-urxvt.patch
 %if %{with gpm}
 BuildRequires:	gpm-devel
@@ -101,6 +108,7 @@ classic curses library.
 %package -n %{utf8libname}
 Summary:	Ncurses libraries which support UTF8
 Group:		System/Libraries
+%rename %{oldutf8libname}
 
 %description -n %{utf8libname}
 The curses library routines are a terminal-independent method of updating
@@ -131,9 +139,9 @@ Provides:	devel(libncurses)
 %endif
 Provides:	ncursesw-devel = %{version}-%{release}
 Requires:	%{utf8libname} = %{version}
-Requires:	%{_lib}formw%{major} = %{version}
-Requires:	%{_lib}menuw%{major} = %{version}
-Requires:	%{_lib}panelw%{major} = %{version}
+Requires:	%{_lib}formw = %{version}
+Requires:	%{_lib}menuw = %{version}
+Requires:	%{_lib}panelw = %{version}
 # /usr/include/termcap.h conflicts
 Conflicts:	termcap-devel > 2.0.8-53
 Conflicts:	ncurses < 5.9-7.20131123.1
@@ -175,18 +183,7 @@ access various features of terminals (the bell, colors, and graphics,
 etc.).
 
 %prep
-%if "%{date}" != ""
-%setup -q -n %{name}-%{version}-%{date}
-%else
-%setup -q
-%endif
-
-%patch7 -p1 -b .urxvt~
-
-# regenerating configure needs patched autoconf, so modify configure
-# directly
-%patch1 -p1 -b .deb~
-%patch3 -p1 -b .bf~
+%autosetup -p1 -n %{name}-%{version}%{?date:-%{date}}
 
 find . -name "*.orig" -o -name "*~" | xargs rm -f
 # fix some permissions
@@ -591,20 +588,22 @@ sed -i -e 's/%{build_ldflags}//g' %{buildroot}%{_bindir}/ncurses*-config
 		EXTRASTATIC=""
 	fi
 	cat <<EOF
-%package -n lib${i}6
+%package -n lib${i}
 Summary: 32-bit compatibility version of the ${i} library
 Group: System/Libraries
+Obsoletes: lib${i}6 < %{EVRD}
+Provides: lib${i}6 = %{EVRD}
 
-%description -n lib${i}6
+%description -n lib${i}
 32-bit compatibility version of the ${i} library.
 
-%files -n lib${i}6
+%files -n lib${i}
 %{_prefix}/lib/lib${i}.so.6*
 
 %package -n lib${i}-devel
 Summary: Development files for the 32-bit version of the ${i} library
 Group: Development/C
-Requires: lib${i}6 = %{EVRD}
+Requires: lib${i} = %{EVRD}
 # Headers are shared between 32-bit and 64-bit versions
 Requires: %{devname} = %{EVRD}
 Requires: libc6
