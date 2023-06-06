@@ -4,7 +4,7 @@
 %bcond_with compat32
 %endif
 
-%define date 20230107
+%define date 20230603
 %define major 6
 %define majorminor 6.4
 %define utf8libname %mklibname %{name}w %{major}
@@ -40,7 +40,7 @@ Version:	6.4
 Release:	0.%{date}.1
 Source0:	https://invisible-mirror.net/archives/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
-Release:	2
+Release:	1
 Source0:	ftp://ftp.invisible-island.net/ncurses/%{name}-%{version}.tar.gz
 %endif
 License:	MIT
@@ -481,6 +481,12 @@ ln -s ncursesw.pc %{buildroot}%{_prefix}/lib/pkgconfig/tinfo.pc
 ln -s libncursesw.a %{buildroot}%{_prefix}/lib/libtinfo.a
 %endif
 
+# -L/usr/lib64 is harmful
+sed -i -e 's,-L%{_libdir} ,,g' %{buildroot}%{_libdir}/pkgconfig/*.pc
+%if %{with compat32}
+sed -i -e 's,-L%{_prefix}/lib ,,g' %{buildroot}%{_prefix}/lib/pkgconfig/*.pc
+%endif
+
 # Prevent weird upgrade failure in which something symlinks libncursesw.so.6 to libtinfo.so.6.3
 ln -sf libncursesw.so.%{majorminor} %{buildroot}%{_libdir}/libncursesw.so.%{major}
 %if %{with compat32}
@@ -499,36 +505,6 @@ export DONT_RELINK=1
 
 # (tpg) do not push our LDFLAGS
 sed -i -e 's/%{build_ldflags}//g' %{buildroot}%{_bindir}/ncurses*-config
-
-# (tpg) strip LTO from "LLVM IR bitcode" files
-check_convert_bitcode() {
-    printf '%s\n' "Checking for LLVM IR bitcode"
-    llvm_file_name=$(realpath ${1})
-    llvm_file_type=$(file ${llvm_file_name})
-
-    if printf '%s\n' "${llvm_file_type}" | grep -q "LLVM IR bitcode"; then
-# recompile without LTO
-    clang %{optflags} -fno-lto -Wno-unused-command-line-argument -x ir ${llvm_file_name} -c -o ${llvm_file_name}
-    elif printf '%s\n' "${llvm_file_type}" | grep -q "current ar archive"; then
-    printf '%s\n' "Unpacking ar archive ${llvm_file_name} to check for LLVM bitcode components."
-# create archive stage for objects
-    archive_stage=$(mktemp -d)
-    archive=${llvm_file_name}
-    cd ${archive_stage}
-    ar x ${archive}
-    for archived_file in $(find -not -type d); do
-        check_convert_bitcode ${archived_file}
-        printf '%s\n' "Repacking ${archived_file} into ${archive}."
-        ar r ${archive} ${archived_file}
-    done
-    ranlib ${archive}
-    cd ..
-    fi
-}
-
-for i in $(find %{buildroot} -type f -name "*.[ao]"); do
-    check_convert_bitcode ${i}
-done
 
 %files -f %{name}.list
 %doc README ANNOUNCE
