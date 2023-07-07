@@ -4,7 +4,7 @@
 %bcond_with compat32
 %endif
 
-%define date 20230603
+%define date 20230701
 %define major 6
 %define majorminor 6.4
 %define utf8libname %mklibname %{name}w
@@ -40,7 +40,7 @@ Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	6.4
 %if "%{date}" != ""
-Release:	0.%{date}.2
+Release:	0.%{date}.1
 Source0:	https://invisible-mirror.net/archives/ncurses/current/%{name}-%{version}-%{date}.tgz
 %else
 Release:	1
@@ -246,7 +246,8 @@ export RANLIB=llvm-ranlib
 	--enable-colorfgbg \
 	--with-ospeed=unsigned \
 	--disable-wattr-macros \
-	--without-progs
+	--without-progs \
+	--disable-stripping
 
 %make_build
 cd ..
@@ -288,7 +289,8 @@ cd ncurses-utf8-32
 	--enable-ext-mouse \
 	--with-ospeed=unsigned \
 	--disable-wattr-macros \
-	--enable-sp-funcs
+	--enable-sp-funcs \
+	--disable-stripping
 
 %make_build
 cd -
@@ -334,7 +336,8 @@ cd ncurses-normal
 	--disable-pc-files \
 	--with-ospeed=unsigned \
 	--disable-wattr-macros \
-	--without-progs
+	--without-progs \
+	--disable-stripping
 
 %make_build
 cd -
@@ -374,7 +377,8 @@ cd ncurses-utf8
 	--enable-ext-mouse \
 	--with-ospeed=unsigned \
 	--disable-wattr-macros \
-	--enable-sp-funcs
+	--enable-sp-funcs \
+	--disable-stripping
 	
 %make_build
 cd -
