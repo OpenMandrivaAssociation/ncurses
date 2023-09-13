@@ -4,7 +4,7 @@
 %bcond_with compat32
 %endif
 
-%define date 20230902
+%define date 20230909
 %define major 6
 %define majorminor 6.4
 %define utf8libname %mklibname %{name}w
@@ -18,23 +18,6 @@
 
 %bcond_without cplusplus
 %bcond_with gpm
-
-# ugly as fuck, but at least mostly harmless to children and animals..
-%define libgen()\
-%package -n %2%{_lib}%{1}\
-Summary:	Ncurses %{1} library\
-Group:		System/Libraries\
-Conflicts:	%{_lib}ncurses%{major} < 5.9-6.20120922.1 \
-Conflicts:	%{_lib}ncursesw%{major} < 5.9-6.20120922.1 \
-Obsoletes:	%2%{_lib}%{1}%{4} < %{EVRD} \
-Provides:	%2%{_lib}%{1}%{4} = %{EVRD} \
-\
-%description -n %2%{_lib}%{1}%{4}\
-This package comes with lib%{1} from the ncurses library.\
-\
-%files -n %2%{_lib}%{1}%{4}\
-%{3}%{_libdir}/lib%{1}.so.%{4}*\
-%{nil}
 
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
