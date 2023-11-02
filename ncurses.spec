@@ -4,7 +4,7 @@
 %bcond_with compat32
 %endif
 
-%define date 20230909
+%define date 20231028
 %define major 6
 %define majorminor 6.4
 %define utf8libname %mklibname %{name}w
