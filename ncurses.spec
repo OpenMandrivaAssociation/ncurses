@@ -74,6 +74,18 @@ character screens with reasonalble optimization. The ncurses (new curses)
 library is a freely distributable replacement for the discontinued 4.4BSD
 classic curses library.
 
+# libpackage with >= 5.0 policies to ease this backport
+%define libpackage()\
+%%package -n %{expand:%%mklibname %{1} %{?3:%{2} %{3}}}\
+Summary: The %{1} library, a part of %{name}\
+Group: System/Libraries\
+Obsoletes: %{expand:%%mklibname %{1} %{2} %{?3:%{3}}} < %{EVRD}\
+%%description -n %{expand:%%mklibname %{1} %{?3:%{2} %{3}}}\
+The %{1} library, a part of %{name}\
+%%files -n %{expand:%%mklibname %{1} %{?3:%{2} %{3}}}\
+%{_libdir}/lib%{1}%{?3:-%{2}}.so.%{?3:%{3}}%{?!3:%{2}}*\
+%{nil}
+
 
 %libpackage form %{major}
 %libpackage menu %{major}
