@@ -45,6 +45,12 @@ Conflicts:	%{name}-extraterms < 5.9-6.20121026.3
 %if %{with compat32}
 BuildRequires:	libc6
 %endif
+# FIXME this circular dependency is not very nice (but not fatal because
+# it doesn't affect crosscompiling). It's currently needed to make sure
+# tic is available.
+%if ! %{cross_compiling}
+BuildRequires:	ncurses
+%endif
 
 %description
 The curses library routines are a terminal-independent method of updating
