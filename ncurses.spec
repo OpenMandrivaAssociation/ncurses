@@ -4,9 +4,9 @@
 %bcond_with compat32
 %endif
 
-%define date 20240302
-%define major 6
-%define majorminor 6.4
+#define date 20240302
+%define major %(echo %{version} |cut -d. -f1)
+%define majorminor %{version}
 %define utf8libname %mklibname %{name}w
 %define oldutf8libname %mklibname %{name}w %{major}
 %define libname %mklibname %{name} %{major}
@@ -21,14 +21,9 @@
 
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
-Version:	6.4
-%if "%{date}" != ""
-Release:	0.%{date}.1
-Source0:	https://invisible-mirror.net/archives/ncurses/current/%{name}-%{version}-%{date}.tgz
-%else
-Release:	1
-Source0:	ftp://ftp.invisible-island.net/ncurses/%{name}-%{version}.tar.gz
-%endif
+Version:	6.5
+Release:	%{?date:0.%{date}.}1
+Source0:	https://invisible-mirror.net/archives/ncurses/%{?date:current/}%{name}-%{version}%{?date:-%{date}}.%{?date:tgz}%{!?date:tar.gz}
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.gnu.org/software/ncurses/ncurses.html
