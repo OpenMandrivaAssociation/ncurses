@@ -26,7 +26,7 @@ Release:	%{?date:0.%{date}.}1
 Source0:	https://invisible-mirror.net/archives/ncurses/%{?date:current/}%{name}-%{version}%{?date:-%{date}}.%{?date:tgz}%{!?date:tar.gz}
 License:	MIT
 Group:		System/Libraries
-Url:		http://www.gnu.org/software/ncurses/ncurses.html
+Url:		https://www.gnu.org/software/ncurses/ncurses.html
 Source4:	ncurses-resetall.sh
 Source5:	ncurses-useful-terms
 Source6:	ncurses.rpmlintrc
