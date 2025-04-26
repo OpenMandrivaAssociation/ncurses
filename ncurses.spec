@@ -4,9 +4,10 @@
 %bcond_with compat32
 %endif
 
-#define date 20240302
-%define major %(echo %{version} |cut -d. -f1)
-%define majorminor %{version}
+%define ver %(echo %{version}|cut -d'+' -f1|cut -d'~' -f1)
+%define date %(echo %{version}|sed -e 's,.*\+,,;s,.*\~,,')
+%define major %(echo %{ver} |cut -d. -f1)
+%define majorminor %{ver}
 %define utf8libname %mklibname %{name}w
 %define oldutf8libname %mklibname %{name}w %{major}
 %define libname %mklibname %{name} %{major}
@@ -21,9 +22,9 @@
 
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
-Version:	6.5
-Release:	%{?date:0.%{date}.}1
-Source0:	https://invisible-mirror.net/archives/ncurses/%{?date:current/}%{name}-%{version}%{?date:-%{date}}.%{?date:tgz}%{!?date:tar.gz}
+Version:	6.5+20250419
+Release:	1
+Source0:	https://invisible-mirror.net/archives/ncurses/%{?date:current/}%{name}-%{ver}%{?date:-%{date}}.%{?date:tgz}%{!?date:tar.gz}
 License:	MIT
 Group:		System/Libraries
 Url:		https://www.gnu.org/software/ncurses/ncurses.html
@@ -179,7 +180,7 @@ access various features of terminals (the bell, colors, and graphics,
 etc.).
 
 %prep
-%autosetup -p1 -n %{name}-%{version}%{?date:-%{date}}
+%autosetup -p1 -n %{name}-%{ver}%{?date:-%{date}}
 
 find . -name "*.orig" -o -name "*~" | xargs rm -f
 # fix some permissions
@@ -482,6 +483,13 @@ ln -s libncursesw.a %{buildroot}%{_prefix}/lib/libtinfo.a
 sed -i -e 's,-L%{_libdir} ,,g' %{buildroot}%{_libdir}/pkgconfig/*.pc
 %if %{with compat32}
 sed -i -e 's,-L%{_prefix}/lib ,,g' %{buildroot}%{_prefix}/lib/pkgconfig/*.pc
+%endif
+
+# So is putting CFLAGS/LDFLAGS (such as -Wl,--no-undefined, which
+# breaks building the ncurses python module) into pkgconfig files
+sed -i -e 's|%{build_cflags}||;s|-Wl,-O2 -Wl,--no-undefined -flto||' %{buildroot}%{_libdir}/pkgconfig/*.pc
+%if %{with compat32}
+sed -i -e 's|%{build_cflags}||;s|-Wl,-O2 -Wl,--no-undefined -flto||' %{buildroot}%{_prefix}/lib/pkgconfig/*.pc
 %endif
 
 # Prevent weird upgrade failure in which something symlinks libncursesw.so.6 to libtinfo.so.6.3
