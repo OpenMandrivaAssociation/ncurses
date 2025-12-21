@@ -39,6 +39,11 @@ Patch3:		ncurses-5.9-buildfix.patch
 Patch4:		ncurses-6.4-no-Lusrlib.patch
 Patch7:		ncurses-urxvt.patch
 %if %{with gpm}
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	gpm-devel
 %endif
 BuildRequires:	sharutils
