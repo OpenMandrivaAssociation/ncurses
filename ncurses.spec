@@ -4,8 +4,8 @@
 %bcond_with compat32
 %endif
 
-%define ver %(echo %{version}|cut -d'+' -f1|cut -d'~' -f1)
-%define date %(echo %{version}|sed -e 's,.*\+,,;s,.*\~,,')
+#define ver %(echo %{version}|cut -d'+' -f1|cut -d'~' -f1)
+#define date %(echo %{version}|sed -e 's,.*\+,,;s,.*\~,,')
 %define major %(echo %{ver} |cut -d. -f1)
 %define majorminor %{ver}
 %define utf8libname %mklibname %{name}w
@@ -22,7 +22,7 @@
 
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
-Version:	6.5+20250419
+Version:	6.6
 Release:	1
 Source0:	https://invisible-mirror.net/archives/ncurses/%{?date:current/}%{name}-%{ver}%{?date:-%{date}}.%{?date:tgz}%{!?date:tar.gz}
 License:	MIT
