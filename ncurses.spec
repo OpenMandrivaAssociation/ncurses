@@ -24,7 +24,7 @@ Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	6.6
 Release:	1
-Source0:	https://invisible-mirror.net/archives/ncurses/%{?date:current/}%{name}-%{ver}%{?date:-%{date}}.%{?date:tgz}%{!?date:tar.gz}
+Source0:	https://invisible-mirror.net/archives/ncurses/%{?date:current/}%{name}-%{version}%{?date:-%{date}}.%{?date:tgz}%{!?date:tar.gz}
 License:	MIT
 Group:		System/Libraries
 Url:		https://www.gnu.org/software/ncurses/ncurses.html
@@ -185,7 +185,7 @@ access various features of terminals (the bell, colors, and graphics,
 etc.).
 
 %prep
-%autosetup -p1 -n %{name}-%{ver}%{?date:-%{date}}
+%autosetup -p1 -n %{name}-%{version}%{?date:-%{date}}
 
 find . -name "*.orig" -o -name "*~" | xargs rm -f
 # fix some permissions
