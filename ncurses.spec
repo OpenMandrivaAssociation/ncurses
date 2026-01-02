@@ -41,6 +41,7 @@ Patch7:		ncurses-urxvt.patch
 %if %{with gpm}
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	libtool
 BuildRequires:	libtool-base
 BuildRequires:	slibtool
 BuildRequires:	make
