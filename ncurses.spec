@@ -199,7 +199,7 @@ rm -rf test/package
 sed -i -e 's,#if HAVE_GETTTYNAM,#if 0,g' progs/tset.c
 
 # Pull in support for newer architectures and OSes
-cp -f %{_datadir}/libtool/config/config.{guess,sub} .
+#cp -f %{_datadir}/libtool/config/config.{guess,sub} .
 
 %build
 export PKG_CONFIG_LIBDIR=%{_libdir}/pkgconfig
