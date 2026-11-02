@@ -41,8 +41,6 @@ Patch7:		ncurses-urxvt.patch
 %if %{with gpm}
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	libtool-base
-BuildRequires:	slibtool
 BuildRequires:	make
 BuildRequires:	gpm-devel
 %endif
@@ -197,8 +195,8 @@ rm -rf test/package
 # FIXME workaround for misdetection when using musl
 sed -i -e 's,#if HAVE_GETTTYNAM,#if 0,g' progs/tset.c
 
-# Pull in support for newer architectures and OSes
-cp -f %{_datadir}/libtool/config/config.{guess,sub} .
+# Keep the upstream config.guess/config.sub (2026-05-17). They are newer
+# than gnu-config, and libtool-base is not in the buildroot.
 
 %build
 export PKG_CONFIG_LIBDIR=%{_libdir}/pkgconfig
