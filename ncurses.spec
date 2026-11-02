@@ -41,9 +41,10 @@ Patch7:		ncurses-urxvt.patch
 %if %{with gpm}
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	make
 BuildRequires:	gpm-devel
 %endif
+# configure finishes with "make preinstall"
+BuildRequires:	make
 BuildRequires:	sharutils
 Conflicts:	%{name}-extraterms < 5.9-6.20121026.3
 %if %{with compat32}
