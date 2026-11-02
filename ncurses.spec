@@ -23,7 +23,7 @@
 Summary:	A CRT screen handling and optimization package
 Name:		ncurses
 Version:	6.6+20261031
-Release:	1
+Release:	2
 Source0:	https://invisible-mirror.net/archives/ncurses/%{?date:current/}%{name}-%{ver}%{?date:-%{date}}.%{?date:tgz}%{!?date:tar.gz}
 License:	MIT
 Group:		System/Libraries
@@ -431,9 +431,9 @@ cp %{buildroot}%{_datadir}/terminfo/x/xterm-new %{buildroot}%{_datadir}/terminfo
 # have to be done before find commands below
 #
 rm -f %{buildroot}%{_libdir}/terminfo
-%if %{with compat32}
+# run_tic.sh also symlinks /usr/lib/terminfo on lib64 arches, not only the compat32 build
 rm -f %{buildroot}%{_prefix}/lib/terminfo
-%endif
+rmdir %{buildroot}%{_prefix}/lib 2>/dev/null || :
 
 # fwang: avoid conflict with kon package
 rm -f %{buildroot}%{_datadir}/terminfo/k/kon
